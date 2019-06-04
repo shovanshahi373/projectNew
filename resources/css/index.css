@@ -1,0 +1,149 @@
+@import 'defaults.css';
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: #252527;
+}
+
+.banner {
+    background-image: url('../images/mtn.jpg');
+    width: 100%;
+    min-height: 80vh;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    /* box-shadow: 0 -120px 120px rgba(0, 0, 0, 1) inset; */
+}
+
+img {
+    width: 100%;
+    height: 100%;
+}
+
+/* .banner img {
+    position: absolute;
+    box-shadow: 120px 0 0 120px inset rgba(0, 0, 0, 0.9);
+} */
+
+.banner .overlay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.banner h1,
+p {
+    color: white;
+}
+
+.banner .flex {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    height: 100%;
+}
+
+nav {
+    width: 100%;
+    /* display: flex;
+    justify-content: space-between;
+    align-items: center; */
+}
+
+.mobile .container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.mobile .container form {
+    min-width: 300px !important;
+}
+
+.mobile .container form>* {
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 0;
+    margin-bottom: 1rem;
+}
+
+.mobile {
+    width: 100%;
+    display: none;
+}
+
+.mobile h3 {
+    color: #28a745;
+}
+
+.mobile .sign-up {
+    position: relative;
+    /* background-image: linear-gradient(180deg, #252527), url('../images/npm.jpg'); */
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    box-shadow: 0 120px 120px 252527;
+}
+
+.mobile .login {
+    position: relative;
+    /* background-image: url('../images/npm.jpg'); */
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    min-height: 400px;
+}
+
+.field {
+    padding: 30px 20px;
+}
+
+.dark-gradient {
+    width: 100%;
+    padding: 30px 20px;
+}
+
+@media(max-width: 700px) {
+    .banner {
+        min-height: 50vh;
+    }
+
+    .banner h1 {
+        font-size: 4rem;
+    }
+
+    .banner p {
+        font-size: 0.7rem;
+    }
+}
+
+@media(max-width: 500px) {
+    .banner {
+        min-height: 30vh;
+    }
+
+    .banner h1 {
+        font-size: 3rem;
+    }
+
+    .banner p {
+        font-size: 0.6rem;
+    }
+
+    .btns {
+        display: none;
+    }
+
+    footer p {
+        font-size: 0.7rem !important;
+    }
+
+    .mobile {
+        display: block;
+    }
+}

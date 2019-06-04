@@ -1,0 +1,33 @@
+body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 30px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+    box-shadow: 1px 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.form-group {
+    border-bottom: 1px solid black;
+    min-width: 220px;
+}
+
+.form-group input {
+    border: none;
+    text-indent: 10px;
+}
+
+.form-group input:focus {
+    outline: none !important;
+}

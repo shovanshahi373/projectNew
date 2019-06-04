@@ -1,0 +1,21 @@
+.row {
+    margin-right: 0 !important;
+}
+
+a {
+    color: white;
+}
+
+a:hover {
+    text-decoration: none;
+    color: white;
+}
+
+i {
+    color: rgba(255, 255, 255, 0.3);
+    transition: 0.5s all;
+}
+
+i:hover {
+    color: white;
+}
