@@ -15,7 +15,6 @@ body {
     position: relative;
     background-size: cover;
     background-position: center;
-    /* box-shadow: 0 -120px 120px rgba(0, 0, 0, 1) inset; */
 }
 
 img {
@@ -23,10 +22,10 @@ img {
     height: 100%;
 }
 
-/* .banner img {
-    position: absolute;
-    box-shadow: 120px 0 0 120px inset rgba(0, 0, 0, 0.9);
-} */
+li {
+    background-color: transparent !important;
+    border: none !important;
+}
 
 .banner .overlay {
     position: absolute;
@@ -36,7 +35,7 @@ img {
 }
 
 .banner h1,
-p {
+.banner p {
     color: white;
 }
 
@@ -50,9 +49,6 @@ p {
 
 nav {
     width: 100%;
-    /* display: flex;
-    justify-content: space-between;
-    align-items: center; */
 }
 
 .mobile .container {
@@ -83,7 +79,6 @@ nav {
 
 .mobile .sign-up {
     position: relative;
-    /* background-image: linear-gradient(180deg, #252527), url('../images/npm.jpg'); */
     background-size: cover;
     background-position: center;
     width: 100%;
@@ -92,7 +87,6 @@ nav {
 
 .mobile .login {
     position: relative;
-    /* background-image: url('../images/npm.jpg'); */
     background-size: cover;
     background-position: center;
     width: 100%;

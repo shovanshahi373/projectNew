@@ -1,0 +1,23 @@
+<% include partials/header.ejs %>
+
+<main>
+    <div class="container">
+        <h1 class="lead display-3" style="color:aliceblue;text-align:center">Our <%= title %></h1>
+        <% for(let i = 0; i < developers.length; i++) { %>
+        <ul class="list-group card my-3">
+            <li class="list-group-item d-flex">
+                <img src='<%= developers[i].img %>' style="width: 100px; height:100px; border-radius: 50%">
+                <div>
+                    <p class="lead px-3" style="line-height: 100px"><%= developers[i].name %></p>
+                </div>
+            </li>
+            <li class="list-group-item"><%= developers[i].desc %></li>
+            <li class="list-group-item">
+                <div class="btn btn-dark">Learn More</div>
+            </li>
+        </ul>
+        <% } %>
+    </div>
+</main>
+
+<% include partials/footer.ejs %>
