@@ -77,6 +77,7 @@ app.get("/developers", (req, res) => {
     title: "developers"
   });
 });
+
 // app.get("/createpoststable", (req, res) => {
 //   let sql =
 //     "CREATE TABLE register(id int(100) AUTO_INCREMENT PRIMARY KEY, firstName varchar(225) NOT NULL, lastName varchar(225), email varchar(225) NOT NULL, password varchar(225) NOT NULL);";

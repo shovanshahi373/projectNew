@@ -27,6 +27,10 @@ li {
     border: none !important;
 }
 
+main {
+    min-height: 100vh;
+}
+
 .banner .overlay {
     position: absolute;
     height: 100%;
@@ -56,6 +60,7 @@ nav {
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    color: white;
 }
 
 .mobile .container form {
@@ -66,11 +71,18 @@ nav {
     border: 1px solid rgba(0, 0, 0, 0.5);
     border-radius: 0;
     margin-bottom: 1rem;
+    border-radius: 20px;
+    text-align: center;
+    transition: .5s;
 }
 
 .mobile {
     width: 100%;
-    display: none;
+    /* display: none; */
+}
+
+.mobile p {
+    color: white;
 }
 
 .mobile h3 {
@@ -107,11 +119,11 @@ nav {
         min-height: 50vh;
     }
 
-    .banner h1 {
+    h1 {
         font-size: 4rem;
     }
 
-    .banner p {
+    p {
         font-size: 0.7rem;
     }
 }
@@ -121,11 +133,11 @@ nav {
         min-height: 30vh;
     }
 
-    .banner h1 {
+    h1 {
         font-size: 3rem;
     }
 
-    .banner p {
+    p {
         font-size: 0.6rem;
     }
 
@@ -134,7 +146,7 @@ nav {
     }
 
     footer p {
-        font-size: 0.7rem !important;
+        font-size: 0.9rem !important;
     }
 
     .mobile {

@@ -1,3 +1,9 @@
+:root {
+    --green: #28a745;
+    --black: #252527;
+    --faded-white: rgba(255, 255, 255, 0.3);
+}
+
 .row {
     margin-right: 0 !important;
 }
@@ -12,10 +18,10 @@ a:hover {
 }
 
 i {
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(0, 0, 0, 0.5);
     transition: 0.5s all;
 }
 
 i:hover {
-    color: white;
+    color: rgba(0, 0, 0, 0.8);
 }
