@@ -52,7 +52,7 @@ Resource.belongsToMany(Complain, {through: ResourceComplain });
 Complain.belongsToMany(Resource, {through: ResourceComplain });
 
 
-sequelize.sync({force: true})
+sequelize.sync()
 .then(result => {
   console.log(result);
   const server = app.listen(port, function () {

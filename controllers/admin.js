@@ -1,7 +1,7 @@
 
 
 exports.getTaskInfo = (req, res, next) =>{
-    res.render('index');
+    res.render('index', {title: 'lets start sarokar'});
     //res.send('<h1>helllo from taskinfo </h1>');
     console.log('view rendered');
 
