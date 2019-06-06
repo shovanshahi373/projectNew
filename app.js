@@ -1,16 +1,10 @@
-const mysql = require("mysql");
+const db = require("./database");
 const express = require("express");
 const path = require("path");
+const bodyParser = require("body-parser");
 const port = process.env.PORT || 3000;
 
-const conn = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "sarokaar"
-});
-
-conn.connect(function(err) {
+db.connect(function (err) {
   if (err) {
     console.log(err);
   } else {
@@ -23,6 +17,11 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, "resources")));
 
+app.use(bodyParser.urlencoded({
+  extended: false
+}))
+app.use(bodyParser.json());
+
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
@@ -33,9 +32,11 @@ app.get("/", (req, res) => {
 });
 
 //admin login route
-app.get("/admin-login", (req, res) => {
-  res.render("adminlogin", { title: "Admin Login" });
-});
+// app.get("/admin-login", (req, res) => {
+//   res.render("adminlogin", {
+//     title: "Admin Login"
+//   });
+// });
 
 app.get("/createDb", (req, res) => {
   let sql = "CREATE DATABASE Sarokaar";
@@ -48,35 +49,32 @@ app.get("/createDb", (req, res) => {
 
 app.get("/developers", (req, res) => {
   res.render("developers", {
-    developers: [
-      {
+    developers: [{
         name: "Shovan Shahi",
         img: "/images/city.jpg",
-        desc:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae magnam quae impedit maiores tempora quod eligendi eaque obcaecati deserunt quisquam! Non doloribus at obcaecati nulla officia placeat praesentium dicta veniam!"
+        desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae magnam quae impedit maiores tempora quod eligendi eaque obcaecati deserunt quisquam! Non doloribus at obcaecati nulla officia placeat praesentium dicta veniam!"
       },
       {
         name: "Siddhartha Paudel",
         img: "images/city.jpg",
-        desc:
-          "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aspernatur minus deserunt obcaecati dignissimos rerum voluptas sequi, hic perferendis at, provident sed repellat! Fuga qui culpa doloribus commodi numquam veritatis temporibus."
+        desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aspernatur minus deserunt obcaecati dignissimos rerum voluptas sequi, hic perferendis at, provident sed repellat! Fuga qui culpa doloribus commodi numquam veritatis temporibus."
       },
       {
         name: "Ravi Sah",
         img: "../images/city.jpg",
-        desc:
-          "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil adipisci sunt nam fuga iusto. Consequuntur harum odio distinctio minus libero delectus exercitationem, labore ad. Atque quas praesentium quasi cumque iste."
+        desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil adipisci sunt nam fuga iusto. Consequuntur harum odio distinctio minus libero delectus exercitationem, labore ad. Atque quas praesentium quasi cumque iste."
       },
       {
         name: "Sujit Sharma",
         img: "../images/city.jpg",
-        desc:
-          "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil adipisci sunt nam fuga iusto. Consequuntur harum odio distinctio minus libero delectus exercitationem, labore ad. Atque quas praesentium quasi cumque iste.f"
+        desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil adipisci sunt nam fuga iusto. Consequuntur harum odio distinctio minus libero delectus exercitationem, labore ad. Atque quas praesentium quasi cumque iste.f"
       }
     ],
     title: "developers"
   });
 });
+
+app.use('/admin', require('./routes/Admin'));
 
 // app.get("/createpoststable", (req, res) => {
 //   let sql =
