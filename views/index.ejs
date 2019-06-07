@@ -1,0 +1,81 @@
+  <% include partials/header.ejs %>
+
+  <section class="banner">
+    <!-- <img src="images/mtn.jpg" /> -->
+    <div class="overlay">
+      <div class="flex">
+        <h1 class="lead display-1">
+          Sar<span class="text-success">ok</span>aar
+        </h1>
+        <p>
+          We do listen to your concerns.
+        </p>
+        <div class="btns">
+          <a class="btn btn-success p-2 text-center btn-md btn-sm" href="#sign-up">Register</a>
+          <a class="btn btn-outline-success p-2 text-center btn-md btn-sm" href="#login">Login</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="mobile dark-gradient">
+    <h3>What is Sarokaar?</h3>
+    <p class="lead">‘Sarokaar’ is a communication platform which aims to fill the void between Municipality authorities and general public.</p>
+    <br>
+    <h3>What it is for?</h3>
+    <p class="lead">
+      This portal will provide a space where anyone can report any local issue related to garbage management, drainage to the municipality office along with a picture and location and an automated system will redirect the issues to the concerned parties. There will be a track of how much progress is accomplished and which complaints are still pending.
+    </p>
+    <br>
+    <h3>How can you help?</h3>
+    <p class="lead">You can be a part of change, too. Simply open up the website,
+      click the photo of problems you've encounter, upload it, and we'll take care of 
+      the rest.</p>
+  </section>
+  <!-- <section class="mobile dark-gradient"></section> -->
+
+  <section class="mobile">
+    <div class="field sign-up" id="sign-up">
+      <div class="container">
+        <h3>Become a part of us!</h3>
+        <form action="#">
+          <input type="text" class="form-control" placeholder="First Name" />
+          <input type="text" class="form-control" placeholder="Last Name" />
+          <input type="email" class="form-control" placeholder="Email" />
+          <input type="text" class="form-control" placeholder="Address" />
+          <input type="text" class="form-control" placeholder="Phone-number" />
+          <input type="password" class="form-control" placeholder="Password" />
+          <input type="password" class="form-control" placeholder="Confirm Password" />
+          <input type="submit" value="Register" class="btn btn-block btn-success" />
+        </form>
+      </div>
+    </div>
+    <br>
+    <div class="field login" id="login">
+      <div class="container">
+        <h3>Welcome back!</h3>
+        <form action="#">
+          <input type="email" class="form-control" placeholder="Email or Phone" />
+          <input type="password" class="form-control" placeholder="Password" />
+          <input type="submit" value="Login" class="btn btn-block btn-success" />
+        </form>
+      </div>
+    </div>
+    <br>
+  </section>
+
+  <% include partials/footer.ejs %>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+  </script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+  </script>
+
+  </body>
+
+  </html>

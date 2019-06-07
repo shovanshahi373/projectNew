@@ -1,0 +1,167 @@
+@import 'defaults.css';
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: #252527;
+    color: white;
+}
+
+.banner {
+    background-image: url('../images/first.png');
+    width: 100%;
+    min-height: 80vh;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+}
+
+.flex {
+    padding: 5%;
+    margin-top: 5%;
+}
+img {
+    width: 100%;
+    height: 100%;
+}
+
+li {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+main {
+    min-height: 100vh;
+}
+
+.banner .overlay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.banner h1,
+.banner p {
+    color: white;
+}
+
+.banner .flex {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    height: 100%;
+}
+
+nav {
+    width: 100%;
+}
+
+.mobile .container {
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: white;
+}
+
+.mobile .container form {
+    min-width: 300px !important;
+}
+
+.mobile .container form>* {
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    border-radius: 0;
+    margin-bottom: 1rem;
+    border-radius: 20px;
+    text-align: center;
+    transition: .5s;
+}
+
+.mobile {
+    width: 100%;
+    /* display: none; */
+}
+
+.mobile p {
+    color: white;
+}
+
+.mobile h3 {
+    color: #28a745;
+}
+
+.mobile .sign-up {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    box-shadow: 0 120px 120px 252527;
+}
+
+.mobile .login {
+    position: relative;
+    background-size: cover;
+    background-position: center;
+    width: 100%;
+    min-height: 400px;
+}
+
+.field {
+    padding: 30px 20px;
+}
+
+.dark-gradient {
+    width: 100%;
+    padding: 7% 16% 7% 20%;
+}
+.mobile .field{
+    border:2px solid #093;
+    width:50%;
+    margin-left:20%;
+    /* margin: 5px 0; */
+}
+
+@media(max-width: 700px) {
+    .banner {
+        min-height: 50vh;
+    }
+
+    h1 {
+        font-size: 4rem;
+    }
+
+    p {
+        font-size: 0.7rem;
+    }
+}
+
+@media(max-width: 500px) {
+    .banner {
+        min-height: 30vh;
+    }
+
+    h1 {
+        font-size: 3rem;
+    }
+
+    p {
+        font-size: 0.6rem;
+    }
+
+    .btns {
+        display: none;
+    }
+
+    footer p {
+        font-size: 0.9rem !important;
+    }
+
+    .mobile {
+        display: block;
+    }
+}

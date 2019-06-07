@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="fonts/css/all.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 30px;
+            border: 1px solid rgba(0, 0, 0, 0.3);
+            border-radius: 3px;
+            box-shadow: 1px 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .form-group {
+            border-bottom: 1px solid black;
+            min-width: 220px;
+        }
+
+        .form-group input {
+            border: none;
+            text-indent: 10px;
+        }
+
+        .form-group input:focus {
+            outline: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <% if(typeof msg !== 'undefined') { %>
+        <div class="alert alert-danger"><%= msg %></div>
+        <% } %>
+        <h1>Sar<span class="text-success">ok</span>aar</h1>
+        <form action="#" method="POST">
+            <div class="form-group">
+                <i class="fas fa-user-tie"></i>
+                <input type="text" name='username' class="" placeholder="username" autocomplete="off">
+            </div>
+            <div class="form-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" name='password' class="" placeholder="password">
+                <i class="fas fa-eye eyes"></i>
+            </div>
+            <input type="submit" value="login" class="btn btn-success btn-block">
+        </form>
+    </div>
+    <script async>
+        let pass = document.querySelector('input[type="password"]');
+        let eyes = document.querySelector('.eyes');
+        eyes.style.display = 'none';
+        pass.addEventListener('keyup', (e) => {
+            if (pass.value != "") {
+                eyes.style.display = 'inline-block';
+                eyes.addEventListener('click', setEye);
+            } else {
+                eyes.style.display = 'none';
+                pass.type = 'password';
+            }
+        })
+
+        function setEye() {
+            if (pass.type === 'text') {
+                pass.type = 'password';
+            } else {
+                pass.type = 'text';
+            }
+        }
+    </script>
+</body>
+
+</html>
