@@ -25,10 +25,17 @@ router.post('/', (req, res) => {
         } else {
             console.log('user found...');
             res.render('dashboard', {
-                title: 'you are authorized admin'
+                title: 'Sarokaar | Dashboard',
+                user: result
             })
             console.log(result);
         }
+    })
+})
+
+router.get('/getAllUsers', (req, res) => {
+    res.render('getUsers', {
+        title: 'get users'
     })
 })
 

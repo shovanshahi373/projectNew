@@ -4,6 +4,7 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const port = process.env.PORT || 3000;
 
+//connect to database
 db.connect(function (err) {
   if (err) {
     console.log(err);
@@ -15,16 +16,16 @@ db.connect(function (err) {
 //init app
 const app = express();
 
+//middleware
 app.use(express.static(path.join(__dirname, "resources")));
-
 app.use(bodyParser.urlencoded({
   extended: false
 }))
 app.use(bodyParser.json());
-
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+//home route
 app.get("/", (req, res) => {
   res.render("index", {
     title: "Welcom to Sarokaar"
@@ -75,6 +76,14 @@ app.get("/developers", (req, res) => {
 });
 
 app.use('/admin', require('./routes/Admin'));
+// app.use('/user', require('./routes/User'));
+
+// const {
+//   addUser,
+//   editUser,
+//   deleteUser,
+//   updateUser
+// } = require('./routes/User');
 
 // app.get("/createpoststable", (req, res) => {
 //   let sql =

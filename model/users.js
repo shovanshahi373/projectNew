@@ -32,12 +32,7 @@ const userModel = db.define('userModel', {
             is: ["^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$"]
         }
     },
-    contact: {
-        type: Sequelize.STRING,
-        allowNull: true,
-
-    },
-    phoneNumber: {
+    mobile: {
         type: Sequelize.INTEGER,
         allowNull: true,
         validate: {
