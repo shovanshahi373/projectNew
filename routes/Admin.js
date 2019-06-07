@@ -12,6 +12,12 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
     let a = req.body.username;
     let b = req.body.password;
+    if (a == '' || b == '') {
+        res.render('adminlogin', {
+            title: 'admin not found',
+            msg: 'please fill-in all fields'
+        })
+    }
     let query = `SELECT * FROM admins WHERE userName="${a}" AND password="${b}"`;
     db.query(query, (err, result) => {
         if (err) {
@@ -34,8 +40,17 @@ router.post('/', (req, res) => {
 })
 
 router.get('/getAllUsers', (req, res) => {
-    res.render('getUsers', {
-        title: 'get users'
+    let query = `SELECT * FROM users ORDER BY uid ASC`;
+    db.query(query, (err, result) => {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log('users fetching...');
+            res.render('getUsers', {
+                users: result,
+                title: 'get users'
+            })
+        }
     })
 })
 
