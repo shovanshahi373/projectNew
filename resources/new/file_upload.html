@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>file uploader</title>
+	<link rel="stylesheet" href="../fonts/css/all.min.css">
+    <link rel="stylesheet" href="../bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/index.css">
+    <link rel="stylesheet" type="text/css" href="../css/style1.css">
+</head>
+<body>
+	<header>
+		
+    <div class="row bg-success sticky-top">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg nav-light bg-success">
+                <a class="navbar-brand" href="/">Sarokaar</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto navbar-right">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/developers">Developers<span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href='#sign-up' id="sign-up-redirect">Register</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#login" id="login-redirect">Login</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </div>
+	</header>
+	<main clas="file_upload">
+		
+  			<form class="form-horizotal" role="form">
+ 			 <div class="form1">
+ 			 	
+ 			 		<div class="form-group" >
+ 			 			<label class="control-label col-sm-2" for="Title">Title:</label>
+ 			 			<div class="col-sm-10">
+ 			 				<select type="dropdown" name="title" id="title" class="form-control col-sm-10" placeholder="enter the title" required>
+ 			 					<option value="garbage" >Garbage</option>
+ 			 					<option value="drainage">Drainage</option>
+ 			 				</select>	
+ 			 			</div>	
+ 			 			<div class="form-group" >
+ 			 		
+ 			 			<div class="col-sm-10 ">
+ 			 				<label class="control-label col-sm-2" for="Location">Location:</label> 
+ 			 				<input type="text" name="location" id="location" class="form-control col-sm-10" placeholder="Location" required >
+ 			 			</div>
+ 						</div>
+ 			 			<div class="form-group" >
+ 			 			<label class="control-label col-sm-2" for="description">Description:</label>
+ 			 			<div class="col-sm-10">
+ 			 				<textarea name="description" id="description" class="form-control col-sm-10" placeholder="Description"></textarea>
+ 			 			</div>				
+ 			 			
+ 			 		</div>
+ 			 
+ 			 </div>
+ 			 <!-- for photo-->
+ 			 <div class="input-group">
+ 			 <div class="input-group-prepend">
+    			<span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+ 			 </div>
+	  		<div class="custom-file">
+	    		<input type="file" class="custom-file-input col-sm-8" id="inputGroupFile01" required>
+	   			<label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+	  		</div>
+	  			
+		</div>
+		<div class="form-group" >
+ 			 		
+ 			 			<div class="col-sm-10 float-center">
+ 			 				<input type="submit" name="submit" id="submit" role="button" value="submit">
+ 			 			</div>
+ 		</div>
+ 	</form>	 			
+	</main>
+	<footer>
+	    <div class="row bg-success">
+	        <div class="container text-center">
+	            <p class="lead m-0">2019 Sarokaar</p>
+	            <p class="lead m-0">All rights reserved.</p>
+	        </div>
+	    </div>
+	    <div class="row bg-success" style="border-bottom:1px solid rgba(255, 255, 255, 0.3);">
+        <div class="container">
+            <ul class="list-group list-group-horizontal float-right">
+                <li class="list-group-item">
+                    <a href="#" title="facebook"><i class="fab fa-facebook-f"></i></a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#" title="instagram"><i class="fab fa-instagram"></i></a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#" title="linkedIn"><i class="fab fa-linkedin-in"></i></a>
+                </li>
+                <li class="list-group-item">
+                    <a href="#" title="google-plus"><i class="fab fa-google-plus-g"></i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+	</footer>
+</body>
+</html>
