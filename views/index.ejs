@@ -1,49 +1,34 @@
   <% include partials/header.ejs %>
 
-  <section class="banner">
+  <section class="banner vh-100">
     <!-- <img src="images/mtn.jpg" /> -->
     <div class="overlay">
-      <div class="container flex">
+
+      <div class="flex">
+
         <h1 class="lead display-1">
           Sar<span class="text-success">ok</span>aar
         </h1>
         <p>
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptatum
-          reprehenderit quisquam.
+
+          We do listen to your concerns.
         </p>
         <div class="btns">
-          <a class="btn btn-success p-2 text-center btn-md btn-sm" href="/sign-up">Register</a>
-          <a class="btn btn-outline-success p-2 text-center btn-md btn-sm" href="#">Login</a>
+          <a class="btn btn-success p-2 text-center btn-md btn-sm" href="#sign-up">Register</a>
+          <a class="btn btn-outline-success p-2 text-center btn-md btn-sm" href="/upload">complain</a>
+
+
         </div>
       </div>
     </div>
   </section>
-
-  <section class="mobile dark-gradient">
-    <h3>What is Sarokaar?</h3>
-    <p class="lead">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Non, et obcaecati laborum reiciendis
-      corrupti, fugiat quos eligendi enim dicta cupiditate doloremque officia. Tempore nobis ab quo, dolorum cumque
-      consequatur illo?</p>
-    <br>
-    <h3>What it is for?</h3>
-    <p class="lead">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut, maxime dolore, quod excepturi consequuntur sapiente
-      facilis sed similique voluptatibus, accusamus quidem natus soluta labore odio asperiores repellendus
-      exercitationem provident esse!
-    </p>
-    <br>
-    <h3>How can you help?</h3>
-    <p class="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nihil sunt rerum sed eum dolor
-      reprehenderit quo incidunt voluptate, molestias quasi. Quis odio dolor reiciendis eaque blanditiis assumenda a
-      enim non.</p>
-  </section>
   <!-- <section class="mobile dark-gradient"></section> -->
 
-  <section class="mobile">
+  <section class="mobile form-section">
     <div class="field sign-up" id="sign-up">
       <div class="container">
         <h3>Become a part of us!</h3>
-        <form action="#">
+        <form action="/register" method="POST">
           <input type="text" name="fname" class="form-control" placeholder="firstName" />
           <input type="text" name="lname" class="form-control" placeholder="last Name" />
           <input type="email" name="email" class="form-control" placeholder="email" />
@@ -55,16 +40,43 @@
         </form>
       </div>
     </div>
+
+
     <div class="field login" id="login">
       <div class="container">
         <h3>Welcome back!</h3>
-        <form action="#">
-          <input type="email" class="form-control" placeholder="email or phone" />
-          <input type="password" class="form-control" placeholder="password" />
-          <input type="submit" value="login" class="btn btn-block btn-success" />
+        <form action="/login" method="POST">
+          <input type="email" class="form-control" placeholder="Email or Phone" />
+          <input type="password" class="form-control" placeholder="Password" />
+          <input type="submit" value="Login" class="btn btn-block btn-success" />
         </form>
       </div>
     </div>
+
+
+  </section>
+
+  <section class="mobile dark-gradient">
+    <h3>What is Sarokaar?</h3>
+
+    <p class="lead">‘Sarokaar’ is a communication platform which aims to fill the void between Municipality authorities
+      and general public.</p>
+    <br>
+    <h3>What it is for?</h3>
+    <p class="lead">
+      This portal will provide a space where anyone can report any local issue related to garbage management, drainage
+      to the municipality office along with a picture and location and an automated system will redirect the issues to
+      the concerned parties. There will be a track of how much progress is accomplished and which complaints are still
+      pending.
+    </p>
+    <br>
+    <h3>How can you help?</h3>
+    <p class="lead">You can be a part of change, too. Simply open up the website,
+      click the photo of problems you've encounter, upload it, and we'll take care of
+      the rest.</p>
+
+
+    <br>
   </section>
 
   <% include partials/footer.ejs %>
@@ -75,9 +87,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
     integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
   </script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+  <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
     integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-  </script>
+  </script> -->
+  <script src="js/bootstrap.min.js"></script>
 
   </body>
 

@@ -1,0 +1,49 @@
+.file-field.big .file-path-wrapper {
+    height: 3.2rem;
+}
+
+.file-field.big .file-path-wrapper .file-path {
+    height: 3rem;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+main .form1 {
+    transform: translate(10vw, 20vh);
+}
+
+.custom-file {
+    max-width: 62vw;
+}
+
+label {
+    color: #fff;
+}
+
+#submit {
+    transform: translate(30vw, 2vh);
+    height: 40px;
+    background-color: #093;
+    border-top-left-radius: 25px;
+    border-bottom-right-radius: 25px;
+}
+
+.input-group-text {
+    background-color: #093;
+    margin-left: 15px;
+    color: #000;
+}
+
+.custom-file-label {
+    width: 61.5vw;
+}
+
+#submit:hover {
+    transition: easy-in 2s delay;
+    color: #093;
+    background-color: #fff;
+}

@@ -1,8 +1,14 @@
 const db = require("./database");
 const express = require("express");
 const path = require("path");
+const multer = require("multer");
 const bodyParser = require("body-parser");
+// const userModel = require('./model/users');
 const port = process.env.PORT || 3000;
+
+const routes = require('./routes/index');
+const users = require('./routes/User');
+const admin = require('./routes/Admin');
 
 //connect to database
 db.connect(function (err) {
@@ -18,26 +24,91 @@ const app = express();
 
 //middleware
 app.use(express.static(path.join(__dirname, "resources")));
-app.use(bodyParser.urlencoded({
-  extended: false
-}))
+app.use(
+  bodyParser.urlencoded({
+    extended: false
+  })
+);
 app.use(bodyParser.json());
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-//home route
-app.get("/", (req, res) => {
-  res.render("index", {
-    title: "Welcom to Sarokaar"
+//set routes
+app.use('/', routes);
+// app.use('/users', users);
+app.use('/admin', admin);
+
+const storage = multer.diskStorage({
+  destination: "resources/uploads",
+  filename: function (req, file, cb) {
+    cb(
+      null,
+      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+    );
+  }
+});
+
+// Init Upload
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1000000
+  },
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+  }
+}).single("myImage");
+
+// Check File Type
+function checkFileType(file, cb) {
+  // Allowed ext
+  const filetypes = /jpeg|jpg|png|gif/;
+  // Check ext
+  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+
+  const mimeType = filetypes.test(file.mimetype);
+
+  if (mimeType && extname) {
+    console.log("success");
+    return cb(null, true);
+  } else {
+    cb("Error: Images Only!");
+  }
+}
+
+app.get("/upload", (req, res) => {
+  res.render("complainform", {
+    title: "this is a complain"
   });
 });
 
-//admin login route
-// app.get("/admin-login", (req, res) => {
-//   res.render("adminlogin", {
-//     title: "Admin Login"
-//   });
-// });
+app.post("/upload", (req, res) => {
+  let {
+    title,
+    location,
+    description
+  } = req.body;
+  // let { myImage } = req.file;
+  console.log(title);
+  upload(req, res, err => {
+    if (err) {
+      res.render("complainform", {
+        msg: err
+      });
+    } else {
+      if (req.file == undefined) {
+        res.render("complainform", {
+          msg: "Error: No File Selected!"
+        });
+      } else {
+        res.render("complainform", {
+          msg: "File Uploaded!",
+          file: `../uploads/${req.file.filename}`
+        });
+      }
+    }
+  });
+});
 
 app.get("/createDb", (req, res) => {
   let sql = "CREATE DATABASE Sarokaar";
@@ -48,34 +119,9 @@ app.get("/createDb", (req, res) => {
   });
 });
 
-app.get("/developers", (req, res) => {
-  res.render("developers", {
-    developers: [{
-        name: "Shovan Shahi",
-        img: "/images/city.jpg",
-        desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae magnam quae impedit maiores tempora quod eligendi eaque obcaecati deserunt quisquam! Non doloribus at obcaecati nulla officia placeat praesentium dicta veniam!"
-      },
-      {
-        name: "Siddhartha Paudel",
-        img: "images/city.jpg",
-        desc: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aspernatur minus deserunt obcaecati dignissimos rerum voluptas sequi, hic perferendis at, provident sed repellat! Fuga qui culpa doloribus commodi numquam veritatis temporibus."
-      },
-      {
-        name: "Ravi Sah",
-        img: "../images/city.jpg",
-        desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil adipisci sunt nam fuga iusto. Consequuntur harum odio distinctio minus libero delectus exercitationem, labore ad. Atque quas praesentium quasi cumque iste."
-      },
-      {
-        name: "Sujit Sharma",
-        img: "../images/city.jpg",
-        desc: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nihil adipisci sunt nam fuga iusto. Consequuntur harum odio distinctio minus libero delectus exercitationem, labore ad. Atque quas praesentium quasi cumque iste.f"
-      }
-    ],
-    title: "developers"
-  });
-});
 
-app.use('/admin', require('./routes/Admin'));
+
+// app.use("/admin", require("./routes/Admin"));
 // app.use('/user', require('./routes/User'));
 
 // const {

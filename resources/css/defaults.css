@@ -1,5 +1,7 @@
 :root {
-    --green: #28a745;
+
+    --green: #252527;
+
     --black: #252527;
     --faded-white: rgba(255, 255, 255, 0.3);
 }
@@ -10,8 +12,8 @@
 
 a {
     color: white;
-}
 
+}
 a:hover {
     text-decoration: none;
     color: white;

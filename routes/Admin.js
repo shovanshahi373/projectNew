@@ -32,7 +32,7 @@ router.post('/', (req, res) => {
             console.log('user found...');
             res.render('dashboard', {
                 title: 'Sarokaar | Dashboard',
-                user: result
+                admin: result
             })
             console.log(result);
         }

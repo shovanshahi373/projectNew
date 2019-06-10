@@ -2,20 +2,34 @@
 
 html {
     scroll-behavior: smooth;
+    width: 100%;
 }
 
 body {
     background-color: #252527;
     color: white;
+    max-width: 100%;
+}
+
+.clear {
+    clear: both;
 }
 
 .banner {
-    background-image: url('../images/mtn.jpg');
+
+    background-image: url('../images/first.png');
+
     width: 100%;
     min-height: 80vh;
     position: relative;
     background-size: cover;
     background-position: center;
+}
+
+
+.flex {
+    padding: 5%;
+    margin-top: 5%;
 }
 
 img {
@@ -57,6 +71,7 @@ nav {
 }
 
 .mobile .container {
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -65,7 +80,7 @@ nav {
 }
 
 .mobile .container form {
-    min-width: 300px !important;
+    width: 90% !important;
 }
 
 .mobile .container form>* {
@@ -79,7 +94,16 @@ nav {
 
 .mobile {
     width: 100%;
-    /* display: none; */
+    /* display: flex;
+    justify-content: center;
+    align-items: center; */
+}
+
+.form-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
 }
 
 .mobile p {
@@ -103,16 +127,23 @@ nav {
     background-size: cover;
     background-position: center;
     width: 100%;
-    min-height: 400px;
 }
 
 .field {
-    padding: 30px 20px;
+    padding: 0;
 }
 
 .dark-gradient {
     width: 100%;
-    padding: 30px 20px;
+    padding: 5% 15%;
+}
+
+.mobile .field {
+    border: 2px solid #093;
+    width: 40%;
+    height: 500px;
+    margin: 0 auto;
+    padding: 0;
 }
 
 @media(max-width: 700px) {
@@ -127,9 +158,30 @@ nav {
     p {
         font-size: 0.7rem;
     }
+
+    .form-section {
+        flex-direction: column;
+    }
 }
 
-@media(max-width: 500px) {
+@media(max-width: 320px) {
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    .mobile .container {
+        padding: 20px;
+        width: 90%;
+    }
+}
+
+@media(max-width: 425px) {
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
     .banner {
         min-height: 30vh;
     }
@@ -152,5 +204,10 @@ nav {
 
     .mobile {
         display: block;
+    }
+
+    .mobile .field {
+        width: 90%;
+        margin-bottom: 2%;
     }
 }

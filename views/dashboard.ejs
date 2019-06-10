@@ -2,60 +2,60 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title><%= title %></title>
-  <link rel="stylesheet" href="fonts/css/all.min.css" />
-  <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" />
-  <link rel="stylesheet" href="css/index.css" />
-  <style>
-    body {
-      color: black;
-      background-color: whitesmoke;
-    }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="fonts/css/all.min.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/index.css" />
+    <style>
+        body {
+            color: black;
+            background-color: whitesmoke;
+        }
 
-    .col-md-2 .list-group a {
-      color: black !important;
-    }
-  </style>
+        .col-md-2 .list-group a {
+            color: black !important;
+        }
+    </style>
 </head>
 
 <body>
-  <div class="row min-vh-100">
-    <div class="col-md-2" style="box-shadow: 0 0 10px rgba(0,0,0,0.2)">
-      <h1 class="text-center">Sar<span class="text-success">ok</span>aar</h1>
-      <ul class="list-group">
-        <li class="list-group-item"><i class="fas fa-tachometer-alt"></i><a href="/admin">Dashboard</a></li>
-        <li class="list-group-item"><i class="fas fa-user-tie"></i>Profile</li>
-        <li class="list-group-item"><i class="fas fa-users"></i>Users</li>
-      </ul>
-    </div>
-    <div class="col-md-10">
-      <div class="row">
-        <div class="col-md-12 bg-dark text-light">
-          <ul class="list-inline d-flex justify-content-center align-items-center h-100 float-right">
-            <li class="list-inline-item">
-              <input type="text" placeholder="search..." class="form-control rounded-pill">
-            </li>
-            <li class="list-inline-item">
-              <img src='<%= user[0].img %>'
-                style='border-radius: 50%;height: 50px;width: 50px;'><span><%= user[0].fName %></span></img>
-            </li>
-          </ul>
+    <div class="row min-vh-100">
+        <div class="col-md-2" style="box-shadow: 0 0 10px rgba(0,0,0,0.2)">
+            <h1 class="text-center">Sar<span class="text-success">ok</span>aar</h1>
+            <ul class="list-group">
+                <li class="list-group-item"><i class="fas fa-tachometer-alt"></i><a href="/admin">Dashboard</a></li>
+                <li class="list-group-item"><i class="fas fa-user-tie"></i>Profile</li>
+                <li class="list-group-item"><i class="fas fa-users"></i><a href="/admin/getAllUsers">Users</a></li>
+            </ul>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="container">
-            <h3>Dashboard</h3>
-          </div>
+        <div class="col-md-10">
+            <div class="row">
+                <div class="col-md-12 bg-dark text-light">
+                    <ul class="list-inline d-flex justify-content-center align-items-center h-100 float-right">
+                        <li class="list-inline-item">
+                            <input type="text" placeholder="search..." class="form-control rounded-pill">
+                        </li>
+                        <li class="list-inline-item">
+                            <img src='<%= admin[0].img %>'
+                                style='border-radius: 50%;height: 50px;width: 50px;'><span><%= admin[0].fName %></span></img>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="container">
+                        <h3>Dashboard</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="row p-4 grid">
+            </div>
         </div>
-      </div>
-      <div class="row p-4 grid">
-      </div>
     </div>
-  </div>
 </body>
 
 </html>
