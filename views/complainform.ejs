@@ -1,114 +1,32 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>file uploader</title>
-    <link rel="stylesheet" href="fonts/css/all.min.css" />
-    <link rel="shortcut icon" href="/images/slogo-2.png" type="image/x-icon">
-    <link rel="stylesheet" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/index.css" />
-    <link rel="stylesheet" type="text/css" href="css/style.css" />
-</head>
-
-<body>
-    <header>
-        <div class="row bg-success sticky-top">
-            <div class="container">
-                <nav class="navbar navbar-expand-lg nav-light bg-success">
-                    <a class="navbar-brand" href="/">Sarokaar</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse"
-                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                        <i class="fas fa-bars"></i>
-                    </button>
-
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav mr-auto navbar-right">
-                            <li class="nav-item">
-                                <a class="nav-link" href="/developers">Developers<span
-                                        class="sr-only">(current)</span></a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#sign-up" id="sign-up-redirect">Register</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#login" id="login-redirect">Login</a>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
+<main>
+    <div class=" container p-3">
+        <% if(typeof msg != 'undefined') { %>
+        <div class="alert alert-danger"><%= msg %></div>
+        <% } %>
+        <form class="form-horizotal d-flex justify-content-center align-items-items flex-column vh-100"
+            action="/upload" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>state the title</label>
+                <input class="form-control" type="text" name="title" placeholder="title" />
             </div>
-        </div>
-    </header>
-    <main>
-        <div class=" container p-3">
-            <% if(typeof msg != 'undefined') { %>
-            <div class="alert alert-danger"><%= msg %></div>
-            <% } %>
-            <form class="form-horizotal d-flex justify-content-center align-items-items flex-column vh-100"
-                action="/upload" method="POST" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label>state the title</label>
-                    <input class="form-control" type="text" name="title" placeholder="title" />
-                </div>
-                <div class="form-group">
-                    <label>Enter the appropriate location below</label>
-                    <input class="form-control" type="text" name="location" placeholder="location" />
-                </div>
-                <div class="form-group">
-                    <label>Please briefly desctibe the problem...</label>
-                    <textarea class="form-control" name="description" cols="30" rows="10">description
-            </textarea>
-                </div>
-                <div class="form-group">
-                    <input type="file" name="myImage">
-                </div>
-                <input type="submit" value="submit" class="btn btn-success w-25 text-center" />
-            </form>
-            <% if(typeof file != 'undefined') { %>
-            <img src="<%= file %>" class="img-thumbnail" style="height:80px;width:100px">
-            <% } %>
-            <br>
-
-        </div>
-    </main>
-    <footer>
-        <div class="row bg-success">
-            <div class="container text-center">
-                <p class="lead m-0">2019 Sarokaar</p>
-                <p class="lead m-0">All rights reserved.</p>
+            <div class="form-group">
+                <label>Enter the appropriate location:</label>
+                <input class="form-control" type="text" name="location" placeholder="location" />
             </div>
-        </div>
-        <div class="row bg-success" style="border-bottom:1px solid rgba(255, 255, 255, 0.3);">
-            <div class="container">
-                <ul class="list-group list-group-horizontal float-right">
-                    <li class="list-group-item">
-                        <a href="#" title="facebook"><i class="fab fa-facebook-f"></i></a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="#" title="instagram"><i class="fab fa-instagram"></i></a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="#" title="linkedIn"><i class="fab fa-linkedin-in"></i></a>
-                    </li>
-                    <li class="list-group-item">
-                        <a href="#" title="google-plus"><i class="fab fa-google-plus-g"></i></a>
-                    </li>
-                </ul>
+            <div class="form-group">
+                <label>Please briefly describe the problem:</label>
+                <textarea class="form-control" name="description" cols="30" rows="10">
+                </textarea>
             </div>
-        </div>
-    </footer>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
-    </script>
-    <!-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
-    </script> -->
-    <script src="js/bootstrap.min.js"></script>
-</body>
-
-</html>
+            <div class="form-group">
+                <input type="file" name="myImage">
+            </div>
+            <input type="submit" value="submit" class="btn btn-success w-25 text-center" />
+        </form>
+        <% if(typeof file != 'undefined') { %>
+        <img src="<%= file %>" class="img-thumbnail" style="height:80px;width:100px">
+        <% } %>
+        <br>
+    </div>
+</main>
+    

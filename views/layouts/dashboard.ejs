@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="fonts/css/all.min.css" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="shortcut icon" href="/images/slogo-2.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/index.css" />
+    <style>
+        body {
+            color: black;
+            background-color: whitesmoke;
+        }
+
+        .col-md-2 .list-group a {
+            color: black !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="row min-vh-100">
+        <div class="col-md-2 fix d-flex flex-column justify-content-top align-items-center" style="box-shadow: 0 0 10px rgba(0,0,0,0.2)">
+            <h1 class="text-center" style="height:14%;">Sar<span class="text-success">ok</span>aar</h1>
+            <ul class="list-group">
+                <li class="list-group-item"><i class="fas fa-tachometer-alt mx-2"></i><a href="/admin">Dashboard</a></li>
+                <li class="list-group-item"><i class="fas fa-user-tie mx-2"></i>user profile</li>
+                <li class="list-group-item"><i class="fas fa-user-tie mx-2"></i>register</li>
+                <li class="list-group-item"><i class="fas fa-map-marker-alt mx-2"></i>maps</li>
+                <li class="list-group-item"><i class="fas fa-table mx-2"></i>tables</li>
+                <li class="list-group-item"><i class="fas fa-users mx-2"></i><a href="/admin/getAllUsers">Users</a></li>
+            </ul>
+            <div style="height:2px;width:80%;background:rgba(0,0,0,0.1)">
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="row">
+                <div class="col-md-12 bg-dark text-light">
+                    <ul class="list-inline d-flex justify-content-between align-items-center h-100">
+                        <li class="list-inline-item text-light font-weight-bold text-uppercase">Dashboard</li>
+                        <li class="d-flex list-inline justify-content-center align-items-center">
+                            <input type="text" placeholder="search..." class="form-control rounded-pill mx-3">
+                            <img src='<%= admin[0].img %>' style='border-radius: 50%;height: 30px;width: 30px;' class="mx-2"><span class="text-capitalize"><%= admin[0].fName %></span>_<span class="text-capitalize"><%= admin[0].lName %></span></img>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <%- body %>
+</body>
+</html>

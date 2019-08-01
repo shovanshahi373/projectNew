@@ -1,53 +1,56 @@
-  <% include partials/header.ejs %>
+<section class="banner vh-100">
+  <!-- <img src="images/mtn.jpg" /> -->
+  <div class="overlay">
 
-  <section class="banner vh-100">
-    <!-- <img src="images/mtn.jpg" /> -->
-    <div class="overlay">
+    <div class="flex">
 
-      <div class="flex">
-
-        <h1 class="lead display-1">
-          Sar<span class="text-success">ok</span>aar
-        </h1>
-        <p>
-          We do listen to your concerns.
-        </p>
-        <div class="btns">
-          <a class="btn btn-success p-2 text-center btn-md btn-sm" href="#sign-up">Register</a>
-          <a class="btn btn-outline-success p-2 text-center btn-md btn-sm" href="/upload">complain</a>
-        </div>
+      <h1 class="lead display-1">
+        Sar<span class="text-success">ok</span>aar
+      </h1>
+      <p>
+        We do listen to your concerns.
+      </p>
+      <div class="btns">
+        <a class="btn btn-success p-2 text-center btn-md btn-sm" href="#sign-up">Register</a>
+        <a class="btn btn-outline-success p-2 text-center btn-md btn-sm" href="/upload">complain</a>
       </div>
     </div>
-  </section>
-  <!-- <section class="mobile dark-gradient"></section> -->
+  </div>
+</section>
 
-  <section class="mobile form-section">
-    <div class="field sign-up" id="sign-up">
-      <div class="container">
-        <h3>Become a part of us!</h3>
-        <form action="/register" method="POST">
-          <input type="text" name="fname" class="form-control" placeholder="firstName" />
-          <input type="text" name="lname" class="form-control" placeholder="last Name" />
-          <input type="email" name="email" class="form-control" placeholder="email" />
-          <input type="text" name="addr" class="form-control" placeholder="address" />
-          <input type="text" name="mobile" class="form-control" placeholder="mobile" />
-          <input type="password" name="password" class="form-control" placeholder="password" />
-          <input type="password" name="cpassword" class="form-control" placeholder="confirm Password" />
-          <input type="submit" value="register" class="btn btn-block btn-success" />
-        </form>
-      </div>
+<% if(locals.msg != null) { %>
+  <div class="alert alert-success error-msg">hello <%= fname + "! " %><%= msg %></div>
+<% } %>
+
+
+<!-- <section class="mobile dark-gradient"></section> -->
+
+<%# <section class="mobile form-section">
+  <div class="field sign-up" id="sign-up">
+    <div class="container">
+      <h3>Become a part of us!</h3>
+      <form action="/register" method="POST">
+        <input type="text" name="fname" class="form-control" placeholder="firstName" />
+        <input type="text" name="lname" class="form-control" placeholder="last Name" />
+        <input type="email" name="email" class="form-control" placeholder="email" />
+        <input type="text" name="addr" class="form-control" placeholder="address" />
+        <input type="text" name="mobile" class="form-control" placeholder="mobile" />
+        <input type="password" name="password" class="form-control" placeholder="password" />
+        <input type="password" name="cpassword" class="form-control" placeholder="confirm Password" />
+        <input type="submit" value="register" class="btn btn-block btn-success" />
+      </form>
     </div>
+  </div>
 
-    <div class="field login" id="login">
-      <div class="container">
-        <h3>Welcome back!</h3>
-        <form action="/login" method="POST">
-          <input type="email" class="form-control" placeholder="Email or Phone" />
-          <input type="password" class="form-control" placeholder="Password" />
-          <input type="submit" value="Login" class="btn btn-block btn-success" />
-        </form>
-      </div>
+  <div class="field login" id="login">
+    <div class="container">
+      <h3>Welcome back!</h3>
+      <form action="/login" method="POST">
+        <input type="email" class="form-control" placeholder="Email or Phone" />
+        <input type="password" class="form-control" placeholder="Password" />
+        <input type="submit" value="Login" class="btn btn-block btn-success" />
+      </form>
     </div>
+  </div>
 
-  </section>
-  <% include partials/footer.ejs %>
+</section> %>

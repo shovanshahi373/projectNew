@@ -1,58 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
+<div class="row bg-success" style="border-bottom:1px solid rgba(255, 255, 255, 0.3);">
+</div>
+<div class="row bg-success sticky-top">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg nav-light bg-success">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><%= title %></title>
-    <link rel="shortcut icon" href="/images/slogo-2.png" type="image/x-icon">
-    <link rel="stylesheet" href="fonts/css/all.min.css">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/index.css">
-</head>
+            <a class="navbar-brand" href="/">Sarokaar</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
 
-<body>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-    <div class="row bg-success" style="border-bottom:1px solid rgba(255, 255, 255, 0.3);">
+                <ul class="navbar-nav mr-auto navbar-right">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/developers">Developers</a>
+                    </li>
+                    <li class="nav-item">
+                        <% if('window.innerWidth' < 425+'px') { %>
+                        <a class="nav-link" href="#sign-up" id="sign-up-redirect">Register</a>
+                        <% }else { %>
+                        <a class="nav-link" href="/user/register" id="login-redirect">Register</a>
+                        <% } %>
+                    </li>
+                    <li class="nav-item">
+                        <% if('window.innerWidth' < 425+'px') { %>
+                        <a class="nav-link" href="#login" id="login-redirect">Login</a>
+                        <% }else { %>
+                        <a class="nav-link" href="/user/login" id="login-redirect">Login</a>
+                        <% } %>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     </div>
-    <div class="row bg-success sticky-top">
-        <div class="container">
-            <nav class="navbar navbar-expand-lg nav-light bg-success">
-
-                <a class="navbar-brand" href="/">Sarokaar</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse"
-                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                    aria-label="Toggle navigation">
-                    <i class="fas fa-bars"></i>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-                    <ul class="navbar-nav mr-auto navbar-right">
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="/about">About us</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/developers">Developers</a>
-                        </li>
-                        <li class="nav-item">
-                            <% if('document.width' < 425+'px') { %>
-                            <a class="nav-link" href="#sign-up" id="sign-up-redirect">Register</a>
-                            <% }else { %>
-                            <a class="nav-link" href="/user/register" id="login-redirect">Register</a>
-                            <% } %>
-                        </li>
-                        <li class="nav-item">
-                            <% if('document.width' < 425+'px') { %>
-                            <a class="nav-link" href="#login" id="login-redirect">Login</a>
-                            <% }else { %>
-                            <a class="nav-link" href="/user/login" id="login-redirect">Login</a>
-                            <% } %>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
-    </div>
+</div>

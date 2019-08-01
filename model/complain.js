@@ -1,8 +1,8 @@
 const Sequelize = require("sequelize");
 const db = require("../database");
 
-module.exports = db.define("userModel", {
-  userid: {
+module.exports = db.define("complaints", {
+  id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
@@ -11,14 +11,14 @@ module.exports = db.define("userModel", {
       min: 1
     }
   },
-  fName: {
+  title: {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
-      is: ["^[a-z]+$", "i"]
+      is: ["^[a-z0-9]+$", "i"]
     }
   },
-  lName: {
+  location: {
     type: Sequelize.STRING,
     allowNull: false,
     validate: {
@@ -36,11 +36,14 @@ module.exports = db.define("userModel", {
     type: Sequelize.INTEGER,
     allowNull: true,
     validate: {
-      is: ["^[0-9]{10}$", "i"]
-    },
-    default: "N/A"
+      is: ["^[0-9]{10}$"]
+    }
   },
-  password: {
+  description: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  image: {
     type: Sequelize.STRING,
     allowNull: false
   }

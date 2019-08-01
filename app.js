@@ -3,21 +3,27 @@ const express = require("express");
 const path = require("path");
 const multer = require("multer");
 const bodyParser = require("body-parser");
+const expressLayouts = require("express-ejs-layouts");
 // const userModel = require('./model/users');
 const port = process.env.PORT || 3000;
 
-const routes = require('./routes/index');
-const users = require('./routes/User');
-const admin = require('./routes/Admin');
+const routes = require("./routes/index");
+const users = require("./routes/User");
+const admin = require("./routes/Admin");
 
 //connect to database
-db.connect(function (err) {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log("connected...");
-  }
-});
+// db.connect(function(err) {
+//   if (err) {
+//     console.log(err);
+//   } else {
+//     console.log("connected...");
+//   }
+// });
+
+//connect to database
+db.authenticate()
+  .then(() => console.log("database connected..."))
+  .catch(err => console.log("error"));
 
 //init app
 const app = express();
@@ -32,15 +38,18 @@ app.use(
 app.use(bodyParser.json());
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+// app.set("layout", "layouts/layout");
+app.use(expressLayouts);
 
 //set routes
-app.use('/', routes);
-app.use('/user', users);
-app.use('/admin', admin);
+app.use("/", routes);
+app.use("/user", users);
+app.use("/admin", admin);
 
+//configure multer
 const storage = multer.diskStorage({
   destination: "resources/uploads",
-  filename: function (req, file, cb) {
+  filename: function(req, file, cb) {
     cb(
       null,
       file.fieldname + "-" + Date.now() + path.extname(file.originalname)
@@ -54,7 +63,7 @@ const upload = multer({
   limits: {
     fileSize: 1000000
   },
-  fileFilter: function (req, file, cb) {
+  fileFilter: function(req, file, cb) {
     checkFileType(file, cb);
   }
 }).single("myImage");
@@ -68,7 +77,7 @@ function checkFileType(file, cb) {
 
   // const mimeType = filetypes.test(file.mimetype);
 
-  if ( /*mimeType &&*/ extname) {
+  if (/*mimeType &&*/ extname) {
     console.log("success");
     return cb(null, true);
   } else {
@@ -78,44 +87,38 @@ function checkFileType(file, cb) {
 
 app.get("/upload", (req, res) => {
   res.render("complainform", {
-    title: "this is a complain"
+    title: "this is a complain",
+    layout: "layouts/main.ejs"
   });
 });
 
 app.post("/upload", (req, res) => {
-  let {
-    title,
-    location,
-    description
-  } = req.body;
+  let { title, location, description } = req.body;
   // let { myImage } = req.file;
   console.log(title);
   upload(req, res, err => {
     if (err) {
       res.render("complainform", {
-        msg: err
+        title: "error",
+        msg: err,
+        layout: "layouts/main.ejs"
       });
     } else {
       if (req.file == undefined) {
         res.render("complainform", {
-          msg: "Error: No File Selected!"
+          title: "error",
+          msg: "Error: No File Selected!",
+          layout: "layouts/main.ejs"
         });
       } else {
-        res.render("complainform", {
+        res.redirect("complainform", {
+          title: "uploading",
           msg: "File Uploaded!",
-          file: `../uploads/${req.file.filename}`
+          file: `../uploads/${req.file.filename}`,
+          layout: "layouts/main.ejs"
         });
       }
     }
-  });
-});
-
-app.get("/createDb", (req, res) => {
-  let sql = "CREATE DATABASE Sarokaar";
-  conn.query(sql, (err, result) => {
-    if (err) throw err;
-    console.log(result);
-    res.send("database created...");
   });
 });
 

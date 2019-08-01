@@ -1,0 +1,52 @@
+<div class="container f-flex flex-column text-center">
+    <h1><img src="/images/slogo-2.png" style="height=20px;width:35px;">Sa<span class="text-success">ok</span>aar
+    </h1>
+    <p class="lead">We do listen to your concerns.</p>
+</div>
+<div class="container d-flex justify-content-center align-items-center">
+    <div class="form-container-user-register">
+        <form action="/user/register" method="POST" class="d-flex justify-content-center align-items-center flex-column">
+            <div class="d-flex justify-content-center align-items-center flex-column">
+                <small style="line-height:50px;text-align:center;color:#bdbcc1">Sign up with</small>
+                <div class="buttons">
+                    <button class="bx mb-2" style="border:none;outline:none"><i class="fab fa-google"></i><small class="text-info font-weight-bold">Google</small></button>
+                    <button class="bx" style="border:none;outline:none"><i class="fab fa-facebook"></i><small class="text-info font-weight-bold">Facebook</small></button>
+                </div>
+            </div>
+            <hr>
+            <small style="line-height:50px;text-align:bottom;color:#bdbcc1">or sign up with credentials</small>
+            <div class="form-group bx">
+                <i class="fab fa-google"></i>
+                <input type="text" name="fname" placeholder="first name" class="transparent" autocomplete="disabled">
+            </div>
+            <div class="form-group bx">
+                <i class="fab fa-google"></i>
+                <input type="text" name="lname" placeholder="last name" class="transparent" autocomplete="disabled">
+            </div>
+            <div class="form-group bx">
+                <i class="fab fa-google"></i>
+                <input type="text" name="email" placeholder="email" class="transparent" autocomplete="disabled">
+            </div>
+            <div class="form-group bx">
+                <i class="fab fa-google"></i>
+                <input type="text" name="mobile" placeholder="mobile" class="transparent" autocomplete="disabled">
+            </div>
+            <div class="form-group bx">
+                <i class="fab fa-google"></i>
+                <input type="password" name="password" placeholder="password" class="transparent">
+            </div>
+            <div class="form-group bx">
+                <i class="fab fa-google"></i>
+                <input type="password" name="cpassword" placeholder="confirm-password" class="transparent">
+            </div>
+            <div class="form-group">
+                <input type="checkbox" name="" value=""><span style="color:#bdbcc1;">i agree with the</span><a href="#"><span class="text-info"> Privacy Policy</a></span>
+            </div>
+            <input type="submit" value="submit" class="btn btn-primary">
+        </form>
+    </div>
+</div>
+
+<% if(locals.msg != null) { %>
+  <div class="alert alert-success error-msg">hello <%= fname + "! " %><%= msg %></div>
+<% } %>
