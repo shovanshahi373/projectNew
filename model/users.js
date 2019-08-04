@@ -1,44 +1,24 @@
 const Sequelize = require("sequelize");
 const db = require("../database");
 
-module.exports = db.define("userModel", {
-  userid: {
+module.exports = db.define("users", {
+  uid: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
-    allowNull: false,
-    primaryKey: true,
-    validate: {
-      min: 1
-    }
+    primaryKey: true
   },
-  fName: {
+  uname: {
     type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      is: ["^[a-z]+$", "i"]
-    }
-  },
-  lName: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      is: ["^[a-z]+$", "i"]
-    }
+    allowNull: false
   },
   email: {
     type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      is: ["^([a-zA-Z0-9_-.]+)@([a-zA-Z0-9_-.]+).([a-zA-Z]{2,5})$"]
-    }
+    allowNull: false
   },
   mobile: {
     type: Sequelize.INTEGER,
     allowNull: true,
-    validate: {
-      is: ["^[0-9]{10}$", "i"]
-    },
-    default: "N/A"
+    default: "-"
   },
   password: {
     type: Sequelize.STRING,

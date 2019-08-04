@@ -1,28 +1,18 @@
 const sequelize = require("sequelize");
 const db = require("../database");
 
-module.exports = db.define("admin", {
+module.exports = db.define("admins", {
   eid: {
     type: sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true
   },
-  fName: {
+  username: {
     type: sequelize.STRING,
-    allowNull: false,
-    validate: {
-      is: ["^[a-z]+$", "i"]
-    }
+    allowNull: false
   },
-  lName: {
-    type: sequelize.STRING,
-    allowNull: false,
-    validate: {
-      is: ["^[a-z]+$", "i"]
-    }
-  },
-  contact: {
+  email: {
     type: sequelize.STRING,
     allowNull: false
   },
@@ -30,21 +20,13 @@ module.exports = db.define("admin", {
     type: sequelize.STRING,
     allowNull: false
   },
-
-  userName: {
-    type: sequelize.STRING,
-    allowNull: false,
-    validate: {
-      isEmail: true
-    }
-  },
   password: {
     type: sequelize.STRING,
     allowNull: false
   },
-  img: {
+  image: {
     type: sequelize.STRING,
     allowNull: true,
-    default: "image"
+    default: "/images/img.png"
   }
 });

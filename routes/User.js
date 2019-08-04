@@ -1,41 +1,118 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../model/users");
+const Seq = require("sequelize");
+const Op = Seq.Op;
 
 router.get("/login", (req, res) => {
   res.render("users/login", {
-    title: "login",
-    layout: "layouts/main.ejs"
+    title: "Sarokaar | Login",
+    layout: "layouts/layout2.ejs"
   });
 });
 
 router.post("/login", (req, res) => {
-  res.render("users/login", {
-    title: "login",
-    layout: "layouts/main.ejs"
-  });
+  let { uname, password } = req.body;
+  let errors = [];
+  User.findAll({
+    where: {
+      uname: { [Op.like]: uname },
+      password: { [Op.like]: password }
+    }
+  })
+    .then(user => {
+      if (user.length == 1) {
+        res.render("users/home", {
+          user,
+          layout: "layouts/users"
+        });
+      } else {
+        errors.push({ msg: "user doesn't exist" });
+        res.render("users/login", {
+          title: "Sarokaar | Login",
+          layout: "layouts/layout2.ejs",
+          errors
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+    });
 });
 
 router.get("/register", (req, res) => {
   res.render("users/register", {
     title: "register",
-    layout: "layouts/main.ejs",
-    user: new User()
+    layout: "layouts/layout2.ejs"
   });
 });
 
 router.post("/register", (req, res) => {
-  let { fname, lname, email, mobile, password } = req.body;
-  // if(fname !== '' && fname.match(/^[a-zA-Z]{3,}$/)) {
+  let { uname, email, mobile, password, cpassword } = req.body;
+  let errors = [];
 
-  // }
-  res.render("index", {
-    title: "Sarokaar",
-    msg: "you are successgully registered",
-    layout: "layouts/main.ejs",
-    fname,
-    lname
-  });
+  if (uname == "" || email == "" || mobile == "" || password == "") {
+    errors.push({ msg: "please fill in all the fields" });
+  }
+
+  if (!mobile.match(/^[0-9]{10}$/)) {
+    errors.push({ msg: "mobile number should be 10 digit" });
+  }
+
+  if (password.length < 6) {
+    errors.push({ msg: "password must be atleast 6 characters long!" });
+  }
+
+  if (cpassword != password) {
+    errors.push({ msg: "please match the password fields" });
+  }
+
+  if (errors.length > 0) {
+    res.render("users/register", {
+      title: "registration invalid",
+      layout: "layouts/layout2.ejs",
+      errors,
+      uname,
+      email,
+      mobile,
+      password,
+      cpassword
+    });
+  } else {
+    User.findAll({
+      where: {
+        email: { [Op.like]: email }
+      }
+    })
+      .then(user => {
+        console.log(user);
+        if (user == "") {
+          User.create({
+            uname,
+            email,
+            mobile,
+            password
+          })
+            .then(user => {
+              res.render("users/login", {
+                layout: "layouts/layout2.ejs",
+                title: "Sarokaar | login"
+              });
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        } else {
+          errors.push({ msg: "email already exists in our system" });
+          res.render("users/register", {
+            layout: "layouts/layout2",
+            errors,
+            title: "invalid entries"
+          });
+        }
+      })
+      .catch(err => {});
+  }
 });
 
 module.exports = router;

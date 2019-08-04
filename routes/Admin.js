@@ -1,44 +1,52 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../database");
+const Seq = require("sequelize");
+const Op = Seq.Op;
+const Admin = require("../model/admin");
+// const Admin = require("../sequelize");
 
 router.get("/", (req, res) => {
   res.render("admin/login", {
-    title: "admin login panel",
-    layout: "layouts/admins"
+    layout: "layouts/admin-login"
   });
 });
 
 router.post("/", (req, res) => {
-  let a = req.body.username;
-  let b = req.body.password;
-  if (a == "" || b == "") {
+  let { username, password } = req.body;
+  if (username == "" || password == "") {
     res.render("admin/login", {
-      title: "admin not found",
       msg: "please fill-in all fields",
-      layout: "layouts/admins"
+      layout: "layouts/admin-login"
     });
   }
-  let query = `SELECT * FROM admins WHERE userName="${a}" AND password="${b}"`;
-  db.query(query, (err, result) => {
-    if (err) {
-      console.log(err);
-    } else if (result == "") {
-      res.render("admin/login", {
-        title: "admin not found",
-        msg: "unauthorized username!",
-        layout: "layouts/admins"
-      });
-    } else {
-      console.log("user found...");
-      res.render("admin/dashboard", {
-        title: "Sarokaar | Dashboard",
-        admin: result,
-        layout: "layouts/dashboard.ejs"
-      });
-      console.log(result);
+
+  Admin.findAll({
+    where: {
+      username: { [Op.like]: username },
+      password: { [Op.like]: password }
     }
-  });
+  })
+    .then(admin => {
+      if (admin != "") {
+        res.render("admin/dashboard", {
+          admin,
+          layout: "layouts/dashboard.ejs"
+        });
+      } else {
+        res.render("admin/login", {
+          msg: "unrecognized credentials!",
+          layout: "layouts/admin-login"
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.render("admin/login", {
+        msg: "something went wrong. Try again.",
+        layout: "layouts/admin-login"
+      });
+    });
 });
 
 module.exports = router;

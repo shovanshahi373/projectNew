@@ -2,13 +2,17 @@
 
 html {
   scroll-behavior: smooth;
-  width: 100%;
 }
 
 body {
   background-color: #252527;
   color: white;
   max-width: 100%;
+}
+
+html,
+body {
+  min-height: 100vh;
 }
 
 .clear {
@@ -20,7 +24,6 @@ body {
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
   border-radius: 2px;
   padding: 10px;
-  width: 90%;
 }
 
 .form-container-user-register {

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Sarokaar</title>
+  <link rel="shortcut icon" href="/images/slogo-2.png" type="image/x-icon">
+  <link rel="stylesheet" href="/fonts/css/all.min.css">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/userLayout.css">
+  <style>
+    body {
+      overflow-x: hidden;
+    }
+  </style>
+</head>
+<body>
+  <header class="sticky-top">
+    <%- include('../partials/user-header.ejs')%>  
+  </header>
+  <main>
+    <div class="row">
+      <div class="col-md-2 bg-info">
+        <%- include('../partials/user-sidebar.ejs')%>
+      </div>
+      <div class="col-md-8">
+        <div class="container pt-3">
+          <%- body %>
+        </div>
+      </div>
+      <div class="col-md-2 min-vh-100 bg-info">
+      </div>
+    </div>
+  </main>
+  <%- include('../partials/footer.ejs') %>
+</body>
+</html>

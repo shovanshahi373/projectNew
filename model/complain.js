@@ -11,37 +11,29 @@ module.exports = db.define("complaints", {
       min: 1
     }
   },
+  createdBy: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
   title: {
     type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      is: ["^[a-z0-9]+$", "i"]
-    }
+    allowNull: false
   },
   location: {
     type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      is: ["^[a-z]+$", "i"]
-    }
+    allowNull: false
   },
   email: {
     type: Sequelize.STRING,
-    allowNull: false,
-    validate: {
-      is: ["^([a-zA-Z0-9_-.]+)@([a-zA-Z0-9_-.]+).([a-zA-Z]{2,5})$"]
-    }
+    allowNull: false
   },
   mobile: {
     type: Sequelize.INTEGER,
-    allowNull: true,
-    validate: {
-      is: ["^[0-9]{10}$"]
-    }
+    allowNull: true
   },
   description: {
     type: Sequelize.STRING,
-    allowNull: true
+    allowNull: false
   },
   image: {
     type: Sequelize.STRING,

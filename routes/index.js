@@ -13,7 +13,7 @@ router.get("/developers", (req, res) => {
     developers: [
       {
         name: "Shovan Shahi",
-        img: "/images/shovan.jpg",
+        img: "/images/sovan.jpg",
         desc:
           "Studying Bsc.CsIT, 7th semester at Tribhuvan University, Mr.Shovan Shahi is primarily interested in frontend development with HTML,CSS, JavaScript, Bootstrap as his tools. Currently shaping his skills on Node js, he has a dream of being a full stack developer.",
         link: "https://www.facebook.com/shovan.shahi"
