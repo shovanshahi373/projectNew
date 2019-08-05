@@ -1,9 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../database");
+let db;
 const Seq = require("sequelize");
 const Op = Seq.Op;
 const Admin = require("../model/admin");
+if (process.env.NODE_ENV == "production") {
+  db = require("../remotedb");
+} else {
+  db = require("./database");
+}
 // const Admin = require("../sequelize");
 
 router.get("/", (req, res) => {

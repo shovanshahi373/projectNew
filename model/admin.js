@@ -1,5 +1,11 @@
 const sequelize = require("sequelize");
-const db = require("../database");
+let db;
+
+if (process.env.NODE_ENV == "production") {
+  db = require("../remotedb");
+} else {
+  db = require("./database");
+}
 
 module.exports = db.define("admins", {
   eid: {

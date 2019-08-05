@@ -3,6 +3,11 @@ const router = express.Router();
 const User = require("../model/users");
 const Seq = require("sequelize");
 const Op = Seq.Op;
+if (process.env.NODE_ENV == "production") {
+  db = require("../remotedb");
+} else {
+  db = require("./database");
+}
 
 router.get("/login", (req, res) => {
   res.render("users/login", {
