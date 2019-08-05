@@ -7,7 +7,7 @@ const Admin = require("../model/admin");
 if (process.env.NODE_ENV == "production") {
   db = require("../remotedb");
 } else {
-  db = require("./database");
+  db = require("../database");
 }
 // const Admin = require("../sequelize");
 
