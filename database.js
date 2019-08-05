@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 // const mysql = require("mysql");
 
-module.exports = new Sequelize("sarokaar", "root", "", {
+const db = new Sequelize("sarokaar", "root", "", {
   host: "localhost",
   dialect: "mysql",
   operatorAliases: false,
@@ -16,9 +16,4 @@ module.exports = new Sequelize("sarokaar", "root", "", {
   }
 });
 
-// module.exports = mysql.createConnection({
-//     host: "localhost",
-//     user: "root",
-//     password: "",
-//     database: "sarokaar"
-// });
+module.exports = db;
