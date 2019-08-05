@@ -1,4 +1,23 @@
-const db = require("./database");
+let db;
+
+if (process.env.NODE_ENV == "production") {
+  db = new Sequelize("cpVJB15QPr", "cpVJB15QPr", "LgzpbTew0b", {
+    host: "37.59.55.185",
+    dialect: "mysql",
+    operatorAliases: false,
+    pool: {
+      max: 5,
+      min: 0,
+      acquire: 30000,
+      idle: 10000
+    },
+    define: {
+      timestamps: false
+    }
+  });
+} else {
+  db = require("./database");
+}
 const express = require("express");
 const path = require("path");
 const multer = require("multer");
