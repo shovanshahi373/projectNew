@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../model/users");
 const Seq = require("sequelize");
+const bcrypt = require("bcryptjs");
 const Op = Seq.Op;
 let db;
 if (process.env.NODE_ENV == "production") {
@@ -18,20 +19,45 @@ router.get("/login", (req, res) => {
 });
 
 router.post("/login", (req, res) => {
-  let { uname, password } = req.body;
+  let { email, password } = req.body;
   let errors = [];
-  User.findAll({
+
+  if (email == "" || password == "") {
+    errors.push({ msg: "please fill all the fields" });
+    res.render("users/login", {
+      errors,
+      title: "Sarokaar | Login",
+      layout: "layouts/layout2.ejs"
+    });
+  }
+
+  User.findOne({
     where: {
-      uname: { [Op.like]: uname },
-      password: { [Op.like]: password }
+      email: { [Op.like]: email }
     }
   })
     .then(user => {
-      if (user.length == 1) {
-        res.render("users/home", {
-          user,
-          layout: "layouts/users"
-        });
+      if (user) {
+        let hash = user.password;
+        bcrypt
+          .compare(password, hash)
+          .then(result => {
+            if (result) {
+              console.log("password matches " + result);
+              res.render("users/home", {
+                user,
+                layout: "layouts/users"
+              });
+            } else {
+              errors.push({ msg: "email or password did not match" });
+              res.render("users/login", {
+                title: "Sarokaar | Login",
+                layout: "layouts/layout2.ejs",
+                errors
+              });
+            }
+          })
+          .catch(err => console.log("error: " + err));
       } else {
         errors.push({ msg: "user doesn't exist" });
         res.render("users/login", {
@@ -54,7 +80,7 @@ router.get("/register", (req, res) => {
 });
 
 router.post("/register", (req, res) => {
-  const { uname, email, mobile, password, cpassword } = req.body;
+  let { uname, email, mobile, password, cpassword } = req.body;
   let errors = [];
 
   if (uname == "" || email == "" || mobile == "" || password == "") {
@@ -92,6 +118,14 @@ router.post("/register", (req, res) => {
     })
       .then(user => {
         if (!user) {
+          // bcrypt.genSalt(10, (err, salt) => {
+          //   bcrypt.hash(password, salt, (err, hash) => {
+          //     if (err) throw err;
+          //     password = hash;
+          //   });
+          // });
+          const hash = bcrypt.hashSync(password, 10);
+          password = hash;
           User.create({
             uname,
             email,
