@@ -1,4 +1,5 @@
 let db;
+const Sequelize = require("sequelize");
 
 if (process.env.NODE_ENV == "production") {
   db = new Sequelize("cpVJB15QPr", "cpVJB15QPr", "LgzpbTew0b", {
