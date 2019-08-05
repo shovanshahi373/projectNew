@@ -54,7 +54,7 @@ router.get("/register", (req, res) => {
 });
 
 router.post("/register", (req, res) => {
-  let { uname, email, mobile, password, cpassword } = req.body;
+  const { uname, email, mobile, password, cpassword } = req.body;
   let errors = [];
 
   if (uname == "" || email == "" || mobile == "" || password == "") {
@@ -85,14 +85,13 @@ router.post("/register", (req, res) => {
       cpassword
     });
   } else {
-    User.findAll({
+    User.findOne({
       where: {
         email: { [Op.like]: email }
       }
     })
       .then(user => {
-        console.log(user);
-        if (user == "") {
+        if (!user) {
           User.create({
             uname,
             email,
@@ -117,7 +116,9 @@ router.post("/register", (req, res) => {
           });
         }
       })
-      .catch(err => {});
+      .catch(err => {
+        console.log(err);
+      });
   }
 });
 
