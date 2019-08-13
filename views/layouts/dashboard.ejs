@@ -11,17 +11,25 @@
     <%# <link rel="stylesheet" href="css/index.css" /> %>
 </head>
 <body>
-    <div class="row">
-        <div class="bg-dark min-vh-100" style="width:15%">
-            <div class="text-center m-auto">
-                <%- include('../partials/dboard-sidebar.ejs') %>
+    <div class="container-fluid">
+        <div class="row" style="height:100vh;">
+            <div class="col-md-2 bg-light h-100">
+                <%- include('../partials/d-sidebar.ejs') %>
             </div>
-        </div>
-        <div style="width:85%">
-
-            <%- include('../partials/dboard-header.ejs') %>
-
-            <%- body%>
+            <div class="col-md-10 h-100">
+                <%# navbar %>
+                <div class="row">
+                    <div class="col-12 bg-dark">
+                        <%- include('../partials/d-navbar.ejs') %>                        
+                    </div>
+                </div>
+                <%# header %>
+                <div class="row h-25">
+                    <%- include('../partials/d-header.ejs') %>
+                </div>
+                <%# main %>
+                <div class="row" style="margin-top:-30px"><div class="container"><%- body %></div></div>
+            </div>
         </div>
     </div>
 </body>

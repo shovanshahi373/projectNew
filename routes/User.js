@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../model/users");
 const Seq = require("sequelize");
 const bcrypt = require("bcryptjs");
+const passport = require("passport");
 const Op = Seq.Op;
 let db;
 if (process.env.NODE_ENV == "production") {
@@ -18,7 +19,11 @@ router.get("/login", (req, res) => {
   });
 });
 
-router.post("/login", (req, res) => {
+router.get("/logout", (req, res) => {
+  res.send("logout");
+});
+
+router.post("/login", (req, res, next) => {
   let { email, password } = req.body;
   let errors = [];
 
@@ -31,45 +36,17 @@ router.post("/login", (req, res) => {
     });
   }
 
-  User.findOne({
-    where: {
-      email: { [Op.like]: email }
-    }
-  })
-    .then(user => {
-      if (user) {
-        let hash = user.password;
-        bcrypt
-          .compare(password, hash)
-          .then(result => {
-            if (result) {
-              console.log("password matches " + result);
-              res.render("users/home", {
-                user,
-                layout: "layouts/users"
-              });
-            } else {
-              errors.push({ msg: "email or password did not match" });
-              res.render("users/login", {
-                title: "Sarokaar | Login",
-                layout: "layouts/layout2.ejs",
-                errors
-              });
-            }
-          })
-          .catch(err => console.log("error: " + err));
-      } else {
-        errors.push({ msg: "user doesn't exist" });
-        res.render("users/login", {
-          title: "Sarokaar | Login",
-          layout: "layouts/layout2.ejs",
-          errors
-        });
-      }
-    })
-    .catch(err => {
-      console.log(err);
-    });
+  passport.authenticate("local", {
+    successRedirect: "/user/home",
+    failureRedirect: "/user/login",
+    failureFlash: true
+  })(req, res, next);
+});
+
+router.get("/home", (req, res) => {
+  res.render("users/home", {
+    layout: "layouts/users"
+  });
 });
 
 router.get("/register", (req, res) => {
@@ -118,12 +95,6 @@ router.post("/register", (req, res) => {
     })
       .then(user => {
         if (!user) {
-          // bcrypt.genSalt(10, (err, salt) => {
-          //   bcrypt.hash(password, salt, (err, hash) => {
-          //     if (err) throw err;
-          //     password = hash;
-          //   });
-          // });
           const hash = bcrypt.hashSync(password, 10);
           password = hash;
           User.create({
@@ -133,10 +104,11 @@ router.post("/register", (req, res) => {
             password
           })
             .then(user => {
-              res.render("users/login", {
-                layout: "layouts/layout2.ejs",
-                title: "Sarokaar | login"
-              });
+              req.flash(
+                "success_msg",
+                "successfully registered. login to contiue"
+              );
+              res.redirect("/user/login");
             })
             .catch(err => {
               console.log(err);
