@@ -53,24 +53,37 @@ router.get("/home", ensureAuthenticated, (req, res) => {
   });
 });
 
-// router.get("/upload", (req, res) => {
-//   res.render("users/complainform", {
-//     title: "this is a complain",
-//     layout: "layouts/main.ejs"
-//   });
-// });
+router.get("/handle-forgot-password", (req, res) => {
+  const email = req.query.email;
+  res.send(email);
+});
 
-// router.post("/upload", (req, res) => {
+router.get("/forgot-password", (req, res) => {
+  res.render("users/forgot-password", {
+    layout: "layouts/layout2.ejs",
+    title: "reset password"
+  });
+});
+
+router.get("/complain-form", (req, res) => {
+  res.render("users/complain-form", {
+    layout: "layouts/users.ejs",
+    user: req.session.user
+  });
+});
+
+// router.post("/complain-form", (req, res) => {
 //   let { title, location, description } = req.body;
 //   // let { myImage } = req.file;
 //   console.log(title);
 //   upload(req, res, err => {
 //     if (err) {
-//       res.render("users/complainform", {
-//         title: "error",
-//         msg: err,
-//         layout: "layouts/main.ejs"
-//       });
+//       res.redirect("/user/home");
+//       // res.render("users/home", {
+//       //   title: "error",
+//       //   msg: err,
+//       //   layout: "layouts/main.ejs"
+//       // });
 //     } else {
 //       if (req.file == "undefined") {
 //         res.render("users/complainform", {
