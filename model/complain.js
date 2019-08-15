@@ -1,21 +1,12 @@
 const Sequelize = require("sequelize");
-let db;
-
-if (process.env.NODE_ENV == "production") {
-  db = require("../remotedb");
-} else {
-  db = require("../database");
-}
+const db = require("../configs/database");
 
 module.exports = db.define("complaints", {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
-    primaryKey: true,
-    validate: {
-      min: 1
-    }
+    primaryKey: true
   },
   createdBy: {
     type: Sequelize.STRING,

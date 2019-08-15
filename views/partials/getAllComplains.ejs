@@ -1,0 +1,18 @@
+<table class="table table-striped">
+  <tr>
+    <th>post id</th>
+    <th>title</th>
+    <th>created By</th>
+    <th>location</th>
+    <th>user email</th>
+  </tr>
+  <% complains.forEach(complain=> { %>
+    <tr>
+      <td><%= complain.id %></td>
+      <td><%= complain.title %></td>
+      <td><%= complain.createdBy %></td>
+      <td><%= complain.location %></td>
+      <td><%= complain.email %></td>
+    </tr>
+  <% }) %>
+<table>

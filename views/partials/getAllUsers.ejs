@@ -1,16 +1,14 @@
-<table class="table">
-  <thead>
+<table class="table table-striped">
+  <tr>
+    <th>uid</th>
+    <th>username</th>
+    <th>email</th>
+  </tr>
+  <% users.forEach(user=> { %>
     <tr>
-      <th>username<th>
-      <th>email<th>
+      <td><%= user.uid %></td>
+      <td><%= user.uname %></td>
+      <td><%= user.email %></td>
     </tr>
-  <thead>
-  <tbody>
-    <% users.forEach(user=> { %>
-      <tr>
-        <td><%= user.username %></td>
-        <td><%= user.email %></td>
-      </tr>
-    <% }) %>
-  <tbody>
+  <% }) %>
 <table>

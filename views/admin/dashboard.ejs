@@ -1,3 +1,9 @@
 <% if (typeof users !== 'undefined') { %>
   <%- include('../partials/getAllUsers',{users:users}); %>
 <% } %>
+
+<% if (typeof complains !== 'undefined') { %>
+  <%- include('../partials/getAllComplains',{complains}); %>
+<% } %>
+
+hello from admin dashboard...

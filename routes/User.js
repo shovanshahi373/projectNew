@@ -1,16 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const User = require("../model/users");
+const Complain = require("../model/complain");
 const Seq = require("sequelize");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
-const Op = Seq.Op;
-let db;
-if (process.env.NODE_ENV == "production") {
-  db = require("../remotedb");
-} else {
-  db = require("../database");
-}
+const { ensureAuthenticated } = require("../configs/auth");
 
 router.get("/login", (req, res) => {
   res.render("users/login", {
@@ -20,34 +15,80 @@ router.get("/login", (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
-  res.send("logout");
+  req.logout();
+  req.flash("success_msg", "you are logged out");
+  res.redirect("/user/login");
 });
 
 router.post("/login", (req, res, next) => {
   let { email, password } = req.body;
-  let errors = [];
-
   if (email == "" || password == "") {
-    errors.push({ msg: "please fill all the fields" });
-    res.render("users/login", {
-      errors,
-      title: "Sarokaar | Login",
-      layout: "layouts/layout2.ejs"
-    });
+    req.flash("error_msg", "please fill in all fields");
+    res.redirect("/user/login");
   }
 
-  passport.authenticate("local", {
-    successRedirect: "/user/home",
-    failureRedirect: "/user/login",
-    failureFlash: true
+  passport.authenticate("user-local", (err, user, info) => {
+    if (err) {
+      req.flash("error_msg", "authentication failed.");
+      res.redirect("/user/login");
+    }
+    if (user) {
+      req.session.user = user;
+      res.render("users/home", {
+        user,
+        layout: "layouts/users"
+      });
+      // res.redirect("/user/home");
+    } else {
+      req.flash("error_msg", info.message);
+      res.redirect("/user/login");
+    }
   })(req, res, next);
 });
 
-router.get("/home", (req, res) => {
+router.get("/home", ensureAuthenticated, (req, res) => {
   res.render("users/home", {
-    layout: "layouts/users"
+    layout: "layouts/users",
+    user
   });
 });
+
+// router.get("/upload", (req, res) => {
+//   res.render("users/complainform", {
+//     title: "this is a complain",
+//     layout: "layouts/main.ejs"
+//   });
+// });
+
+// router.post("/upload", (req, res) => {
+//   let { title, location, description } = req.body;
+//   // let { myImage } = req.file;
+//   console.log(title);
+//   upload(req, res, err => {
+//     if (err) {
+//       res.render("users/complainform", {
+//         title: "error",
+//         msg: err,
+//         layout: "layouts/main.ejs"
+//       });
+//     } else {
+//       if (req.file == "undefined") {
+//         res.render("users/complainform", {
+//           title: "error",
+//           msg: "Error: No File Selected!",
+//           layout: "layouts/main.ejs"
+//         });
+//       } else {
+//         res.redirect("users/complainform", {
+//           title: "uploading",
+//           msg: "File Uploaded!",
+//           file: `../uploads/${req.file.filename}`,
+//           layout: "layouts/main.ejs"
+//         });
+//       }
+//     }
+//   });
+// });
 
 router.get("/register", (req, res) => {
   res.render("users/register", {
@@ -90,7 +131,7 @@ router.post("/register", (req, res) => {
   } else {
     User.findOne({
       where: {
-        email: { [Op.like]: email }
+        email
       }
     })
       .then(user => {

@@ -1,24 +1,45 @@
-<nav class="navbar bg-light">
+<nav class="sidenav bg-light">
 
   <!-- Links -->
-  <ul class="navbar-nav">
-    <li class="nav-item">
-      <a class="nav-link text-dark" href="#"><h1 class="navbar-brand" style="font-size:30px">sar<span class="text-success">ok</span>aar</h1></a>
+  <ul class="list-group">
+    <li class="list-group-item">
+      <a class="nav-link text-dark" href="/admin/dashboard"><h1 class="sidenav-brand" style="font-size:30px">sar<span class="text-success">ok</span>aar</h1></a>
     </li>
-    <li class="nav-item mb-3" style="font-size:20px">
-      <i class="far fa-address-card"></i><a class="nav-link d-inline" href="#">Profile</a>
+    <li class="list-group-item" style="font-size:20px">
+      <i class="far fa-address-card"></i>
+      <form action="/admin/dashboard/profile" method="GET">
+        <input type="submit" value="profile" class="d-sidenav-item">
+      </form>
     </li>
-    <li class="nav-item mb-3" style="font-size:20px">
-      <i class="fas fa-cog"></i><a class="nav-link d-inline" href="#">Settings</a>
+    <li class="list-group-item" style="font-size:20px">
+      <i class="fas fa-cog"></i>
+      <form action="/admin/dashboard/settings" method="GET">
+        <input type="submit" value="settings" class="d-sidenav-item">
+      </form>
     </li>
-    <li class="nav-item mb-3" style="font-size:20px">
-      <i class="fas fa-sign-out-alt"></i><a class="nav-link d-inline" href="#">Logout</a>
+    <li class="list-group-item" style="font-size:20px">
+      <i class="fas fa-sign-out-alt"></i>
+      <form action="/admin/logout" method="GET">
+        <input type="submit" value="logout" class="d-sidenav-item">
+      </form>
     </li>
-    <li class="nav-item mb-3" style="font-size:20px">
-      <i class="far fa-registered"></i><a class="nav-link d-inline" href="#">Register</a>
+    <li class="list-group-item" style="font-size:20px">
+      <i class="far fa-registered"></i>
+      <form action="/admin/dashboard/register" method="GET">
+        <input type="submit" value="register" class="d-sidenav-item">
+      </form>
     </li>
-    <li class="nav-item mb-3" style="font-size:20px"> 
-      <i class="far fa-registered"></i><a class="nav-link d-inline" href="#">Users</a>
+    <li class="list-group-item" style="font-size:20px"> 
+      <i class="fas fa-users"></i>
+      <form action="/admin/dashboard/getAllUsers" method="GET">
+        <input type="submit" value="users" class="d-sidenav-item">
+      </form>
+    </li>
+    <li class="list-group-item" style="font-size:20px"> 
+      <i class="fas fa-mail-bulk"></i>
+      <form action="/admin/dashboard/complaints" method="GET">
+        <input type="submit" value="complaints" class="d-sidenav-item">
+      </form>
     </li>
   </ul>
 
