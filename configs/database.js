@@ -1,6 +1,6 @@
 const Sequelize = require("sequelize");
 if (process.env.NODE_ENV == "production") {
-  require("dotenv").config();
+  require("dotenv").parse();
   const db = new Sequelize(REMOTE_DB, REMOTE_USER, REMOTE_DB_PASS, {
     host: REMOTE_HOST,
     dialect: "mysql",
