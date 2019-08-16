@@ -16,10 +16,6 @@ module.exports = db.define("complaints", {
     type: Sequelize.STRING,
     allowNull: false
   },
-  location: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
   email: {
     type: Sequelize.STRING,
     allowNull: false
@@ -35,5 +31,13 @@ module.exports = db.define("complaints", {
   image: {
     type: Sequelize.STRING,
     allowNull: false
+  },
+  isCompleted: {
+    type: Sequelize.BOOLEAN,
+    allowNull: true
+  },
+  markedBy: {
+    type: Sequelize.INTEGER,
+    allowNull: true
   }
 });

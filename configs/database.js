@@ -35,7 +35,7 @@ if (process.env.NODE_ENV == "production") {
       idle: 10000
     },
     define: {
-      timestamps: false
+      timestamps: true
     }
   });
   db.authenticate()

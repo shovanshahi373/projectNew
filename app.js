@@ -8,7 +8,20 @@ const expressLayouts = require("express-ejs-layouts");
 const flash = require("connect-flash");
 const session = require("express-session");
 const passport = require("passport");
+const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 const port = process.env.PORT || 3000;
+
+const Admin = require("./model/admin");
+const Location = require("./model/location");
+const Complain = require("./model/complain");
+const Resource = require("./model/resource");
+const ComplainResource = require("./model/ComplainResource");
+
+Complain.belongsTo(Location,{constraints:true,onDelete:'CASCADE'});
+Complain.belongsToMany(Resource,{through: ComplainResource});
+
+require("./configs/database").sync();
 
 //init app
 const app = express();
@@ -20,6 +33,9 @@ adminAuth(passport);
 
 //set up assets directory
 app.use(express.static(path.join(__dirname, "resources")));
+
+app.use(morgan('dev'));
+app.use(cookieParser());
 //body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -45,6 +61,7 @@ app.use((req, res, next) => {
   res.locals.success_msg = req.flash("success_msg");
   res.locals.error_msg = req.flash("error_msg");
   res.locals.error = req.flash("error");
+  res.locals.link = req.flash("link");
   next();
 });
 
@@ -91,10 +108,6 @@ function checkFileType(file, cb) {
     cb("Error: Images Only!");
   }
 }
-
-// app.get("*", (req, res) => {
-//   res.status(404).sendFile(__dirname + "/resources/html/error.html");
-// });
 
 app.use((req, res, next) => {
   res.status(404).sendFile(__dirname + "/views/error.html");
