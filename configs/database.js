@@ -15,7 +15,7 @@ if (process.env.NODE_ENV == "production") {
         idle: 10000
       },
       define: {
-        timestamps: false
+        timestamps: true
       }
     }
   );
@@ -24,7 +24,7 @@ if (process.env.NODE_ENV == "production") {
     .catch(err => console.log(err));
   module.exports = db;
 } else {
-  const db = new Sequelize("sarokaar", "root", "", {
+  const db = new Sequelize("sarokaar", "root", "Sujit@123#", {
     host: "localhost",
     dialect: "mysql",
     operatorAliases: false,

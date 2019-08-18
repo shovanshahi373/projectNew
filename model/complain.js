@@ -1,28 +1,16 @@
 const Sequelize = require("sequelize");
 const db = require("../configs/database");
 
-module.exports = db.define("complaints", {
+module.exports = db.define("complains", {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
-    allowNull: false,
+    //allowNull: false,
     primaryKey: true
-  },
-  createdBy: {
-    type: Sequelize.STRING,
-    allowNull: false
   },
   title: {
     type: Sequelize.STRING,
     allowNull: false
-  },
-  email: {
-    type: Sequelize.STRING,
-    allowNull: false
-  },
-  mobile: {
-    type: Sequelize.INTEGER,
-    allowNull: true
   },
   description: {
     type: Sequelize.STRING,
@@ -31,6 +19,10 @@ module.exports = db.define("complaints", {
   image: {
     type: Sequelize.STRING,
     allowNull: false
+  },
+  createdBy: {
+    type: Sequelize.STRING,
+    allowNull: true
   },
   isCompleted: {
     type: Sequelize.BOOLEAN,

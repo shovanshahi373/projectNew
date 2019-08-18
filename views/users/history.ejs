@@ -1,0 +1,21 @@
+<h1 class="display-5">My Complaints</h1>
+<% if(typeof complains[0] != 'undefined') { %>
+    <% complains.forEach(complain=>{ %>
+        <div class=""><%= complain.id %><span class="ml-4"><%= complain.createdAt %><span></div>
+        <div class="card card-body mb-5 d-flex justify-content-start align-items-center flex-row" style="border-right:2px solid green">
+            <div class="mr-4"><img src="<%= complain.image %>" style="height:200px;width:200px"></div>
+            <div>
+                <div class="">title: <%= complain.title %></div>
+                <div class="">description: <%= complain.description %></div>
+                <div class="">Status: <% if(complain.isCompleted) { %>
+                    Completed
+                <% }else { %>
+                    Not Completed
+                <% } %>
+                </div>
+            </div>
+        </div> 
+    <% }) %>
+<% }else { %>
+    <p class="lead text-muted">There are no complaints...</p>
+<% } %>

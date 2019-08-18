@@ -21,7 +21,7 @@ const ComplainResource = require("./model/ComplainResource");
 Complain.belongsTo(Location,{constraints:true,onDelete:'CASCADE'});
 Complain.belongsToMany(Resource,{through: ComplainResource});
 
-require("./configs/database").sync();
+require("./configs/database").sync({force: false});
 
 //init app
 const app = express();
@@ -37,6 +37,7 @@ app.use(express.static(path.join(__dirname, "resources")));
 app.use(morgan('dev'));
 app.use(cookieParser());
 //body parser
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 //set view engine
@@ -51,6 +52,30 @@ app.use(
     saveUninitialized: true
   })
 );
+//multer config
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'resources/uploads');
+  },
+  filename: (req, file, cb) =>{
+
+    cb(null, Date.now() + '-' + file.originalname);
+  }
+});
+
+const fileFilter = (req, file, cb) => {
+  if(file.mimetype == 'image/png' || file.mimetype == 'image/jpg' || file.mimetype == 'image/jpeg' || file.mimetype == 'image/gif'){
+    cb(null, true);
+  }
+  else{
+    cb(null, false);
+  }
+ 
+};
+
+
+app.use(multer({storage: fileStorage, fileFilter: fileFilter}).single('myImage'))
+
 //init passport
 app.use(passport.initialize());
 app.use(passport.session());
@@ -71,43 +96,43 @@ app.use("/user", require("./routes/User"));
 app.use("/admin", require("./routes/Admin"));
 
 //configure multer
-const storage = multer.diskStorage({
-  destination: "resources/uploads",
-  filename: function(req, file, cb) {
-    cb(
-      null,
-      file.fieldname + "-" + Date.now() + path.extname(file.originalname)
-    );
-  }
-});
+// const storage = multer.diskStorage({
+//   destination: "resources/uploads",
+//   filename: function(req, file, cb) {
+//     cb(
+//       null,
+//       file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+//     );
+//   }
+// });
 
-// Init Upload
-const upload = multer({
-  storage: storage,
-  limits: {
-    fileSize: 1000000
-  },
-  fileFilter: function(req, file, cb) {
-    checkFileType(file, cb);
-  }
-}).single("myImage");
+// // old multer
+// const upload = multer({
+//   storage: storage,
+//   limits: {
+//     fileSize: 1000000
+//   },
+//   fileFilter: function(req, file, cb) {
+//     checkFileType(file, cb);
+//   }
+// }).single("myImage");
 
-// Check File Type
-function checkFileType(file, cb) {
-  // Allowed ext
-  const filetypes = /jpeg|jpg|png|gif/;
-  // Check ext
-  const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+// // Check File Type
+// function checkFileType(file, cb) {
+//   // Allowed ext
+//   const filetypes = /jpeg|jpg|png|gif/;
+//   // Check ext
+//   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
 
-  // const mimeType = filetypes.test(file.mimetype);
+//   // const mimeType = filetypes.test(file.mimetype);
 
-  if (/*mimeType &&*/ extname) {
-    console.log("success");
-    return cb(null, true);
-  } else {
-    cb("Error: Images Only!");
-  }
-}
+//   if (/*mimeType &&*/ extname) {
+//     console.log("success");
+//     return cb(null, true);
+//   } else {
+//     cb("Error: Images Only!");
+//   }
+// }
 
 app.use((req, res, next) => {
   res.status(404).sendFile(__dirname + "/views/error.html");

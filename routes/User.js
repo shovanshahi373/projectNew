@@ -166,6 +166,45 @@ router.get("/create-new-password/:token", (req, res) => {
   })
 });
 
+router.get("/settings",(req,res)=>{
+  res.render("users/settings",{
+    layout: "layouts/users.ejs",
+    user: req.session.user
+  })
+});
+router.post("/settings", (req, res) => {
+  const { uname, email:newemail, mobile, password } = req.body;
+  bcrypt.hash(password, 10)
+  .then(hash=> {
+    User.findOne({where: {email: req.session.user.email}})
+    .then(user => {
+      console.log('1111111111111111');
+      user.uname= uname;
+      user.email = newemail;
+      user.mobile = mobile;
+      user.password = hash;
+      console.log(user);
+      user.save()
+        .then(result=>{
+          if(result) {
+            console.log('111111111111111333');
+            req.logOut();
+            req.flash("success_msg","user credentials successfully changed");
+            res.redirect("/user/login");
+          }
+        })
+        .catch(err => console.log(err));
+    })
+    .catch(err => { throw err });
+
+  });
+
+});
+
+// router.get("/profile",(req,res)=>{
+//   res.
+// })
+
 router.get("/complain-form", (req, res) => {
   res.render("users/complain-form", {
     layout: "layouts/users.ejs",
@@ -173,11 +212,51 @@ router.get("/complain-form", (req, res) => {
   });
 });
 
-// router.post("/complain-form", (req, res) => {
-//   let { title, location, description } = req.body;
-//   // let { myImage } = req.file;
-//   console.log(title);
-//   upload(req, res, err => {
+router.post("/upload", (req, res) => {
+  let { title, location, description } = req.body;
+  const myImage = req.file;
+  let errors = [];
+   errors.push({msg: 'An error has occured . Please check and resend data'})
+  console.log(myImage);
+  if(!myImage) {
+    return res.status(422).render("users/complain-form", {
+      layout: "layouts/users.ejs",
+      user: req.session.user,
+      errors
+      
+    });
+
+  }
+  else if (req.file == "undefined"){
+           return res.render("users/complainform", {
+              title: "error",
+              msg: "Error: No File Selected!",
+              layout: "layouts/main.ejs"
+            });
+          }; 
+
+  const imageUrl = `../uploads/${req.file.filename}`;
+  Complain.create({
+  
+    title,
+    description,
+    image: imageUrl,
+    createdBy: req.session.user.email
+  })
+  .then(result => {
+    res.render("users/home", {
+      layout: "layouts/users",
+      user: req.session.user
+    });
+  })
+  .catch(err => {
+    console.log(err);
+  });
+
+});
+
+
+  //upload(req, res, err => {
 //     if (err) {
 //       res.redirect("/user/home");
 //       // res.render("users/home", {
@@ -204,6 +283,22 @@ router.get("/complain-form", (req, res) => {
 //   });
 // });
 
+router.get('/history', (req, res) => {
+  let usr = req.session.user.email;
+  Complain.findAll({where: {createdBy: usr}})
+  .then(complains => {
+    res.render('users/history', {
+      complains,
+      user: req.session.user,
+      layout: 'layouts/users.ejs'
+    });
+
+  })
+  .catch(err => {
+    console.log(err);
+  });
+})
+
 router.get("/register", (req, res) => {
   res.render("users/register", {
     title: "register",
@@ -214,7 +309,7 @@ router.get("/register", (req, res) => {
 router.post("/register", (req, res) => {
   let { uname, email, mobile, password, cpassword } = req.body;
   let errors = [];
-
+  console.log(mobile);
   if (uname == "" || email == "" || mobile == "" || password == "") {
     errors.push({ msg: "please fill in all the fields" });
   }
@@ -252,6 +347,7 @@ router.post("/register", (req, res) => {
         if (!user) {
           const hash = bcrypt.hashSync(password, 10);
           password = hash;
+          console.log(mobile)
           User.create({
             uname,
             email,
