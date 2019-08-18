@@ -4,7 +4,7 @@ const Seq = require("sequelize");
 const Admin = require("../model/admin");
 const Users = require("../model/users");
 // const Complains = require("../model/complain");
-const bcrypt = require("bcryptjs");
+// const bcrypt = require("bcryptjs");
 const { ensureAuthenticatedAdmin } = require("../configs/auth");
 const passport = require("passport");
 

@@ -18,8 +18,8 @@ const Complain = require("./model/complain");
 const Resource = require("./model/resource");
 const ComplainResource = require("./model/ComplainResource");
 
-Complain.belongsTo(Location,{constraints:true,onDelete:'CASCADE'});
-Complain.belongsToMany(Resource,{through: ComplainResource});
+Complain.belongsTo(Location, { constraints: true, onDelete: "CASCADE" });
+Complain.belongsToMany(Resource, { through: ComplainResource });
 
 require("./configs/database").sync();
 
@@ -34,7 +34,7 @@ adminAuth(passport);
 //set up assets directory
 app.use(express.static(path.join(__dirname, "resources")));
 
-app.use(morgan('dev'));
+app.use(morgan("dev"));
 app.use(cookieParser());
 //body parser
 app.use(express.json());
@@ -56,12 +56,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 //flash
 app.use(flash());
-//global flash variables
+//global variables
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash("success_msg");
   res.locals.error_msg = req.flash("error_msg");
   res.locals.error = req.flash("error");
   res.locals.link = req.flash("link");
+  res.locals.user = req.user || null;
+  // res.locals.admin = req.admin || null;
   next();
 });
 

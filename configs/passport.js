@@ -43,13 +43,13 @@ module.exports = {
     );
 
     passport.serializeUser((user, done) => {
-      done(null, user.uid);
+      done(null, user.email);
     });
 
-    passport.deserializeUser((uid, done) => {
+    passport.deserializeUser((email, done) => {
       User.findOne({
         where: {
-          uid
+          email
         }
       })
         .then(user => {
@@ -72,8 +72,7 @@ module.exports = {
         (req, email, password, done) => {
           Admin.findOne({
             where: {
-              email,
-              password
+              email
             }
           })
             .then(admin => {
@@ -83,20 +82,20 @@ module.exports = {
                 });
               }
 
-              return done(null, admin);
+              bcrypt.compare(password, admin.password, (err, ismatched) => {
+                if (err) throw err;
+                if (ismatched) {
+                  console.log("password matches!!!!!");
+                  return done(null, admin);
+                } else {
+                  console.log("password not matched!!!");
+                  return done(null, false, {
+                    message: "username or password is incorrect"
+                  });
+                }
+              });
 
-              // bcrypt.compare(password, admin.password, (err, ismatched) => {
-              //   if (err) throw err;
-              //   if (ismatched) {
-              //     console.log("password matches!!!!!");
-              //     return done(null, admin);
-              //   } else {
-              //     console.log("password not matched!!!");
-              //     return done(null, false, {
-              //       message: "username or password is incorrect"
-              //     });
-              //   }
-              // });
+              // return done(null, admin);
             })
             .catch(err => {
               console.log(err);
@@ -106,13 +105,13 @@ module.exports = {
     );
 
     passport.serializeUser((admin, done) => {
-      done(null, admin.eid);
+      done(null, admin.id);
     });
 
-    passport.deserializeUser((eid, done) => {
+    passport.deserializeUser((id, done) => {
       Admin.findOne({
         where: {
-          eid
+          id
         }
       })
         .then(admin => {
