@@ -2,26 +2,30 @@ const Sequelize = require("sequelize");
 const db = require("../configs/database");
 
 module.exports = db.define("users", {
-  uid: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    primaryKey: true
-  },
+ 
   uname: {
     type: Sequelize.STRING,
     allowNull: false
   },
   email: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
+    primaryKey: true
   },
   mobile: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.STRING,
     allowNull: true,
-    default: "-"
   },
   password: {
     type: Sequelize.STRING,
     allowNull: false
+  },
+  resetToken: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  resetTokenExpiry: {
+    type: Sequelize.DATE,
+    allowNull: true
   }
 });

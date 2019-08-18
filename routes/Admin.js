@@ -8,6 +8,18 @@ const bcrypt = require("bcryptjs");
 const { ensureAuthenticatedAdmin } = require("../configs/auth");
 const passport = require("passport");
 
+router.get("/create-admin",(req,res)=>{
+  Admin.create({
+    username: "admin",
+    email: "root@root.com",
+    citizenship: "23123215efsd",
+    password: "root",
+    image: "/images/1.jpg"
+  })
+    .then(admin=>console.log("admin created"))
+    .catch(err=>console.log(err));
+})
+
 router.get("/", (req, res) => {
   res.render("admin/login", {
     layout: "layouts/admin-login"

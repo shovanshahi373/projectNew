@@ -1,35 +1,23 @@
 const Sequelize = require("sequelize");
 const db = require("../configs/database");
 
-module.exports = db.define("complains", {
-  id: {
+module.exports = db.define("location", {
+  locationId: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
-    //allowNull: false,
+    allowNull: false,
     primaryKey: true
   },
-  title: {
+  locationName: {
     type: Sequelize.STRING,
     allowNull: false
   },
-  description: {
+  xCord: {
     type: Sequelize.STRING,
     allowNull: false
   },
-  image: {
+  yCord: {
     type: Sequelize.STRING,
     allowNull: false
-  },
-  createdBy: {
-    type: Sequelize.STRING,
-    allowNull: true
-  },
-  isCompleted: {
-    type: Sequelize.BOOLEAN,
-    allowNull: true
-  },
-  markedBy: {
-    type: Sequelize.INTEGER,
-    allowNull: true
   }
 });

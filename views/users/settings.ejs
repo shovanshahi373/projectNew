@@ -1,0 +1,21 @@
+<form action="/user/settings" method="POST">
+    <table>
+        <tr>
+            <td>Username</td>
+            <td><input type="text" required name="uname" value="<%= user.uname %>"></td>
+        </tr>
+        <tr>
+            <td>Email</td>
+            <td><input type="email" required name="email" value="<%= user.email %>"></td>
+        </tr>
+        <tr>
+            <td>mobile no.</td>
+            <td><input type="text" required name= "mobile" value="<%= user.mobile %>"></td>
+        </tr>
+        <tr>
+            <td>password</td>
+            <td><input type="password" required name="password" placeholder="new password"></td>
+        </tr>
+    </table>
+    <button type="submit">change</button>
+</form>

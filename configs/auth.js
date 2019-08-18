@@ -3,7 +3,7 @@ module.exports = {
     if (req.isAuthenticated()) {
       return next();
     }
-    req.flash("error_msg", "request denied. log in first.");
+    req.flash("error_msg", "request denied. log in first...");
     res.redirect("/user/login");
   },
 

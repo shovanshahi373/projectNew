@@ -8,35 +8,38 @@ module.exports = {
   userAuth: function(passport) {
     passport.use(
       "user-local",
-      new localStrategy({ usernameField: "email" }, (email, password, done) => {
-        User.findOne({
-          where: {
-            email
-          }
-        })
-          .then(user => {
-            if (!user) {
-              return done(null, false, {
-                message: "that email is not registerd"
-              });
+      new localStrategy(
+        { usernameField: "email", passReqToCallback: true },
+        (req, email, password, done) => {
+          User.findOne({
+            where: {
+              email
             }
-
-            bcrypt.compare(password, user.password, (err, ismatched) => {
-              if (err) throw err;
-              if (ismatched) {
-                console.log("password matches!!!!!");
-                return done(null, user);
-              } else {
+          })
+            .then(user => {
+              if (!user) {
                 return done(null, false, {
-                  message: "username or password is incorrect"
+                  message: "that email is not registerd"
                 });
               }
+
+              bcrypt.compare(password, user.password, (err, ismatched) => {
+                if (err) throw err;
+                if (ismatched) {
+                  console.log("password matches!!!!!");
+                  return done(null, user);
+                } else {
+                  return done(null, false, {
+                    message: "username or password is incorrect"
+                  });
+                }
+              });
+            })
+            .catch(err => {
+              console.log(err);
             });
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      })
+        }
+      )
     );
 
     passport.serializeUser((user, done) => {
@@ -64,39 +67,42 @@ module.exports = {
   adminAuth: function(passport) {
     passport.use(
       "admin-local",
-      new localStrategy({ usernameField: "email" }, (email, password, done) => {
-        Admin.findOne({
-          where: {
-            email,
-            password
-          }
-        })
-          .then(admin => {
-            if (!admin) {
-              return done(null, false, {
-                message: "unauthorized email!"
-              });
+      new localStrategy(
+        { usernameField: "email", passReqToCallback: true },
+        (req, email, password, done) => {
+          Admin.findOne({
+            where: {
+              email,
+              password
             }
-
-            return done(null, admin);
-
-            // bcrypt.compare(password, admin.password, (err, ismatched) => {
-            //   if (err) throw err;
-            //   if (ismatched) {
-            //     console.log("password matches!!!!!");
-            //     return done(null, admin);
-            //   } else {
-            //     console.log("password not matched!!!");
-            //     return done(null, false, {
-            //       message: "username or password is incorrect"
-            //     });
-            //   }
-            // });
           })
-          .catch(err => {
-            console.log(err);
-          });
-      })
+            .then(admin => {
+              if (!admin) {
+                return done(null, false, {
+                  message: "unauthorized email!"
+                });
+              }
+
+              return done(null, admin);
+
+              // bcrypt.compare(password, admin.password, (err, ismatched) => {
+              //   if (err) throw err;
+              //   if (ismatched) {
+              //     console.log("password matches!!!!!");
+              //     return done(null, admin);
+              //   } else {
+              //     console.log("password not matched!!!");
+              //     return done(null, false, {
+              //       message: "username or password is incorrect"
+              //     });
+              //   }
+              // });
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }
+      )
     );
 
     passport.serializeUser((admin, done) => {

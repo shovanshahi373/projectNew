@@ -2,7 +2,7 @@ const sequelize = require("sequelize");
 const db = require("../configs/database");
 
 module.exports = db.define("admins", {
-  eid: {
+  id: {
     type: sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
