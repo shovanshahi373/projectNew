@@ -1,24 +1,33 @@
 const express = require("express");
 const router = express.Router();
 const Seq = require("sequelize");
+const db = require('../configs/database');
 const Admin = require("../model/admin");
 const Users = require("../model/users");
 const Complains = require("../model/complain");
-// const bcrypt = require("bcryptjs");
+ const bcrypt = require("bcryptjs");
 const { ensureAuthenticatedAdmin } = require("../configs/auth");
 const passport = require("passport");
+const uuid4 = require('uuid/v4');
 
+const id = uuid4();
 router.get("/create-admin",(req,res)=>{
-  Admin.create({
-    username: "admin",
-    email: "root@root.com",
-    citizenship: "23123215efsd",
-    password: "root",
-    image: "/images/1.jpg"
+  bcrypt.hash('root', 10)
+  .then(result => {
+    Admin.create({
+      id,
+      username: "admin",
+      email: "root@root.com",
+      citizenship: "23123215efsd",
+      password: result,
+      image: "/images/1.jpg"
+    })
+      .then(admin=>console.log("admin created"))
+      .catch(err=>console.log(err));
+
   })
-    .then(admin=>console.log("admin created"))
-    .catch(err=>console.log(err));
-})
+  
+});
 
 router.get("/", (req, res) => {
   res.render("admin/login", {
@@ -93,4 +102,20 @@ router.get("/dashboard/complaints", (req, res) => {
     .catch(err => console.log(err));
 });
 
+
+router.get("/dashboard/complaints", (req, res) => {
+ // Complains.findAll({include: [{model: Users}]})
+  db.query('Select * from complains,users')
+  .then(complains => {
+    //console.log('11111111' + complains[0][0].title);
+    res.render("admin/dashboard",{
+      layout:"layouts/dashboard",
+      complains,
+      admin:req.session.admin
+    })
+  })
+  .catch(err => {console.log(err)});
+
+
+});
 module.exports = router;
