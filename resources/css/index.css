@@ -265,3 +265,9 @@ nav {
 	50%{ color: white; }
 	100%{ color: green;  }
 }
+
+
+/* @media screen and (max-width: 990px) {
+	.columns .column {
+		flex-basis: 100%;
+		margin: 0 0 5px 0; */
