@@ -2,7 +2,7 @@ const Sequelize = require("sequelize");
 const db = require("../configs/database");
 
 module.exports = db.define("complains", {
-  id: {
+  cid: {
     type: Sequelize.STRING,
     allowNull: false,
     primaryKey: true
@@ -18,6 +18,10 @@ module.exports = db.define("complains", {
   image: {
     type: Sequelize.STRING,
     allowNull: false
+  },
+  category: {
+    type : Sequelize.STRING,
+    allowNull: true
   },
   createdBy: {
     type: Sequelize.STRING,
