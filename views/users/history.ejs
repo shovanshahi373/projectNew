@@ -1,0 +1,35 @@
+<div class="d-flex justify-content-between align-items-center">
+    <h1 class="display-5">My Complaints</h1>
+    <ul class="list-group list-group-horizontal">
+        <li class="pill pill-info list-group-item">
+            <a href="#">all</a>
+        </li>
+        <li class="pill pill-info list-group-item">
+            <a href="#">completed</a>
+        </li>
+        <li class="pill pill-info list-group-item">
+            <a href="#">pending</a>
+        </li>
+    </ul>
+</div>
+<% if(typeof complains[0] != 'undefined') { %>
+    <% complains.forEach(complain=>{ %>
+        <div class=""><%= complain.id + "." %></div>
+        <div class="card card-body mb-5 d-flex justify-content-start align-items-start flex-row" style="border-left:4px solid #28a745; cursor:pointer;postion:relative">
+            <div class="mr-4"><img src="<%= complain.image %>" style="height:200px;width:200px"></div>
+            <div class="container-fluid">
+                <div class="mb-3" style="border-bottom:3px solid #28a745"><h5><%= complain.title %></h5></div>
+                <div class="">Status: <% if(complain.isCompleted) { %>
+                    <small>Completed<small><i class="far fa-check-circle"></i>
+                <% }else { %>
+                    <small>Pending</small><i class="far fa-times-circle"></i>
+                <% } %>
+                </div>
+                <div class="mb-3">description: <%= complain.description %></div>
+                <div class="ml-4 text-right" style="color:#b0bac3; position:absolute;right:5px;bottom:5px"><%= complain.dateCreated %></div>
+            </div>
+        </div> 
+    <% }) %>
+<% }else { %>
+    <p class="lead text-muted">There are no complaints...</p>
+<% } %>
