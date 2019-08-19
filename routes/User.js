@@ -6,10 +6,12 @@ const Seq = require("sequelize");
 const Op = Seq.Op;
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
-// const { ensureAuthenticated } = require("../configs/auth");
-const ensureLoggedIn = require("connect-ensure-login").ensureLoggedIn;
+const { ensureAuthenticated } = require("../configs/auth");
+// const ensureLoggedIn = require("connect-ensure-login").ensureLoggedIn;
 const sendgrid = require("../configs/email");
 const crypto = require("crypto");
+const uuid4 = require("uuid/v4");
+// const uuid3 = require("uuid/v3");
 
 router.get("/login", (req, res) => {
   res.render("users/login", {
@@ -25,35 +27,42 @@ router.get("/logout", (req, res) => {
 });
 
 router.post("/password-verify", (req, res) => {
-  const { password, cpassword,userId, token } = req.body;
+  const { password, cpassword, userId, token } = req.body;
   if (password.length >= 6 && password == cpassword) {
     User.findOne({
-    where: {[Op.and]: [{
-      resetToken: token
-    },{
-      resetTokenExpiry: {[Op.gte]: Date.now()}
-    },{
-      email: userId
-    }
-  ]}
-  })
-    .then(user=>{
-      const resetUser = user;
-      bcrypt.hash(password,10)
-        .then(hash=>{
-          resetUser.password = hash;
-          resetUser.resetTokenExpiry = undefined;
-          resetUser.resetToken = undefined;
-          resetUser.save()
-            .then((user)=>{
-              req.flash("success_msg", "successfully changed password");
-              res.redirect("/user/login");
-            })
-            .catch(err=> console.log(err));
-        })
-        .catch(err => console.log(err));
+      where: {
+        [Op.and]: [
+          {
+            resetToken: token
+          },
+          {
+            resetTokenExpiry: { [Op.gte]: Date.now() }
+          },
+          {
+            email: userId
+          }
+        ]
+      }
     })
-    .catch(err=> console.log(err));
+      .then(user => {
+        const resetUser = user;
+        bcrypt
+          .hash(password, 10)
+          .then(hash => {
+            resetUser.password = hash;
+            resetUser.resetTokenExpiry = undefined;
+            resetUser.resetToken = undefined;
+            resetUser
+              .save()
+              .then(user => {
+                req.flash("success_msg", "successfully changed password");
+                res.redirect("/user/login");
+              })
+              .catch(err => console.log(err));
+          })
+          .catch(err => console.log(err));
+      })
+      .catch(err => console.log(err));
   } else {
     req.flash(
       "error_msg",
@@ -89,8 +98,15 @@ router.post("/home", (req, res, next) => {
   })(req, res, next);
 });
 
-router.get("/home", (req, res) => {
-  res.render("users/home", {
+router.get("/home", ensureAuthenticated, (req, res) => {
+  res.redirect("users/home", {
+    layout: "layouts/users",
+    user: req.session.user
+  });
+});
+
+router.get("/settings", (req, res) => {
+  res.render("users/settings", {
     layout: "layouts/users",
     user: req.session.user
   });
@@ -105,18 +121,17 @@ router.get("/handle-forgot-password", (req, res) => {
   })
     .then(user => {
       if (user) {
-        crypto.randomBytes(32,(err,buffer)=>{
-          if(err) throw err;
-          const token = buffer.toString('hex');
+        crypto.randomBytes(32, (err, buffer) => {
+          if (err) throw err;
+          const token = buffer.toString("hex");
           user.resetToken = token;
           user.resetTokenExpiry = Date.now() + 3600000;
-          user.save()
-            .then(result =>{
-              sendgrid(
-          email,
-          "sovanshahihero@gmail.com",
-          "email account verification for changing password for Sarokaar",
-          `<!DOCTYPE html>
+          user.save().then(result => {
+            sendgrid(
+              email,
+              "sovanshahihero@gmail.com",
+              "email account verification for changing password for Sarokaar",
+              `<!DOCTYPE html>
           <html>
             <head>
               <title>Hi</title>
@@ -126,12 +141,12 @@ router.get("/handle-forgot-password", (req, res) => {
               to verify your account
             </body>
           </html>`
-        );
+            );
 
-        req.flash("link", email);
-        res.redirect("/user/forgot-password");
-            })
-        })
+            req.flash("link", email);
+            res.redirect("/user/forgot-password");
+          });
+        });
       } else {
         req.flash("error_msg", "invalid email");
         res.redirect("/user/forgot-password");
@@ -149,29 +164,26 @@ router.get("/forgot-password", (req, res) => {
 
 router.get("/create-new-password/:token", (req, res) => {
   User.findOne({
-    where: {[Op.and]: [{
-      resetToken: req.params.token
-    },{
-      resetTokenExpiry: {[Op.gte]: Date.now()}
+    where: {
+      [Op.and]: [
+        {
+          resetToken: req.params.token
+        },
+        {
+          resetTokenExpiry: { [Op.gte]: Date.now() }
+        }
+      ]
     }
-  ]}
-  })
-    .then(user=>{
-      res.render("users/create-new-password", {
-      token:user.resetToken,
+  }).then(user => {
+    res.render("users/create-new-password", {
+      token: user.resetToken,
       userId: user.email,
       layout: "layouts/layout2.ejs",
       title: "create new password"
     });
-  })
+  });
 });
 
-router.get("/settings",(req,res)=>{
-  res.render("users/settings",{
-    layout: "layouts/users.ejs",
-    user: req.session.user
-  })
-});
 router.post("/settings", (req, res) => {
   const { uname, email:newemail, mobile, password } = req.body;
   bcrypt.hash(password, 10)
@@ -206,6 +218,7 @@ router.post("/settings", (req, res) => {
 // })
 
 router.get("/complain-form", (req, res) => {
+// >>>>>>> 0716abaa9b598359a3acdacf52243ab3a0f802d7
   res.render("users/complain-form", {
     layout: "layouts/users.ejs",
     user: req.session.user
@@ -236,12 +249,16 @@ router.post("/upload", (req, res) => {
           }; 
 
   const imageUrl = `../uploads/${req.file.filename}`;
+  let d = new Date();
+  const date = d.toDateString();
+  const pid = uuid4();
   Complain.create({
-  
+    id: pid,
     title,
     description,
     image: imageUrl,
-    createdBy: req.session.user.email
+    createdBy: req.session.user.email,
+    dateCreated: date
   })
   .then(result => {
     res.render("users/home", {
@@ -256,37 +273,15 @@ router.post("/upload", (req, res) => {
 });
 
 
-  //upload(req, res, err => {
-//     if (err) {
-//       res.redirect("/user/home");
-//       // res.render("users/home", {
-//       //   title: "error",
-//       //   msg: err,
-//       //   layout: "layouts/main.ejs"
-//       // });
-//     } else {
-//       if (req.file == "undefined") {
-//         res.render("users/complainform", {
-//           title: "error",
-//           msg: "Error: No File Selected!",
-//           layout: "layouts/main.ejs"
-//         });
-//       } else {
-//         res.redirect("users/complainform", {
-//           title: "uploading",
-//           msg: "File Uploaded!",
-//           file: `../uploads/${req.file.filename}`,
-//           layout: "layouts/main.ejs"
-//         });
-//       }
-//     }
-//   });
-// });
-
 router.get('/history', (req, res) => {
   let usr = req.session.user.email;
   Complain.findAll({where: {createdBy: usr}})
   .then(complains => {
+    complains.forEach(complain => {
+      complain.createdAt.stringify();
+      console.log(complain.createdAt);
+      console.log(typeof complain.createdAt);
+    })
     res.render('users/history', {
       complains,
       user: req.session.user,
@@ -348,7 +343,9 @@ router.post("/register", (req, res) => {
           const hash = bcrypt.hashSync(password, 10);
           password = hash;
           console.log(mobile)
+          const id = uuid4();
           User.create({
+            id,
             uname,
             email,
             mobile,
