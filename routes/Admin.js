@@ -1,9 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const Seq = require("sequelize");
+const db = require('../configs/database');
 const Admin = require("../model/admin");
 const Users = require("../model/users");
-// const Complains = require("../model/complain");
+const Complains = require("../model/complain");
 const bcrypt = require("bcryptjs");
 const { ensureAuthenticatedAdmin } = require("../configs/auth");
 const passport = require("passport");
@@ -93,4 +94,20 @@ router.get("/dashboard/getAllUsers", (req, res) => {
 //     .catch(err => console.log(err));
 // });
 
+
+router.get("/dashboard/complaints", (req, res) => {
+ // Complains.findAll({include: [{model: Users}]})
+  db.query('Select * from complains,users')
+  .then(complains => {
+    //console.log('11111111' + complains[0][0].title);
+    res.render("admin/dashboard",{
+      layout:"layouts/dashboard",
+      complains,
+      admin:req.session.admin
+    })
+  })
+  .catch(err => {console.log(err)});
+
+
+});
 module.exports = router;

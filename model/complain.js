@@ -5,7 +5,7 @@ module.exports = db.define("complains", {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
-    //allowNull: false,
+    allowNull: false,
     primaryKey: true
   },
   title: {

@@ -12,14 +12,15 @@ const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const port = process.env.PORT || 3000;
 
-const Admin = require("./model/admin");
+const User = require("./model/users");
 const Location = require("./model/location");
 const Complain = require("./model/complain");
 const Resource = require("./model/resource");
 const ComplainResource = require("./model/ComplainResource");
 
 Complain.belongsTo(Location,{constraints:true,onDelete:'CASCADE'});
-Complain.belongsToMany(Resource,{through: ComplainResource});
+Complain.belongsToMany(Resource,{through: 'ComplainResource'});
+Complain.belongsTo(User,{constraints:true,onDelete:'CASCADE'});
 
 require("./configs/database").sync({force: false});
 
