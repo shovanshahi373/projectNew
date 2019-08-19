@@ -14,22 +14,46 @@
 </div>
 <% if(typeof complains[0] != 'undefined') { %>
     <% complains.forEach(complain=>{ %>
-        <div class=""><%= complain.id + "." %></div>
         <div class="card card-body mb-5 d-flex justify-content-start align-items-start flex-row" style="border-left:4px solid #28a745; cursor:pointer;postion:relative">
-            <div class="mr-4"><img src="<%= complain.image %>" style="height:200px;width:200px"></div>
+            <div class="mr-4 hide"><img src="<%= complain.image %>" style="height:200px;width:200px"></div>
             <div class="container-fluid">
                 <div class="mb-3" style="border-bottom:3px solid #28a745"><h5><%= complain.title %></h5></div>
                 <div class="">Status: <% if(complain.isCompleted) { %>
-                    <small>Completed<small><i class="far fa-check-circle"></i>
+                    <small>Completed</small><i style="color:#28a745;" class="far fa-check-circle"></i>
                 <% }else { %>
-                    <small>Pending</small><i class="far fa-times-circle"></i>
+                    <small>Pending</small><i style="color:red" class="far fa-times-circle"></i>
                 <% } %>
                 </div>
                 <div class="mb-3">description: <%= complain.description %></div>
-                <div class="ml-4 text-right" style="color:#b0bac3; position:absolute;right:5px;bottom:5px"><%= complain.dateCreated %></div>
+                <button class="view-modal btn btn-info">view</button>
+                <div class="ml-4 text-right" style="color:#b0bac3; position:absolute;right:5px;bottom:5px"><sub><%= complain.dateCreated %></sub></div>
             </div>
         </div> 
+
+        <section class="history-modal">
+            <div class="text-light cross" style="position:absolute;top:5px;right:5px;font-size:50px">&times;</div>
+            <div class="container-fluid d-flex justify-content-center align-items-center" style="height:100%">
+                <div class="card card-body history-modal-card">
+                    <div>
+                        <img src="<%= complain.image %>" style="height:200px;width:200px"/>
+                    </div>
+                    <div>
+                        <div>
+                            <h1 class="display-2"><%= complain.title %></h1>
+                        </div>
+                        <div>
+                            <div class="jumbotron"><%= complain.description %></div>
+                        </div>
+                        <div>
+                        asdsadasdasd
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     <% }) %>
 <% }else { %>
     <p class="lead text-muted">There are no complaints...</p>
 <% } %>
+
+// <% if(typeof complains[0] != 'undefined') { %>

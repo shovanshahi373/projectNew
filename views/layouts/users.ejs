@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="/fonts/css/all.min.css">
   <link rel="stylesheet" href="/css/bootstrap.min.css">
   <link rel="stylesheet" href="/css/userLayout.css">
+  <script defer src="/js/showModal.js"></script>
   <style>
     body {
       overflow-x: hidden;
@@ -21,15 +22,15 @@
   </header>
   <main>
     <div class="row">
-      <div class="col-md-2 bg-info">
+      <div class="col-md-2 bg-info flex">
         <%- include('../partials/user-sidebar.ejs')%>
       </div>
-      <div class="col-md-8">
+      <div class="col-md-8 col-sm-12">
         <div class="container pt-3">
           <%- body %>
         </div>
       </div>
-      <div class="col-md-2 min-vh-100 bg-info">
+      <div class="col-md-2 min-vh-100 bg-info d-770">
       </div>
     </div>
   </main>

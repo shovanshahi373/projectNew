@@ -218,7 +218,6 @@ router.post("/settings", (req, res) => {
 // })
 
 router.get("/complain-form", (req, res) => {
-// >>>>>>> 0716abaa9b598359a3acdacf52243ab3a0f802d7
   res.render("users/complain-form", {
     layout: "layouts/users.ejs",
     user: req.session.user
@@ -278,9 +277,9 @@ router.get('/history', (req, res) => {
   Complain.findAll({where: {createdBy: usr}})
   .then(complains => {
     complains.forEach(complain => {
-      complain.createdAt.stringify();
-      console.log(complain.createdAt);
-      console.log(typeof complain.createdAt);
+      // complain.createdAt.stringify();
+      // console.log(complain.createdAt);
+      // console.log(typeof complain.createdAt);
     })
     res.render('users/history', {
       complains,
