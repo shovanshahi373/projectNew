@@ -22,7 +22,7 @@ Complain.belongsTo(Location,{constraints:true,onDelete:'CASCADE'});
 Complain.belongsToMany(Resource,{through: 'ComplainResource'});
 Complain.belongsTo(User,{constraints:true,onDelete:'CASCADE'});
 
-require("./configs/database").sync({force: true});
+require("./configs/database").sync();
 
 //init app
 const app = express();
