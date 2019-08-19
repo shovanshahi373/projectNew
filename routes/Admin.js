@@ -1,32 +1,29 @@
 const express = require("express");
 const router = express.Router();
 const Seq = require("sequelize");
-const db = require('../configs/database');
+const db = require("../configs/database");
 const Admin = require("../model/admin");
 const Users = require("../model/users");
 const Complains = require("../model/complain");
- const bcrypt = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 const { ensureAuthenticatedAdmin } = require("../configs/auth");
 const passport = require("passport");
-const uuid4 = require('uuid/v4');
+const uuid4 = require("uuid/v4");
 
 const id = uuid4();
-router.get("/create-admin",(req,res)=>{
-  bcrypt.hash('root', 10)
-  .then(result => {
+router.get("/create-admin", (req, res) => {
+  bcrypt.hash("root", 10).then(result => {
     Admin.create({
       id,
       username: "admin",
       email: "root@root.com",
       citizenship: "23123215efsd",
       password: result,
-      image: "/images/1.jpg"
+      image: "/images/sovan.jpg"
     })
-      .then(admin=>console.log("admin created"))
-      .catch(err=>console.log(err));
-
-  })
-  
+      .then(admin => console.log("admin created"))
+      .catch(err => console.log(err));
+  });
 });
 
 router.get("/", (req, res) => {
@@ -90,32 +87,49 @@ router.get("/dashboard/getAllUsers", (req, res) => {
     .catch(err => console.log(err));
 });
 
+// router.get("/dashboard/complaints", (req, res) => {
+//   Complains.findAll({ raw: true })
+//     .then(complains => {
+//       res.render("admin/dashboard", {
+//         admin: req.session.admin,
+//         layout: "layouts/dashboard",
+//         complains
+//       });
+//     })
+//     .catch(err => console.log(err));
+// });
+
 router.get("/dashboard/complaints", (req, res) => {
-  Complains.findAll({ raw: true })
+  // Complains.findAll({include: [{model: Users}]})
+  db.query("Select * from complains,users")
     .then(complains => {
+      console.log(complains);
       res.render("admin/dashboard", {
-        admin: req.session.admin,
         layout: "layouts/dashboard",
-        complains
+        complains: complains[0],
+        admin: req.session.admin
+      });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
+router.get("/dashboard/complaints/:id", (req, res) => {
+  const post = req.params.id;
+  Complains.findOne({
+    where: {
+      cid: post
+    }
+  })
+    .then(post => {
+      const url = post.image.split("..")[1];
+      res.render("admin/dashboard", {
+        post,
+        url,
+        layout: "layouts/dashboard",
+        admin: req.session.admin
       });
     })
     .catch(err => console.log(err));
-});
-
-
-router.get("/dashboard/complaints", (req, res) => {
- // Complains.findAll({include: [{model: Users}]})
-  db.query('Select * from complains,users')
-  .then(complains => {
-    //console.log('11111111' + complains[0][0].title);
-    res.render("admin/dashboard",{
-      layout:"layouts/dashboard",
-      complains,
-      admin:req.session.admin
-    })
-  })
-  .catch(err => {console.log(err)});
-
-
 });
 module.exports = router;
