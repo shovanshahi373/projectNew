@@ -3,8 +3,8 @@ const router = express.Router();
 const Seq = require("sequelize");
 const Admin = require("../model/admin");
 const Users = require("../model/users");
-// const Complains = require("../model/complain");
-const bcrypt = require("bcryptjs");
+const Complains = require("../model/complain");
+// const bcrypt = require("bcryptjs");
 const { ensureAuthenticatedAdmin } = require("../configs/auth");
 const passport = require("passport");
 
@@ -81,16 +81,16 @@ router.get("/dashboard/getAllUsers", (req, res) => {
     .catch(err => console.log(err));
 });
 
-// router.get("/dashboard/complaints", (req, res) => {
-//   Complains.findAll({ raw: true })
-//     .then(complains => {
-//       res.render("admin/dashboard", {
-//         admin: req.session.admin,
-//         layout: "layouts/dashboard",
-//         complains
-//       });
-//     })
-//     .catch(err => console.log(err));
-// });
+router.get("/dashboard/complaints", (req, res) => {
+  Complains.findAll({ raw: true })
+    .then(complains => {
+      res.render("admin/dashboard", {
+        admin: req.session.admin,
+        layout: "layouts/dashboard",
+        complains
+      });
+    })
+    .catch(err => console.log(err));
+});
 
 module.exports = router;

@@ -27,3 +27,6 @@ i {
 i:hover {
     color: rgba(0, 0, 0, 0.8);
 }
+.card {
+    background-color: #f8f9fa !important;
+}

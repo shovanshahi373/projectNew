@@ -3,6 +3,11 @@ const db = require("../configs/database");
 
 module.exports = db.define("users", {
  
+  id: {
+    type: Sequelize.STRING,
+    allowNull: false,
+    primaryKey: true
+  },
   uname: {
     type: Sequelize.STRING,
     allowNull: false
@@ -10,11 +15,12 @@ module.exports = db.define("users", {
   email: {
     type: Sequelize.STRING,
     allowNull: false,
-    primaryKey: true
+    unique: true
   },
   mobile: {
     type: Sequelize.STRING,
     allowNull: true,
+    unique: true
   },
   password: {
     type: Sequelize.STRING,

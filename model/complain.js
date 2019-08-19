@@ -3,9 +3,8 @@ const db = require("../configs/database");
 
 module.exports = db.define("complains", {
   id: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
-    //allowNull: false,
+    type: Sequelize.STRING,
+    allowNull: false,
     primaryKey: true
   },
   title: {
@@ -31,5 +30,9 @@ module.exports = db.define("complains", {
   markedBy: {
     type: Sequelize.INTEGER,
     allowNull: true
+  },
+  dateCreated: {
+    type: Sequelize.STRING,
+    allowNull: false
   }
 });
