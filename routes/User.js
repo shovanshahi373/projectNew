@@ -252,7 +252,7 @@ router.post("/upload", (req, res) => {
   const date = d.toDateString();
   const pid = uuid4();
   Complain.create({
-    id: pid,
+    cid: pid,
     title,
     description,
     image: imageUrl,

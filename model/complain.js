@@ -29,10 +29,11 @@ module.exports = db.define("complains", {
   },
   isCompleted: {
     type: Sequelize.BOOLEAN,
-    allowNull: true
+    allowNull: true,
+    default: false
   },
   markedBy: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.STRING,
     allowNull: true
   },
   dateCreated: {

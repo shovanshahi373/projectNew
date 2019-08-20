@@ -14,7 +14,7 @@
 </div>
 <% if(typeof complains[0] != 'undefined') { %>
     <% complains.forEach(complain=>{ %>
-        <div class="card card-body mb-5 d-flex justify-content-start align-items-start flex-row" style="border-left:4px solid #28a745; cursor:pointer;postion:relative">
+        <div class="card card-body mb-5 d-flex justify-content-start align-items-start flex-row" style="border-left:4px solid #28a745; cursor:pointer;position:relative">
             <div class="mr-4 hide"><img src="<%= complain.image %>" style="height:200px;width:200px"></div>
             <div class="container-fluid">
                 <div class="mb-3" style="border-bottom:3px solid #28a745"><h5><%= complain.title %></h5></div>
@@ -56,4 +56,4 @@
     <p class="lead text-muted">There are no complaints...</p>
 <% } %>
 
-// <% if(typeof complains[0] != 'undefined') { %>
+
