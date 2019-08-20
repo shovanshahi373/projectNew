@@ -4,15 +4,13 @@
     <th>title</th>
     <th>created By</th>
     <th>location</th>
-    <th>user email</th>
   </tr>
-  <% complains.forEach(complain=> { %>
+  <% complains.forEach(complain => { %>
     <tr>
-      <td><%= complain.id %></td>
+      <td><form action="/admin/dashboard/complaints/<%= complain.cid %>" method="GET"><input type="submit" value="<%= complain.cid %>"></form></td>
       <td><%= complain.title %></td>
       <td><%= complain.createdBy %></td>
       <td><%= complain.location %></td>
-      <td><%= complain.email %></td>
     </tr>
   <% }) %>
 <table>

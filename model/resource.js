@@ -3,8 +3,7 @@ const db = require("../configs/database");
 
 module.exports = db.define("resources", {
   resourceId: {
-    type: Sequelize.INTEGER,
-    autoIncrement: true,
+    type: Sequelize.STRING,
     allowNull: false,
     primaryKey: true
   },

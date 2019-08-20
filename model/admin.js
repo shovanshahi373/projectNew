@@ -3,8 +3,7 @@ const db = require("../configs/database");
 
 module.exports = db.define("admins", {
   id: {
-    type: sequelize.INTEGER,
-    autoIncrement: true,
+    type: sequelize.STRING,
     allowNull: false,
     primaryKey: true
   },

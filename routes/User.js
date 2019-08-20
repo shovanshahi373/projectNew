@@ -185,32 +185,32 @@ router.get("/create-new-password/:token", (req, res) => {
 });
 
 router.post("/settings", (req, res) => {
-  const { uname, email:newemail, mobile, password } = req.body;
-  bcrypt.hash(password, 10)
-  .then(hash=> {
-    User.findOne({where: {email: req.session.user.email}})
-    .then(user => {
-      console.log('1111111111111111');
-      user.uname= uname;
-      user.email = newemail;
-      user.mobile = mobile;
-      user.password = hash;
-      console.log(user);
-      user.save()
-        .then(result=>{
-          if(result) {
-            console.log('111111111111111333');
-            req.logOut();
-            req.flash("success_msg","user credentials successfully changed");
-            res.redirect("/user/login");
-          }
-        })
-        .catch(err => console.log(err));
-    })
-    .catch(err => { throw err });
-
+  const { uname, email: newemail, mobile, password } = req.body;
+  bcrypt.hash(password, 10).then(hash => {
+    User.findOne({ where: { email: req.session.user.email } })
+      .then(user => {
+        console.log("1111111111111111");
+        user.uname = uname;
+        user.email = newemail;
+        user.mobile = mobile;
+        user.password = hash;
+        console.log(user);
+        user
+          .save()
+          .then(result => {
+            if (result) {
+              console.log("111111111111111333");
+              req.logOut();
+              req.flash("success_msg", "user credentials successfully changed");
+              res.redirect("/user/login");
+            }
+          })
+          .catch(err => console.log(err));
+      })
+      .catch(err => {
+        throw err;
+      });
   });
-
 });
 
 // router.get("/profile",(req,res)=>{
@@ -218,7 +218,6 @@ router.post("/settings", (req, res) => {
 // })
 
 router.get("/complain-form", (req, res) => {
-// >>>>>>> 0716abaa9b598359a3acdacf52243ab3a0f802d7
   res.render("users/complain-form", {
     layout: "layouts/users.ejs",
     user: req.session.user
@@ -229,70 +228,62 @@ router.post("/upload", (req, res) => {
   let { title, location, description } = req.body;
   const myImage = req.file;
   let errors = [];
-   errors.push({msg: 'An error has occured . Please check and resend data'})
+  errors.push({ msg: "An error has occured . Please check and resend data" });
   console.log(myImage);
-  if(!myImage) {
+  if (!myImage) {
     return res.status(422).render("users/complain-form", {
       layout: "layouts/users.ejs",
       user: req.session.user,
       errors
-      
     });
-
+  } else if (req.file == "undefined") {
+    return res.render("users/complainform", {
+      title: "error",
+      msg: "Error: No File Selected!",
+      layout: "layouts/main.ejs"
+    });
   }
-  else if (req.file == "undefined"){
-           return res.render("users/complainform", {
-              title: "error",
-              msg: "Error: No File Selected!",
-              layout: "layouts/main.ejs"
-            });
-          }; 
 
   const imageUrl = `../uploads/${req.file.filename}`;
   let d = new Date();
   const date = d.toDateString();
   const pid = uuid4();
   Complain.create({
-    id: pid,
+    cid: pid,
     title,
     description,
     image: imageUrl,
     createdBy: req.session.user.email,
     dateCreated: date
   })
-  .then(result => {
-    res.render("users/home", {
-      layout: "layouts/users",
-      user: req.session.user
+    .then(result => {
+      req.flash("success_msg", "complaint uploaded");
+      res.redirect("/user/complain-form");
+    })
+    .catch(err => {
+      console.log(err);
     });
-  })
-  .catch(err => {
-    console.log(err);
-  });
-
 });
 
-
-router.get('/history', (req, res) => {
+router.get("/history", (req, res) => {
   let usr = req.session.user.email;
-  Complain.findAll({where: {createdBy: usr}})
-  .then(complains => {
-    complains.forEach(complain => {
-      complain.createdAt.stringify();
-      console.log(complain.createdAt);
-      console.log(typeof complain.createdAt);
+  Complain.findAll({ where: { createdBy: usr } })
+    .then(complains => {
+      complains.forEach(complain => {
+        // complain.createdAt.stringify();
+        // console.log(complain.createdAt);
+        // console.log(typeof complain.createdAt);
+      });
+      res.render("users/history", {
+        complains,
+        user: req.session.user,
+        layout: "layouts/users.ejs"
+      });
     })
-    res.render('users/history', {
-      complains,
-      user: req.session.user,
-      layout: 'layouts/users.ejs'
+    .catch(err => {
+      console.log(err);
     });
-
-  })
-  .catch(err => {
-    console.log(err);
-  });
-})
+});
 
 router.get("/register", (req, res) => {
   res.render("users/register", {
@@ -342,7 +333,7 @@ router.post("/register", (req, res) => {
         if (!user) {
           const hash = bcrypt.hashSync(password, 10);
           password = hash;
-          console.log(mobile)
+          console.log(mobile);
           const id = uuid4();
           User.create({
             id,
