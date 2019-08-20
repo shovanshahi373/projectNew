@@ -50,6 +50,19 @@ html {
   padding: 5px;
   min-height: 30%;
   line-height: 40px;
+  /* flex-wrap: wrap; */
+  overflow-wrap: break-word;
+}
+
+.card {
+  max-width: 100% !important;
+  overflow: hidden;
+}
+
+.word-wrap {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  max-width: 100% !important;
 }
 
 .jumboss::first-letter {

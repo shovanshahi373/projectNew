@@ -17,14 +17,14 @@
         <div class="card card-body mb-5 d-flex justify-content-start align-items-start flex-row" style="border-left:4px solid #28a745; cursor:pointer;position:relative">
             <div class="mr-4 hide"><img src="<%= complain.image %>" style="height:200px;width:200px"></div>
             <div class="container-fluid">
-                <div class="mb-3" style="border-bottom:3px solid #28a745"><h5><%= complain.title %></h5></div>
+                <div class="mb-3" style="border-bottom:3px solid #28a745;width:100%"><h5><%= complain.title %></h5></div>
                 <div class="">Status: <% if(complain.isCompleted) { %>
                     <small>Completed</small><i style="color:#28a745;" class="far fa-check-circle"></i>
                 <% }else { %>
                     <small>Pending</small><i style="color:red" class="far fa-times-circle"></i>
                 <% } %>
                 </div>
-                <div class="mb-3">description: <%= complain.description %></div>
+                <div class="mb-3 word-wrap">description: <%= complain.description %></div>
                 <button class="view-modal btn btn-info">view</button>
                 <div class="ml-4 text-right" style="color:#b0bac3; position:absolute;right:5px;bottom:5px"><sub><%= complain.dateCreated %></sub></div>
             </div>
