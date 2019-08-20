@@ -7,7 +7,7 @@
   </tr>
   <% complains.forEach(complain => { %>
     <tr>
-      <td><form action="/admin/dashboard/complaints/<%= complain.cid %>" method="GET"><input type="submit" value="<%= complain.cid %>"></form></td>
+      <td><a style="color:black;text-decoration:none;" href="/admin/dashboard/complaints/<%= complain.cid %>"><%= complain.cid %></a></td>
       <td><%= complain.title %></td>
       <td><%= complain.createdBy %></td>
       <td><%= complain.location %></td>
