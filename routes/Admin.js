@@ -132,4 +132,36 @@ router.get("/dashboard/complaints/:id", (req, res) => {
     })
     .catch(err => console.log(err));
 });
+
+router.get("/dashboard/complaints/mark/:cid", (req, res) => {
+  const post = req.params.cid;
+  Complains.findOne({
+    where: {
+      cid: post
+    }
+  })
+  .then(ismark => {
+      ismark.isCompleted = !ismark.isCompleted;
+      ismark.save()
+      .then(result => {
+        res.redirect('/admin/dashboard/complaints');
+
+      })
+      .catch(err => {
+        console.log(err);
+      });
+      
+    // console.log('333333333' + ismark.isCompleted);
+
+    // ismark.isCompleted = true;
+    // res.redirect('/admin/dashboard/complaints');
+    // console.log('333333333' + ismark.isCompleted);
+
+  })
+  .catch(err => {
+    console.log(err);
+  });
+
+});
+
 module.exports = router;
