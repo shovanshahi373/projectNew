@@ -22,15 +22,16 @@
   </header>
   <main>
     <div class="row">
-      <div class="col-md-2 bg-info flex">
+      <div class="col-md-2 bg-info flex col-lg-2">
         <%- include('../partials/user-sidebar.ejs')%>
       </div>
-      <div class="col-md-8 col-sm-12">
+      <div class="col-md-12 col-sm-12 col-lg-8">
         <div class="container pt-3">
+          <%- include('../partials/messages.ejs') %>
           <%- body %>
         </div>
       </div>
-      <div class="col-md-2 min-vh-100 bg-info d-770">
+      <div class="min-vh-100 bg-info hide col-lg-2">
       </div>
     </div>
   </main>

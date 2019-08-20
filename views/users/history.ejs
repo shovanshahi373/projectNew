@@ -17,37 +17,27 @@
         <div class="card card-body mb-5 d-flex justify-content-start align-items-start flex-row" style="border-left:4px solid #28a745; cursor:pointer;position:relative">
             <div class="mr-4 hide"><img src="<%= complain.image %>" style="height:200px;width:200px"></div>
             <div class="container-fluid">
-                <div class="mb-3" style="border-bottom:3px solid #28a745"><h5><%= complain.title %></h5></div>
+                <div class="mb-3" style="border-bottom:3px solid #28a745;width:100%"><h5><%= complain.title %></h5></div>
                 <div class="">Status: <% if(complain.isCompleted) { %>
                     <small>Completed</small><i style="color:#28a745;" class="far fa-check-circle"></i>
                 <% }else { %>
                     <small>Pending</small><i style="color:red" class="far fa-times-circle"></i>
                 <% } %>
                 </div>
-                <div class="mb-3">description: <%= complain.description %></div>
+                <div class="mb-3 word-wrap">description: <%= complain.description %></div>
                 <button class="view-modal btn btn-info">view</button>
                 <div class="ml-4 text-right" style="color:#b0bac3; position:absolute;right:5px;bottom:5px"><sub><%= complain.dateCreated %></sub></div>
             </div>
         </div> 
 
         <section class="history-modal">
-            <div class="text-light cross" style="position:absolute;top:5px;right:5px;font-size:50px">&times;</div>
-            <div class="container-fluid d-flex justify-content-center align-items-center" style="height:100%">
-                <div class="card card-body history-modal-card">
+            <div class="container-fluid d-flex justify-content-center" style="height:100%;">
+                <div class="history-modal-card">
+                    <i class="fas fa-times cross"></i>
                     <div>
-                        <img src="<%= complain.image %>" style="height:200px;width:200px"/>
+                        <img src="<%= complain.image %>" style="height:auto;width:100%"/>
                     </div>
-                    <div>
-                        <div>
-                            <h1 class="display-2"><%= complain.title %></h1>
-                        </div>
-                        <div>
-                            <div class="jumbotron"><%= complain.description %></div>
-                        </div>
-                        <div>
-                        asdsadasdasd
-                        </div>
-                    </div>
+                    <div class="jumboss"><%= complain.description %></div>
                 </div>
             </div>
         </section>
@@ -56,4 +46,7 @@
     <p class="lead text-muted">There are no complaints...</p>
 <% } %>
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2ac0b6c6636d0249de9206944eb9ce53fe1edcec

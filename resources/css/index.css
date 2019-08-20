@@ -83,7 +83,7 @@ main {
   position: absolute;
   height: 100%;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .banner h1,
@@ -253,4 +253,33 @@ nav {
   .form-container-user-register {
     width: 90%;
   }
+}
+
+#animate {
+	animation:  animatesiddu 1s infinite;
+}
+
+@keyframes animatesiddu{
+	0%{color: #bf55ec;}
+	25%{color:#bf55ec; ;}
+	50%{ color: white; }
+	100%{ color: green;  }
+}
+
+
+/* @media screen and (max-width: 990px) {
+	.columns .column {
+		flex-basis: 100%;
+    margin: 0 0 5px 0; */
+    
+  
+
+
+/* The popup chat - hidden by default */
+
+  /* display: inline-block;
+  position: fixed;
+
+  border: 3px solid #f1f1f1;
+  z-index: 9; */
 }

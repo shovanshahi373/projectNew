@@ -3,17 +3,28 @@
     <th>post id</th>
     <th>title</th>
     <th>created By</th>
-    <th>location</th>
-    <th>user email</th>
+    <th>Date created</th>
+    <th>Status</th>
   </tr>
   <% complains.forEach(complain => { %>
     <tr>
-      <td><%= complain.id %></td>
+      <td><a style="color:black;text-decoration:none;" href="/admin/dashboard/complaints/<%= complain.cid %>"><%= complain.cid %></a></td>
       <td><%= complain.title %></td>
       <td><%= complain.createdBy %></td>
-      <td><%= complain.location %></td>
-      <td><%= complain.email %></td>
-      <td><%= complain.uname %></td>
+      <td><%= complain.dateCreated %></td>
+      <td>
+        <a href="/admin/dashboard/complaints/mark/<%= complain.cid %>">
+          <% if(complain.isCompleted) { %>
+            <div class="btn btn-success text-center" style="width: 90px;">
+              completed
+            </div>
+          <% }else { %>
+            <div class="btn btn-danger text-center" style="width: 90px;">
+              pending
+            </div>
+          <% } %>
+        </a>
+      </td>
     </tr>
   <% }) %>
 <table>

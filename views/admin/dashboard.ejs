@@ -6,6 +6,18 @@
   <%- include('../partials/getAllComplains',{complains}); %>
 <% } %>
 
-
+<% if (typeof post !== 'undefined') { %>
+  <section>
+    <div class="card card-body d-flex justify-content-center align-items-center">
+      <div class="w-50">
+        <img src="<%= url %>" class="w-100"/>  
+      </div>
+      <div class="w-50">
+        <h3><%= post.title %></h3>
+        <p><%= post.description %></p>  
+      </div>
+    </div>
+  </section>
+<% } %>
 
 hello from admin dashboard...

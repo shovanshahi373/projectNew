@@ -29,8 +29,7 @@ module.exports = db.define("complains", {
   },
   isCompleted: {
     type: Sequelize.BOOLEAN,
-    allowNull: true,
-    default: false
+    defaultValue: false,
   },
   markedBy: {
     type: Sequelize.STRING,

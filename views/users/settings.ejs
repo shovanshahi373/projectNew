@@ -1,21 +1,26 @@
-<form action="/user/settings" method="POST">
-    <table>
-        <tr>
-            <td>Username</td>
-            <td><input type="text" required name="uname" value="<%= user.uname %>"></td>
-        </tr>
-        <tr>
-            <td>Email</td>
-            <td><input type="email" required name="email" value="<%= user.email %>"></td>
-        </tr>
-        <tr>
-            <td>mobile no.</td>
-            <td><input type="text" required name= "mobile" value="<%= user.mobile %>"></td>
-        </tr>
-        <tr>
-            <td>password</td>
-            <td><input type="password" required name="password" placeholder="new password"></td>
-        </tr>
-    </table>
-    <button type="submit">change</button>
-</form>
+<div class="d-flex justify-content-center align-items-center mt-5">
+    <form action="/user/settings" method="POST" class="text-left">
+        <table>
+            <tr>
+                <td>Username</td>
+                <td><input type="text" placeholder="username" class="form-control" required name="uname" value="<%= user.uname %>"></td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td><input type="email" placeholder="email" class="form-control" required name="email" value="<%= user.email %>"></td>
+            </tr>
+            <tr>
+                <td>mobile no.</td>
+                <td><input type="text" placeholder="mobile" class="form-control" required name= "mobile" value="<%= user.mobile %>"></td>
+            </tr>
+            <tr>
+                <td>password</td>
+                <td><input type="password" class="form-control" required name="password" placeholder="new password"></td>
+            </tr>
+        </table>
+        <div class="btns mt-3">
+            <button type="submit" class="btn btn-info">change</button>
+            <button type="button" class="btn btn-info">reset</button>
+        </div>
+    </form>
+</div>
