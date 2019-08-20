@@ -3,14 +3,20 @@
     <th>post id</th>
     <th>title</th>
     <th>created By</th>
-    <th>location</th>
+    <th>Date created</th>
+    <th></th>
   </tr>
   <% complains.forEach(complain => { %>
     <tr>
       <td><a style="color:black;text-decoration:none;" href="/admin/dashboard/complaints/<%= complain.cid %>"><%= complain.cid %></a></td>
       <td><%= complain.title %></td>
       <td><%= complain.createdBy %></td>
-      <td><%= complain.location %></td>
+      <td><%= complain.dateCreated %></td>
+      <td>
+        <div class="btn btn-danger">
+          mark
+        </div>
+      </td>
     </tr>
   <% }) %>
 <table>
