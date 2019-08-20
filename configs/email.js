@@ -1,6 +1,6 @@
 const sendGrid = require("@sendgrid/mail");
-if (process.env.NODE_ENV == "production") {
-}
+// if (process.env.NODE_ENV == "production") {
+// }
 const key = process.env.SENDGRID_API_KEY;
 sendGrid.setApiKey(key);
 
