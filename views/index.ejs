@@ -1,27 +1,19 @@
 <section class="banner vh-100">
-  <!-- <img src="images/mtn.jpg" /> -->
   <div class="overlay">
-
     <div class="flex">
-
       <h1 class="lead display-1" id="animate1">
-        Sarokaar
+        Sar<span style="color: var(--primary-green)">ok</span>aar
       </h1>
       <p>
         We do listen to your concerns.
       </p>
-      <div class="btns">
-        <a class="btn btn-success p-2 text-center btn-md btn-sm" href="#sign-up">Register</a>
-      </div>
     </div>
   </div>
 
-
-  <input type="image" name="submit" src="/images/chaticon.png" style=" height:10%; width:auto; position: fixed; bottom:2px; right: 20px ; z-index: 9990; border-radius: 40%;"
+  <input type="image" name="submit" src="/images/chaticon.png" style=" height:10%; width:auto; position: fixed; bottom:20px; right: 20px ; z-index: 9990; border-radius: 40%; outline: none !important; transition: 1s all;"
    alt="Submit"  onclick="openform() " />
 
-
-   <div id="myform" style="position: fixed; bottom:0; right: 0; z-index: 999; display: none;"> 
+   <div id="myform" style="position: fixed; bottom:0; right: 0; z-index: 999; display: none; transition: 1s all;"> 
    
       <div>
        <iframe
@@ -30,9 +22,7 @@
           height="430"
           src="https://console.dialogflow.com/api-client/demo/embedded/b75c1647-f48e-445a-b893-7956a850b29c">
       </iframe>
-
-      <button type="button" class="btn cancel" onclick="closeform()">Close</button>
-      
+      <button type="button" class="btn cancel" onclick="closeform()"></button>
  </div>
 
   </div>

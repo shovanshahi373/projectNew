@@ -13,7 +13,7 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent" style="display:inline-block !important;" >
 
-                <ul class="navbar-nav mr-auto navbar-right" style= "float:right;" >
+                <ul class="navbar-nav mr-auto navbar-right">
  
                     <li class="nav-item">
                         <a class="nav-link" href="/about">About us</a>
@@ -22,18 +22,10 @@
                         <a class="nav-link" href="/developers">Developers</a>
                     </li>
                     <li class="nav-item">
-                        <% if('window.innerWidth' < 425+'px') { %>
-                        <a class="nav-link" href="#sign-up" id="sign-up-redirect">Register</a>
-                        <% }else { %>
                         <a class="nav-link" href="/user/register" id="login-redirect">Register</a>
-                        <% } %>
                     </li>
                     <li class="nav-item">
-                        <% if('window.innerWidth' < 425+'px') { %>
-                        <a class="nav-link" href="#login" id="login-redirect">Login</a>
-                        <% }else { %>
                         <a class="nav-link" href="/user/login" id="login-redirect">Login</a>
-                        <% } %>
                     </li>
                 </ul>
             </div>

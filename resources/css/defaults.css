@@ -1,7 +1,7 @@
 :root {
-
-    --green: #252527;
-
+    --primary-green: #37b34a;
+    --secondary-green: #8cc63f;
+    --light-white: #f8f9fa;
     --black: #252527;
     --faded-white: rgba(255, 255, 255, 0.3);
 }
@@ -12,8 +12,8 @@
 
 a {
     color: white;
-
 }
+
 a:hover {
     text-decoration: none;
     color: white;
