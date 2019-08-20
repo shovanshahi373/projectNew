@@ -15,6 +15,27 @@
       </div>
     </div>
   </div>
+
+  <button style="position: fixed; bottom:10px; right: 15px ; z-index: 9990; border-radius: 40%; background-color: #4CAF50;"
+   onclick="openform()">Chat</button>
+
+   <div id="myform" style="position: fixed; bottom:0; right: 0; z-index: 999; display: none;"> 
+   
+      <div>
+       <iframe
+          allow="microphone;"
+          width="350"
+          height="430"
+          src="https://console.dialogflow.com/api-client/demo/embedded/b75c1647-f48e-445a-b893-7956a850b29c">
+      </iframe>
+
+      <button type="button" class="btn cancel" onclick="closeform()">Close</button>
+      
+ </div>
+
+  </div>
+  
+
 </section>
 
 <!-- <section class="mobile dark-gradient"></section> -->
@@ -48,3 +69,17 @@
   </div>
 
 </section> %>
+
+<script>
+  function openform() {
+  console.log("Clikeed");
+  window.onload= document.getElementById("myform").style.display = "block";
+}
+
+function closeform() {
+  document.getElementById("myForm").style.display = "none";
+}
+
+</script>
+
+

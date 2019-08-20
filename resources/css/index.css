@@ -270,4 +270,16 @@ nav {
 /* @media screen and (max-width: 990px) {
 	.columns .column {
 		flex-basis: 100%;
-		margin: 0 0 5px 0; */
+    margin: 0 0 5px 0; */
+    
+  
+
+
+/* The popup chat - hidden by default */
+.form-popup {
+  /* display: inline-block;
+  position: fixed;
+
+  border: 3px solid #f1f1f1;
+  z-index: 9; */
+}
