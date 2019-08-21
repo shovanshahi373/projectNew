@@ -237,7 +237,7 @@ router.post("/upload", (req, res) => {
       errors
     });
   } else if (req.file == "undefined") {
-    return res.render("users/complainform", {
+    return res.status(422).render("users/complainform", {
       title: "error",
       msg: "Error: No File Selected!",
       layout: "layouts/main.ejs"
@@ -257,12 +257,26 @@ router.post("/upload", (req, res) => {
     dateCreated: date
   })
     .then(result => {
+      // Complain.findAll({
+      //   where: {
+      //     cid: result.cid
+      //   }
       req.flash("success_msg", "complaint uploaded");
-      res.redirect("/user/complain-form");
+      res.status(200).redirect("/user/complain-form");
+      // res.render("users/home",{
+      //   layout:"layouts/users",
+      //   user: req.session.user
+      // });
+      
+        // .then(res => {
+        //   if(res = '') {
+        //     req.flash("success_msg", "complaint uploaded");
+        //     res.status(200).redirect("/user/complain-form");
+        //   }
+        // })
+        // .catch(err => console.log(err));
     })
-    .catch(err => {
-      console.log(err);
-    });
+    .catch(err => console.log(err));
 });
 
 router.get("/history", (req, res) => {
@@ -270,9 +284,6 @@ router.get("/history", (req, res) => {
   Complain.findAll({ where: { createdBy: usr } })
     .then(complains => {
       complains.forEach(complain => {
-        // complain.createdAt.stringify();
-        // console.log(complain.createdAt);
-        // console.log(typeof complain.createdAt);
       });
       res.render("users/history", {
         complains,

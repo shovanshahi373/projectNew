@@ -26,6 +26,11 @@ body {
   padding: 10px;
 }
 
+#navbarNav {
+  text-align:center !important;
+  /* margin-left: 90px !important; */
+}
+
 .form-container-user-register {
   background: #f7fafc;
   padding: 10px;

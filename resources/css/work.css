@@ -1,22 +1,44 @@
 .wrapper {
-    margin: 0 20px 0;
-    padding: 10px;
+  margin: 0 20px 0;
+  padding: 10px;
 }
 
 h1 {
-    text-align: center;
-    text-decoration-color: azure;
-    text-transform: capitalize;
+  text-align: center;
+  text-decoration-color: azure;
+  text-transform: capitalize;
 }
 
 .row img {
-    width: 90%;
-    height: 45%;
+  width: 90%;
+  height: 45%;
 }
 
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-column-gap: 20px;
+  /* padding: 70px; */
+}
 
+.grid-item {
+  display: grid;
+  grid-template-rows: 1fr;
+  text-align: center;
+}
 
-@media screen and (max-width: 990px) {
-	section.row.col  {
-    }
-		
+.grid-item p {
+  font-size: 14px;
+  padding: 0 40px;
+}
+
+.grid-item h2 {
+  padding: 0;
+  margin: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -2,38 +2,25 @@
 </div>
 <div class="row bg-success sticky-top">
     <div class="container">
-        <nav class="navbar navbar-expand-lg nav-light bg-success">
-
-            <a class="navbar-brand" href="/" style="float:left;">Sarokaar</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse"
-                data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <i class="fas fa-bars"></i>
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand text-light" href="/">Sarokaar</a>
+            
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
             </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent" style="display:inline-block !important;" >
-
-                <ul class="navbar-nav mr-auto navbar-right" style= "float:right;" >
- 
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="/about">About us</a>
+                        <a class="nav-link" href="/about">About</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/developers">Developers</a>
                     </li>
                     <li class="nav-item">
-                        <% if('window.innerWidth' < 425+'px') { %>
-                        <a class="nav-link" href="#sign-up" id="sign-up-redirect">Register</a>
-                        <% }else { %>
-                        <a class="nav-link" href="/user/register" id="login-redirect">Register</a>
-                        <% } %>
+                        <a class="nav-link" href="/user/register">Register</a>
                     </li>
                     <li class="nav-item">
-                        <% if('window.innerWidth' < 425+'px') { %>
-                        <a class="nav-link" href="#login" id="login-redirect">Login</a>
-                        <% }else { %>
-                        <a class="nav-link" href="/user/login" id="login-redirect">Login</a>
-                        <% } %>
+                        <a class="nav-link" href="/user/login">Login</a>
                     </li>
                 </ul>
             </div>
