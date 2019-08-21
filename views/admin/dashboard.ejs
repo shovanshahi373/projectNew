@@ -8,6 +8,10 @@
 
 <% if (typeof post !== 'undefined') { %>
   <section>
+    <form action="/admin/dashboard/complaints/delete/<%= post.cid %>" method="POST"> 
+      <input type="submit" class="btn btn-danger mb-3" value="DELETE"/>
+    </form>
+    
     <div class="card card-body d-flex justify-content-center align-items-center">
       <div class="w-50">
         <img src="<%= url %>" class="w-100"/>  

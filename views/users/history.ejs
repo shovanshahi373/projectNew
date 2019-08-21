@@ -19,9 +19,9 @@
             <div class="container-fluid">
                 <div class="mb-3" style="border-bottom:3px solid #28a745;width:100%"><h5><%= complain.title %></h5></div>
                 <div class="">Status: <% if(complain.isCompleted) { %>
-                    <small>Completed</small><i style="color:#28a745;" class="far fa-check-circle"></i>
+                    <small class="badge badge-success">Completed</small>
                 <% }else { %>
-                    <small>Pending</small><i style="color:red" class="far fa-times-circle"></i>
+                    <small class="badge badge-danger">Pending</small>
                 <% } %>
                 </div>
                 <div class="mb-3 word-wrap">description: <%= complain.description %></div>
@@ -45,8 +45,3 @@
 <% }else { %>
     <p class="lead text-muted">There are no complaints...</p>
 <% } %>
-
-<<<<<<< HEAD
-
-=======
->>>>>>> 2ac0b6c6636d0249de9206944eb9ce53fe1edcec

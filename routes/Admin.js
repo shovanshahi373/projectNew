@@ -87,34 +87,36 @@ router.get("/dashboard/getAllUsers", (req, res) => {
     .catch(err => console.log(err));
 });
 
-// router.get("/dashboard/complaints", (req, res) => {
-//   Complains.findAll({ raw: true })
-//     .then(complains => {
-//       res.render("admin/dashboard", {
-//         admin: req.session.admin,
-//         layout: "layouts/dashboard",
-//         complains
-//       });
-//     })
-//     .catch(err => console.log(err));
-// });
-
 router.get("/dashboard/complaints", (req, res) => {
-  // Complains.findAll({include: [{model: Users}]})
-  db.query("Select * from complains,users")
-    .then(complains => {
-      console.log(complains);
-      res.render("admin/dashboard", {
-        layout: "layouts/dashboard",
-        complains: complains[0],
-        admin: req.session.admin
-      });
-    })
-    .catch(err => {
-      console.log(err);
+  Complains.findAll({
+    order:[
+      ['dateCreated','ASC']
+    ]
+  })
+  .then(complains => {
+    res.render("admin/dashboard", {
+      layout: "layouts/dashboard",
+      complains,
+      admin: req.session.admin
     });
+  })
+  .catch(err => console.log(err));
+
+
+  // db.query("Select * from complains,users")
+  //   .then(complains => {
+  //     console.log(complains);
+  //     res.render("admin/dashboard", {
+  //       layout: "layouts/dashboard",
+  //       complains: complains[0],
+  //       admin: req.session.admin
+  //     });
+  //   })
+  //   .catch(err => {
+  //     console.log(err);
+  //   });
 });
-router.get("/dashboard/complaints/:id", (req, res) => {
+router.get("/dashboard/complaints/find/:id", (req, res) => {
   const post = req.params.id;
   Complains.findOne({
     where: {
@@ -133,6 +135,7 @@ router.get("/dashboard/complaints/:id", (req, res) => {
     .catch(err => console.log(err));
 });
 
+//mark/unmark user complaint
 router.get("/dashboard/complaints/mark/:cid", (req, res) => {
   const post = req.params.cid;
   Complains.findOne({
@@ -141,27 +144,35 @@ router.get("/dashboard/complaints/mark/:cid", (req, res) => {
     }
   })
   .then(ismark => {
-      ismark.isCompleted = !ismark.isCompleted;
-      ismark.save()
-      .then(result => {
-        res.redirect('/admin/dashboard/complaints');
+    ismark.isCompleted = !ismark.isCompleted;
+    ismark.save()
+    .then(result => {
+      res.redirect('/admin/dashboard/complaints');
 
-      })
-      .catch(err => {
-        console.log(err);
-      });
-      
-    // console.log('333333333' + ismark.isCompleted);
-
-    // ismark.isCompleted = true;
-    // res.redirect('/admin/dashboard/complaints');
-    // console.log('333333333' + ismark.isCompleted);
-
+    })
+    .catch(err => {
+      console.log(err);
+    });
   })
   .catch(err => {
     console.log(err);
   });
 
+});
+
+//delete user complaint
+router.post("/dashboard/complaints/delete/:cid", (req, res) => {
+  const pid = req.params.cid;
+  Complains.destroy({
+    where: {
+      cid: pid
+    }
+  })
+    .then(result => {
+      console.log("post " + pid + " was deleted...");
+      res.redirect("/admin/dashboard/complaints");
+    })
+    .catch(err => console.log(err));
 });
 
 module.exports = router;

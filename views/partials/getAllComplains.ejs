@@ -8,18 +8,18 @@
   </tr>
   <% complains.forEach(complain => { %>
     <tr>
-      <td><a style="color:black;text-decoration:none;" href="/admin/dashboard/complaints/<%= complain.cid %>"><%= complain.cid %></a></td>
+      <td><a style="color:black;text-decoration:none;" href="/admin/dashboard/complaints/find/<%= complain.cid %>"><%= complain.cid %></a></td>
       <td><%= complain.title %></td>
       <td><%= complain.createdBy %></td>
       <td><%= complain.dateCreated %></td>
       <td>
         <a href="/admin/dashboard/complaints/mark/<%= complain.cid %>">
           <% if(complain.isCompleted) { %>
-            <div class="btn btn-success text-center" style="width: 90px;">
+            <div class="btn btn-success text-center" style="width: 110px;">
               completed
             </div>
           <% }else { %>
-            <div class="btn btn-danger text-center" style="width: 90px;">
+            <div class="btn btn-danger text-center" style="width: 110px;">
               pending
             </div>
           <% } %>

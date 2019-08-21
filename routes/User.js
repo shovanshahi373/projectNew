@@ -257,12 +257,26 @@ router.post("/upload", (req, res) => {
     dateCreated: date
   })
     .then(result => {
+      // Complain.findAll({
+      //   where: {
+      //     cid: result.cid
+      //   }
       req.flash("success_msg", "complaint uploaded");
       res.status(200).redirect("/user/complain-form");
+      // res.render("users/home",{
+      //   layout:"layouts/users",
+      //   user: req.session.user
+      // });
+      
+        // .then(res => {
+        //   if(res = '') {
+        //     req.flash("success_msg", "complaint uploaded");
+        //     res.status(200).redirect("/user/complain-form");
+        //   }
+        // })
+        // .catch(err => console.log(err));
     })
-    .catch(err => {
-      console.log(err);
-    });
+    .catch(err => console.log(err));
 });
 
 router.get("/history", (req, res) => {
