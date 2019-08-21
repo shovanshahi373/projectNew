@@ -11,9 +11,18 @@ const { ensureAuthenticated } = require("../configs/auth");
 const sendgrid = require("../configs/email");
 const crypto = require("crypto");
 const uuid4 = require("uuid/v4");
+const r = require("../configs/redditapi");
 // const uuid3 = require("uuid/v3");
 
 router.get("/login", (req, res) => {
+  r.getSubreddit("trashtag")
+    .getHot()
+    .then(posts => {
+      posts.forEach(post => {
+        console.log(post.title + "\n");
+      });
+    });
+  // console.log(r.getSubreddit("trashtag").body);
   res.render("users/login", {
     title: "Sarokaar | Login",
     layout: "layouts/layout2.ejs"
@@ -85,11 +94,20 @@ router.post("/home", (req, res, next) => {
       res.redirect("/user/login");
     }
     if (user) {
-      req.session.user = user;
-      res.render("users/home", {
-        user,
-        layout: "layouts/users"
-      });
+      r.getSubreddit("trashtag")
+        .getHot()
+        .then(posts => {
+          const pat = new RegExp(/.jpg/);
+          const Zposts = posts.filter(post => pat.test(post.url));
+          console.log(posts.length);
+          console.log(Zposts.length);
+          req.session.user = user;
+          res.render("users/home", {
+            Zposts,
+            user,
+            layout: "layouts/users"
+          });
+        });
       // res.redirect("/user/home");
     } else {
       req.flash("error_msg", info.message);
@@ -267,14 +285,14 @@ router.post("/upload", (req, res) => {
       //   layout:"layouts/users",
       //   user: req.session.user
       // });
-      
-        // .then(res => {
-        //   if(res = '') {
-        //     req.flash("success_msg", "complaint uploaded");
-        //     res.status(200).redirect("/user/complain-form");
-        //   }
-        // })
-        // .catch(err => console.log(err));
+
+      // .then(res => {
+      //   if(res = '') {
+      //     req.flash("success_msg", "complaint uploaded");
+      //     res.status(200).redirect("/user/complain-form");
+      //   }
+      // })
+      // .catch(err => console.log(err));
     })
     .catch(err => console.log(err));
 });
@@ -283,8 +301,7 @@ router.get("/history", (req, res) => {
   let usr = req.session.user.email;
   Complain.findAll({ where: { createdBy: usr } })
     .then(complains => {
-      complains.forEach(complain => {
-      });
+      complains.forEach(complain => {});
       res.render("users/history", {
         complains,
         user: req.session.user,

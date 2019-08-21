@@ -55,6 +55,7 @@ app.use(
     saveUninitialized: true
   })
 );
+
 //multer config
 const fileStorage = multer.diskStorage({
   destination: (req, file, cb) => {

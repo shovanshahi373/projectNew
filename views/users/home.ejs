@@ -1,1 +1,11 @@
-this contains the body...
+<% if(Zposts !== 'undefined') { %>
+  <% Zposts.forEach(post => { %>
+    <div class="card card-body mb-3">
+      <h3><%= post.title %></h3>
+      <div class="badge badge-success mb-4"><img src="<%= post.url %>" style="width:100%;"/></div>
+    </div>
+  <% }); %>
+<% }else { %>
+  <div>nothing to show...</div>
+<% } %>
+
