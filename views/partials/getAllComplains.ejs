@@ -5,6 +5,7 @@
     <th>created By</th>
     <th>Date created</th>
     <th>Status</th>
+    <th>Marked by</th>
   </tr>
   <% complains.forEach(complain => { %>
     <tr>
@@ -24,6 +25,9 @@
             </div>
           <% } %>
         </a>
+      </td>
+      <td>
+        <%= complain.markedBy %>
       </td>
     </tr>
   <% }) %>

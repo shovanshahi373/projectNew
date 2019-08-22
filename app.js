@@ -10,7 +10,7 @@ const session = require("express-session");
 const passport = require("passport");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
-dotenv.config();
+// dotenv.config();
 const cookieParser = require("cookie-parser");
 const port = process.env.PORT || 3000;
 
@@ -24,14 +24,12 @@ Complain.belongsTo(Location, { constraints: true, onDelete: "CASCADE" });
 Complain.belongsToMany(Resource, { through: "ComplainResource" });
 Complain.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 
-require("./configs/database").sync();
+require("./configs/database").sync({ force: true });
 
 //init app
 const app = express();
-const { userAuth } = require("./configs/passport");
-// require("./configs/passport")(passport);
+const { userAuth, adminAuth } = require("./configs/passport");
 userAuth(passport);
-const { adminAuth } = require("./configs/passport");
 adminAuth(passport);
 
 //set up assets directory
@@ -53,6 +51,7 @@ app.use(
     secret: "keyboardcat",
     resave: true,
     saveUninitialized: true
+    // expires: -1
   })
 );
 
@@ -94,7 +93,7 @@ app.use((req, res, next) => {
   res.locals.error_msg = req.flash("error_msg");
   res.locals.error = req.flash("error");
   res.locals.link = req.flash("link");
-  res.locals.user = req.user || null;
+  // res.locals.user = req.user || null;
   next();
 });
 

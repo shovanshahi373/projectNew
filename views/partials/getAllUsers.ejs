@@ -2,6 +2,7 @@
   <tr>
     <th>id</th>
     <th>username</th>
+    <th>profile</th>
     <th>email</th>
     <th>joined</th>
     <th>last updated</th>
@@ -10,6 +11,7 @@
     <tr>
       <td><%= user.id %></td>
       <td><%= user.uname %></td>
+      <td><img src="<%= user.image %>" style="heigh:50px;width:50px;border-radius:50%;"/></td>
       <td><%= user.email %></td>
       <td><%= user.createdAt %></td>
       <td><%= user.updatedAt %></td>

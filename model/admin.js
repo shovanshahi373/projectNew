@@ -1,31 +1,38 @@
-const sequelize = require("sequelize");
+const Sequelize = require("sequelize");
 const db = require("../configs/database");
 
 module.exports = db.define("admins", {
   id: {
-    type: sequelize.STRING,
+    type: Sequelize.STRING,
     allowNull: false,
     primaryKey: true
   },
   username: {
-    type: sequelize.STRING,
+    type: Sequelize.STRING,
     allowNull: false
   },
   email: {
-    type: sequelize.STRING,
+    type: Sequelize.STRING,
     allowNull: false
   },
   citizenship: {
-    type: sequelize.STRING,
+    type: Sequelize.STRING,
     allowNull: false
   },
   password: {
-    type: sequelize.STRING,
+    type: Sequelize.STRING,
     allowNull: false
   },
   image: {
-    type: sequelize.STRING,
-    allowNull: true,
-    default: "/images/img.png"
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  resetToken: {
+    type: Sequelize.STRING,
+    allowNull: true
+  },
+  resetTokenExpiry: {
+    type: Sequelize.DATE,
+    allowNull: true
   }
 });

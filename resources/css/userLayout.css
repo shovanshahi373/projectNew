@@ -59,6 +59,10 @@ html {
   overflow: hidden;
 }
 
+.rpost .container {
+  padding: 0% 15% !important;
+}
+
 .word-wrap {
   overflow-wrap: break-word;
   word-wrap: break-word;

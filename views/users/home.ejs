@@ -1,8 +1,10 @@
 <% if(Zposts !== 'undefined') { %>
   <% Zposts.forEach(post => { %>
-    <div class="card card-body mb-3">
-      <h3><%= post.title %></h3>
-      <div class="badge badge-success mb-4"><img src="<%= post.url %>" style="width:100%;"/></div>
+    <div class="card card-body mb-3 rpost">
+      <div class="container">
+        <h5><%= post.title %></h5>
+        <div class="badge badge-success mb-4"><img src="<%= post.url %>" style="width:100%;"/></div>
+      </div>
     </div>
   <% }); %>
 <% }else { %>

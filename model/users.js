@@ -2,7 +2,6 @@ const Sequelize = require("sequelize");
 const db = require("../configs/database");
 
 module.exports = db.define("users", {
- 
   id: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -17,12 +16,20 @@ module.exports = db.define("users", {
     allowNull: false,
     unique: true
   },
+  gender: {
+    type: Sequelize.BOOLEAN,
+    allowNull: false
+  },
   mobile: {
     type: Sequelize.STRING,
     allowNull: true,
     unique: true
   },
   password: {
+    type: Sequelize.STRING,
+    allowNull: false
+  },
+  image: {
     type: Sequelize.STRING,
     allowNull: false
   },

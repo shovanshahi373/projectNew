@@ -2,46 +2,116 @@
     <h1 class="display-5">My Complaints</h1>
     <ul class="list-group list-group-horizontal">
         <li class="pill pill-info list-group-item">
-            <a href="#">all</a>
+            <a href="#" onclick="showTab('tab1')">all</a>
         </li>
         <li class="pill pill-info list-group-item">
-            <a href="#">completed</a>
+            <a href="#" onclick="showTab('tab2')">completed</a>
         </li>
         <li class="pill pill-info list-group-item">
-            <a href="#">pending</a>
+            <a href="#" onclick="showTab('tab3')">pending</a>
         </li>
     </ul>
 </div>
 <% if(typeof complains[0] != 'undefined') { %>
-    <% complains.forEach(complain=>{ %>
-        <div class="card card-body mb-5 d-flex justify-content-start align-items-start flex-row" style="border-left:4px solid #28a745; cursor:pointer;position:relative">
-            <div class="mr-4 hide"><img src="<%= complain.image %>" style="height:200px;width:200px"></div>
-            <div class="container-fluid">
-                <div class="mb-3" style="border-bottom:3px solid #28a745;width:100%"><h5><%= complain.title %></h5></div>
-                <div class="">Status: <% if(complain.isCompleted) { %>
-                    <small class="badge badge-success">Completed</small>
-                <% }else { %>
-                    <small class="badge badge-danger">Pending</small>
-                <% } %>
-                </div>
-                <div class="mb-3 word-wrap">description: <%= complain.description %></div>
-                <button class="view-modal btn btn-info">view</button>
-                <div class="ml-4 text-right" style="color:#b0bac3; position:absolute;right:5px;bottom:5px"><sub><%= complain.dateCreated %></sub></div>
-            </div>
-        </div> 
 
-        <section class="history-modal">
-            <div class="container-fluid d-flex justify-content-center" style="height:100%;">
-                <div class="history-modal-card">
-                    <i class="fas fa-times cross"></i>
-                    <div>
-                        <img src="<%= complain.image %>" style="height:auto;width:100%"/>
+    <div class="tab tab1">
+        <% complains.forEach(complain=>{ %>
+            <div class="card card-body mb-5 d-flex justify-content-start align-items-start flex-row" style="border-left:4px solid #28a745; cursor:pointer;position:relative">
+                <div class="mr-4 hide"><img src="<%= complain.image %>" style="height:200px;width:200px"></div>
+                <div class="container-fluid">
+                    <div class="mb-3" style="border-bottom:3px solid #28a745;width:100%"><h5><%= complain.title %></h5></div>
+                    <div class="">Status: <% if(complain.isCompleted) { %>
+                        <small class="badge badge-success">Completed</small>
+                    <% }else { %>
+                        <small class="badge badge-danger">Pending</small>
+                    <% } %>
                     </div>
-                    <div class="jumboss"><%= complain.description %></div>
+                    <div class="mb-3 word-wrap">description: <%= complain.description %></div>
+                    <button class="view-modal btn btn-info">view</button>
+                    <div class="ml-4 text-right" style="color:#b0bac3; position:absolute;right:5px;bottom:5px"><sub><%= complain.dateCreated %></sub></div>
                 </div>
-            </div>
-        </section>
-    <% }) %>
+            </div> 
+
+            <section class="history-modal">
+                <div class="container-fluid d-flex justify-content-center" style="height:100%;">
+                    <div class="history-modal-card">
+                        <i class="fas fa-times cross"></i>
+                        <div>
+                            <img src="<%= complain.image %>" style="height:auto;width:100%"/>
+                        </div>
+                        <div class="jumboss"><%= complain.description %></div>
+                    </div>
+                </div>
+            </section>
+        <% }) %>
+    </div>
+
+    <div class="tab tab2" style="display:none;">
+        <% var filteredComplains = complains.filter(complain => complain.isCompleted) %>
+        <% filteredComplains.forEach(complain => { %>
+            <div class="card card-body mb-5 d-flex justify-content-start align-items-start flex-row" style="border-left:4px solid #28a745; cursor:pointer;position:relative">
+                <div class="mr-4 hide"><img src="<%= complain.image %>" style="height:200px;width:200px"></div>
+                <div class="container-fluid">
+                    <div class="mb-3" style="border-bottom:3px solid #28a745;width:100%"><h5><%= complain.title %></h5></div>
+                    <div class="">Status: <% if(complain.isCompleted) { %>
+                        <small class="badge badge-success">Completed</small>
+                    <% }else { %>
+                        <small class="badge badge-danger">Pending</small>
+                    <% } %>
+                    </div>
+                    <div class="mb-3 word-wrap">description: <%= complain.description %></div>
+                    <button class="view-modal btn btn-info">view</button>
+                    <div class="ml-4 text-right" style="color:#b0bac3; position:absolute;right:5px;bottom:5px"><sub><%= complain.dateCreated %></sub></div>
+                </div>
+            </div> 
+
+            <section class="history-modal">
+                <div class="container-fluid d-flex justify-content-center" style="height:100%;">
+                    <div class="history-modal-card">
+                        <i class="fas fa-times cross"></i>
+                        <div>
+                            <img src="<%= complain.image %>" style="height:auto;width:100%"/>
+                        </div>
+                        <div class="jumboss"><%= complain.description %></div>
+                    </div>
+                </div>
+            </section>
+        <% }) %>
+    </div>
+
+    <div class="tab tab3" style="display:none;">
+        <% var filteredComplains = complains.filter(complain => !complain.isCompleted) %>
+        <% filteredComplains.forEach(complain => { %>
+            <div class="card card-body mb-5 d-flex justify-content-start align-items-start flex-row" style="border-left:4px solid #28a745; cursor:pointer;position:relative">
+                <div class="mr-4 hide"><img src="<%= complain.image %>" style="height:200px;width:200px"></div>
+                <div class="container-fluid">
+                    <div class="mb-3" style="border-bottom:3px solid #28a745;width:100%"><h5><%= complain.title %></h5></div>
+                    <div class="">Status: <% if(complain.isCompleted) { %>
+                        <small class="badge badge-success">Completed</small>
+                    <% }else { %>
+                        <small class="badge badge-danger">Pending</small>
+                    <% } %>
+                    </div>
+                    <div class="mb-3 word-wrap">description: <%= complain.description %></div>
+                    <button class="view-modal btn btn-info">view</button>
+                    <div class="ml-4 text-right" style="color:#b0bac3; position:absolute;right:5px;bottom:5px"><sub><%= complain.dateCreated %></sub></div>
+                </div>
+            </div> 
+
+            <section class="history-modal">
+                <div class="container-fluid d-flex justify-content-center" style="height:100%;">
+                    <div class="history-modal-card">
+                        <i class="fas fa-times cross"></i>
+                        <div>
+                            <img src="<%= complain.image %>" style="height:auto;width:100%"/>
+                        </div>
+                        <div class="jumboss"><%= complain.description %></div>
+                    </div>
+                </div>
+            </section>
+        <% }) %>
+    </div>
 <% }else { %>
     <p class="lead text-muted">There are no complaints...</p>
 <% } %>
+

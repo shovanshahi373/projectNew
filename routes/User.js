@@ -12,17 +12,8 @@ const sendgrid = require("../configs/email");
 const crypto = require("crypto");
 const uuid4 = require("uuid/v4");
 const r = require("../configs/redditapi");
-// const uuid3 = require("uuid/v3");
 
 router.get("/login", (req, res) => {
-  r.getSubreddit("trashtag")
-    .getHot()
-    .then(posts => {
-      posts.forEach(post => {
-        console.log(post.title + "\n");
-      });
-    });
-  // console.log(r.getSubreddit("trashtag").body);
   res.render("users/login", {
     title: "Sarokaar | Login",
     layout: "layouts/layout2.ejs"
@@ -81,34 +72,36 @@ router.post("/password-verify", (req, res) => {
   }
 });
 
-router.post("/home", (req, res, next) => {
+router.post("/home", async (req, res, next) => {
   let { email, password } = req.body;
   if (email == "" || password == "") {
     req.flash("error_msg", "please fill in all fields");
     res.redirect("/user/login");
   }
 
-  passport.authenticate("user-local", (err, user, info) => {
+  passport.authenticate("user-local", async (err, user, info) => {
     if (err) {
       req.flash("error_msg", "authentication failed.");
       res.redirect("/user/login");
     }
     if (user) {
-      r.getSubreddit("trashtag")
-        .getHot()
-        .then(posts => {
-          const pat = new RegExp(/.jpg/);
-          const Zposts = posts.filter(post => pat.test(post.url));
-          console.log(posts.length);
-          console.log(Zposts.length);
-          req.session.user = user;
-          res.render("users/home", {
-            Zposts,
-            user,
-            layout: "layouts/users"
-          });
-        });
-      // res.redirect("/user/home");
+      const sr1 = await r.getSubreddit("DeTrashed").getHot();
+      const sr2 = await r.getSubreddit("pics").getHot();
+      const sr3 = await r.getSubreddit("TrashTag").getHot();
+      const posts = [...sr1, ...sr2, ...sr3];
+      console.log(posts.length);
+      const filteredposts = posts.filter(post => {
+        const pat1 = new RegExp(/#TrashTag|garbage|sewage|trash|clean/gi);
+        const pat2 = new RegExp(/.jpg$|.png$|.gif$/);
+        return post.title.match(pat1) && post.url.match(pat2);
+      });
+      console.log(filteredposts.length);
+      req.session.user = user;
+      res.render("users/home", {
+        Zposts: filteredposts,
+        user,
+        layout: "layouts/users"
+      });
     } else {
       req.flash("error_msg", info.message);
       res.redirect("/user/login");
@@ -203,7 +196,11 @@ router.get("/create-new-password/:token", (req, res) => {
 });
 
 router.post("/settings", (req, res) => {
-  const { uname, email: newemail, mobile, password } = req.body;
+  const { uname, email: newemail, mobile, password, image } = req.body;
+  const pic = req.file;
+  if (pic) {
+    image = `../uploads/users/${pic.filename}`;
+  }
   bcrypt.hash(password, 10).then(hash => {
     User.findOne({ where: { email: req.session.user.email } })
       .then(user => {
@@ -212,15 +209,20 @@ router.post("/settings", (req, res) => {
         user.email = newemail;
         user.mobile = mobile;
         user.password = hash;
+        user.image = image;
         console.log(user);
         user
           .save()
           .then(result => {
-            if (result) {
+            const checkHash = bcrypt.compare(password, result.password);
+            if (result.email != email || checkHash) {
               console.log("111111111111111333");
               req.logOut();
               req.flash("success_msg", "user credentials successfully changed");
               res.redirect("/user/login");
+            } else {
+              req.flash("success_msg", "user credentials successfully changed");
+              res.redirect("/user/settings");
             }
           })
           .catch(err => console.log(err));
@@ -230,10 +232,6 @@ router.post("/settings", (req, res) => {
       });
   });
 });
-
-// router.get("/profile",(req,res)=>{
-//   res.
-// })
 
 router.get("/complain-form", (req, res) => {
   res.render("users/complain-form", {
@@ -246,23 +244,15 @@ router.post("/upload", (req, res) => {
   let { title, location, description } = req.body;
   const myImage = req.file;
   let errors = [];
-  errors.push({ msg: "An error has occured . Please check and resend data" });
-  console.log(myImage);
   if (!myImage) {
-    return res.status(422).render("users/complain-form", {
+    errors.push({ msg: "Error: No File Selected!" });
+    res.status(422).render("users/complain-form", {
       layout: "layouts/users.ejs",
       user: req.session.user,
       errors
     });
-  } else if (req.file == "undefined") {
-    return res.status(422).render("users/complainform", {
-      title: "error",
-      msg: "Error: No File Selected!",
-      layout: "layouts/main.ejs"
-    });
   }
-
-  const imageUrl = `../uploads/${req.file.filename}`;
+  const imageUrl = `../uploads/${myImage.filename}`;
   let d = new Date();
   const date = d.toDateString();
   const pid = uuid4();
@@ -275,24 +265,8 @@ router.post("/upload", (req, res) => {
     dateCreated: date
   })
     .then(result => {
-      // Complain.findAll({
-      //   where: {
-      //     cid: result.cid
-      //   }
       req.flash("success_msg", "complaint uploaded");
       res.status(200).redirect("/user/complain-form");
-      // res.render("users/home",{
-      //   layout:"layouts/users",
-      //   user: req.session.user
-      // });
-
-      // .then(res => {
-      //   if(res = '') {
-      //     req.flash("success_msg", "complaint uploaded");
-      //     res.status(200).redirect("/user/complain-form");
-      //   }
-      // })
-      // .catch(err => console.log(err));
     })
     .catch(err => console.log(err));
 });
@@ -321,10 +295,23 @@ router.get("/register", (req, res) => {
 });
 
 router.post("/register", (req, res) => {
-  let { uname, email, mobile, password, cpassword } = req.body;
+  let { uname, email, mobile, password, cpassword, gender } = req.body;
+  let males = ["/uploads/users/um1.png", "/uploads/users/um2.png"];
+  let females = ["/uploads/users/ufm1.png", "/uploads/users/ufm2.png"];
+  let img;
+  let gdr;
+
   let errors = [];
-  console.log(mobile);
-  if (uname == "" || email == "" || mobile == "" || password == "") {
+
+  if (gender[0].checked) {
+    img = males[Math.ceil(Math.random() * 2) - 1];
+  } else if (gender[1].checked) {
+    img = females[Math.ceil(Math.random() * 2) - 1];
+  } else {
+    errors.push({ msg: "please select your gender" });
+  }
+
+  if (uname == "" || email == "") {
     errors.push({ msg: "please fill in all the fields" });
   }
 
@@ -361,14 +348,20 @@ router.post("/register", (req, res) => {
         if (!user) {
           const hash = bcrypt.hashSync(password, 10);
           password = hash;
-          console.log(mobile);
           const id = uuid4();
+          if (gender[0].checked) {
+            gdr = 0;
+          } else {
+            gdr = 1;
+          }
           User.create({
             id,
             uname,
             email,
+            gender: gdr,
             mobile,
-            password
+            password,
+            image: img
           })
             .then(user => {
               req.flash(
