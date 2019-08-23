@@ -11,6 +11,7 @@ const sendgrid = require("../configs/email");
 const crypto = require("crypto");
 const uuid4 = require("uuid/v4");
 const r = require("../configs/redditapi");
+const mapKey = process.env.GOOGLE_API_KEY;
 
 const { userAuth } = require("../configs/passport");
 userAuth(passport);
@@ -140,7 +141,7 @@ router.post("/settings", (req, res) => {
   const pic = req.file;
   User.findOne({
     where: {
-      id: req.session.user.id
+      id: req.user.id
     }
   }).then(user => {
     if (pic) {
@@ -265,7 +266,8 @@ router.get("/create-new-password/:token", (req, res) => {
 router.get("/complain-form", isUserAuthenticated, (req, res) => {
   res.render("users/complain-form", {
     layout: "layouts/users.ejs",
-    user: req.user
+    user: req.user,
+    googeMapAPI: mapKey
     // user
   });
 });
