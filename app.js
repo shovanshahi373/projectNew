@@ -8,9 +8,8 @@ const expressLayouts = require("express-ejs-layouts");
 const flash = require("connect-flash");
 const session = require("express-session");
 const passport = require("passport");
+// const { userAuth, adminAuth } = require("./configs/passport");
 const morgan = require("morgan");
-const dotenv = require("dotenv");
-// dotenv.config();
 const cookieParser = require("cookie-parser");
 const port = process.env.PORT || 3000;
 
@@ -28,9 +27,10 @@ Complain.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 
 //init app
 const app = express();
-const { userAuth, adminAuth } = require("./configs/passport");
-userAuth(passport);
-adminAuth(passport);
+
+//configure passports for user and admin login
+// userAuth(passport);
+// adminAuth(passport);
 
 //set up assets directory
 app.use(express.static(path.join(__dirname, "resources")));

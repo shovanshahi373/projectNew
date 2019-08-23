@@ -2,14 +2,16 @@ const express = require("express");
 const router = express.Router();
 const Seq = require("sequelize");
 const sendgrid = require("../configs/email");
-const db = require("../configs/database");
 const Admin = require("../model/admin");
 const Users = require("../model/users");
 const Complains = require("../model/complain");
 const bcrypt = require("bcryptjs");
-const adminAuth = require("../configs/auth").a;
+const isAdminAuthenticated = require("../configs/auth").a;
 const passport = require("passport");
 const uuid4 = require("uuid/v4");
+
+const { adminAuth } = require("../configs/passport");
+adminAuth(passport);
 
 router.get("/create-admin", (req, res) => {
   const id = uuid4();
@@ -38,14 +40,15 @@ router.get("/", (req, res) => {
 
 router.get("/logout", (req, res) => {
   req.logout();
+  console.log("admin session destroyed");
   req.flash("success_msg", "you are logged out");
   res.redirect("/admin");
 });
 
-router.get("/dashboard", (req, res) => {
+router.get("/dashboard", isAdminAuthenticated, (req, res) => {
   res.render("admin/dashboard", {
     layout: "layouts/dashboard",
-    admin: req.session.admin
+    admin: req.admin
   });
 });
 
@@ -62,24 +65,27 @@ router.post("/dashboard", (req, res, next) => {
       res.redirect("/admin");
     }
     if (admin) {
-      req.session.admin = admin;
-      res.render("admin/dashboard", {
-        admin,
-        layout: "layouts/dashboard"
+      req.logIn(admin, err => {
+        if (err) {
+          return next(err);
+        }
+        res.render("admin/dashboard", {
+          admin,
+          layout: "layouts/dashboard"
+        });
       });
-      // res.redirect("/admin/dashboard");
     } else {
       req.flash("error_msg", info.message);
-      res.redirect("/admin");
+      return res.redirect("/admin");
     }
   })(req, res, next);
 });
 
-router.get("/dashboard/getAllUsers", (req, res) => {
+router.get("/dashboard/getAllUsers", isAdminAuthenticated, (req, res) => {
   Users.findAll({ raw: true })
     .then(users => {
       res.render("admin/dashboard", {
-        admin: req.session.admin,
+        admin: req.admin,
         layout: "layouts/dashboard",
         users
       });
@@ -87,16 +93,16 @@ router.get("/dashboard/getAllUsers", (req, res) => {
     .catch(err => console.log(err));
 });
 
-router.get("/dashboard/invite", (req, res) => {
+router.get("/dashboard/invite", isAdminAuthenticated, (req, res) => {
   res.render("admin/invite", {
     layout: "layouts/dashboard",
-    admin: req.session.admin
+    admin: req.admin
   });
 });
 
 router.post("/dashboard/invite", (req, res) => {
   const { email, description } = req.body;
-  const admin = req.session.admin;
+  const admin = req.admin;
   crypto.randomBytes(32, (err, buffer) => {
     if (err) throw err;
     const token = buffer.toString("hex");
@@ -208,7 +214,7 @@ router.post("/register", (req, res) => {
   });
 });
 
-router.get("/dashboard/complaints", (req, res) => {
+router.get("/dashboard/complaints", isAdminAuthenticated, (req, res) => {
   Complains.findAll({
     order: [["dateCreated", "ASC"]]
   })
@@ -216,15 +222,15 @@ router.get("/dashboard/complaints", (req, res) => {
       res.render("admin/dashboard", {
         layout: "layouts/dashboard",
         complains,
-        admin: req.session.admin
+        admin: req.admin
       });
     })
     .catch(err => console.log(err));
 });
 
-router.get("/admin/dashboard/settings", (req, res) => {
+router.get("/admin/dashboard/settings", isAdminAuthenticated, (req, res) => {
   res.render("admin/settings", {
-    admin: req.session.admin,
+    admin: req.admin,
     layout: "layouts/dashboard"
   });
 });
@@ -234,7 +240,7 @@ router.post("/admin/dashboard/settings", (req, res) => {
   const pic = req.file;
   Admin.findOne({
     where: {
-      id: req.session.admin.id
+      id: req.admin.id
     }
   }).then(admin => {
     if (pic) {
@@ -274,54 +280,62 @@ router.post("/admin/dashboard/settings", (req, res) => {
   });
 });
 
-router.get("/dashboard/complaints/find/:id", (req, res) => {
-  const post = req.params.id;
-  Complains.findOne({
-    where: {
-      cid: post
-    }
-  })
-    .then(post => {
-      const url = post.image.split("..")[1];
-      res.render("admin/dashboard", {
-        post,
-        url,
-        layout: "layouts/dashboard",
-        admin: req.session.admin
-      });
+router.get(
+  "/dashboard/complaints/find/:id",
+  isAdminAuthenticated,
+  (req, res) => {
+    const post = req.params.id;
+    Complains.findOne({
+      where: {
+        cid: post
+      }
     })
-    .catch(err => console.log(err));
-});
+      .then(post => {
+        const url = post.image.split("..")[1];
+        res.render("admin/dashboard", {
+          post,
+          url,
+          layout: "layouts/dashboard",
+          admin: req.admin
+        });
+      })
+      .catch(err => console.log(err));
+  }
+);
 
 //mark/unmark user complaint
-router.get("/dashboard/complaints/mark/:cid", (req, res) => {
-  const post = req.params.cid;
-  const admin = req.session.admin;
-  Complains.findOne({
-    where: {
-      cid: post
-    }
-  })
-    .then(complain => {
-      complain.isCompleted = !complain.isCompleted;
-      if (complain.isCompleted) {
-        complain.markedBy = admin.username;
-      } else {
-        complain.markedBy = "";
+router.get(
+  "/dashboard/complaints/mark/:cid",
+  isAdminAuthenticated,
+  (req, res) => {
+    const post = req.params.cid;
+    const admin = req.admin;
+    Complains.findOne({
+      where: {
+        cid: post
       }
-      complain
-        .save()
-        .then(result => {
-          res.redirect("/admin/dashboard/complaints");
-        })
-        .catch(err => {
-          console.log(err);
-        });
     })
-    .catch(err => {
-      console.log(err);
-    });
-});
+      .then(complain => {
+        complain.isCompleted = !complain.isCompleted;
+        if (complain.isCompleted) {
+          complain.markedBy = admin.username;
+        } else {
+          complain.markedBy = "";
+        }
+        complain
+          .save()
+          .then(result => {
+            res.redirect("/admin/dashboard/complaints");
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+);
 
 //delete user complaint
 router.post("/dashboard/complaints/delete/:cid", (req, res) => {

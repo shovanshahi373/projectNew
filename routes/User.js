@@ -6,11 +6,16 @@ const Seq = require("sequelize");
 const Op = Seq.Op;
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
-const userAuth = require("../configs/auth").a;
+const isUserAuthenticated = require("../configs/auth").u;
 const sendgrid = require("../configs/email");
 const crypto = require("crypto");
 const uuid4 = require("uuid/v4");
 const r = require("../configs/redditapi");
+
+const { userAuth } = require("../configs/passport");
+userAuth(passport);
+
+// const auth = userAuth(passport);
 
 router.get("/login", (req, res) => {
   res.render("users/login", {
@@ -20,9 +25,10 @@ router.get("/login", (req, res) => {
 });
 
 router.get("/logout", (req, res) => {
-  req.logout();
+  req.logOut();
   req.flash("success_msg", "you are logged out");
   res.redirect("/user/login");
+  console.log("user session destroyed");
 });
 
 router.post("/password-verify", (req, res) => {
@@ -78,47 +84,54 @@ router.post("/home", async (req, res, next) => {
     res.redirect("/user/login");
   }
 
-  passport.authenticate("user-local", async (err, user, info) => {
+  passport.authenticate("user-local", (err, user, info) => {
     if (err) {
-      req.flash("error_msg", "authentication failed.");
-      res.redirect("/user/login");
+      return next(err);
+      // req.flash("error_msg", "authentication failed.");
+      // res.redirect("/user/login");
     }
     if (user) {
-      const sr1 = await r.getSubreddit("DeTrashed").getHot();
-      const sr2 = await r.getSubreddit("pics").getHot();
-      const sr3 = await r.getSubreddit("TrashTag").getHot();
-      const posts = [...sr1, ...sr2, ...sr3];
-      console.log(posts.length);
-      const filteredposts = posts.filter(post => {
-        const pat1 = new RegExp(/#TrashTag|garbage|sewage|trash|clean/gi);
-        const pat2 = new RegExp(/.jpg$|.png$|.gif$/);
-        return post.title.match(pat1) && post.url.match(pat2);
-      });
-      console.log(filteredposts.length);
-      req.session.user = user;
-      res.render("users/home", {
-        Zposts: filteredposts,
-        user,
-        layout: "layouts/users"
+      req.login(user, async err => {
+        if (err) {
+          return next(err);
+        }
+        const sr1 = await r.getSubreddit("DeTrashed").getHot();
+        const sr2 = await r.getSubreddit("pics").getHot();
+        const sr3 = await r.getSubreddit("TrashTag").getHot();
+        const posts = [...sr1, ...sr2, ...sr3];
+        console.log(posts.length);
+        const filteredposts = posts.filter(post => {
+          const pat1 = new RegExp(/#TrashTag|garbage|sewage|trash|clean/gi);
+          const pat2 = new RegExp(/.jpg$|.png$|.gif$/);
+          return post.title.match(pat1) && post.url.match(pat2);
+        });
+        console.log(filteredposts.length);
+        res.render("users/home", {
+          Zposts: filteredposts,
+          user,
+          layout: "layouts/users"
+        });
       });
     } else {
       req.flash("error_msg", info.message);
-      res.redirect("/user/login");
+      return res.redirect("/user/login");
     }
   })(req, res, next);
 });
 
-router.get("/home", (req, res) => {
+router.get("/home", isUserAuthenticated, (req, res) => {
   res.redirect("users/home", {
     layout: "layouts/users",
-    user: req.session.user
+    // user
+    user: req.user
   });
 });
 
-router.get("/settings", (req, res) => {
+router.get("/settings", isUserAuthenticated, (req, res) => {
   res.render("users/settings", {
     layout: "layouts/users",
-    user: req.session.user
+    user: req.user
+    // user
   });
 });
 
@@ -249,10 +262,11 @@ router.get("/create-new-password/:token", (req, res) => {
   });
 });
 
-router.get("/complain-form", (req, res) => {
+router.get("/complain-form", isUserAuthenticated, (req, res) => {
   res.render("users/complain-form", {
     layout: "layouts/users.ejs",
-    user: req.session.user
+    user: req.user
+    // user
   });
 });
 
@@ -264,7 +278,8 @@ router.post("/upload", (req, res) => {
     errors.push({ msg: "Error: No File Selected!" });
     res.status(422).render("users/complain-form", {
       layout: "layouts/users.ejs",
-      user: req.session.user,
+      // user: req.session.user,
+      user: req.user,
       errors
     });
   }
@@ -277,7 +292,7 @@ router.post("/upload", (req, res) => {
     title,
     description,
     image: imageUrl,
-    createdBy: req.session.user.email,
+    createdBy: req.user.email,
     dateCreated: date
   })
     .then(result => {
@@ -287,14 +302,14 @@ router.post("/upload", (req, res) => {
     .catch(err => console.log(err));
 });
 
-router.get("/history", (req, res) => {
-  let usr = req.session.user.email;
-  Complain.findAll({ where: { createdBy: usr } })
+router.get("/history", isUserAuthenticated, (req, res) => {
+  Complain.findAll({ where: { createdBy: req.user.email } })
     .then(complains => {
       complains.forEach(complain => {});
       res.render("users/history", {
         complains,
-        user: req.session.user,
+        // user: req.session.user,
+        user: req.user,
         layout: "layouts/users.ejs"
       });
     })

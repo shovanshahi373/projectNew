@@ -1,8 +1,8 @@
-<div class=" container p-3">
+<div class=" container pt-3">
   <% if(typeof msg != 'undefined') { %>
   <div class="alert alert-danger"><%= msg %></div>
   <% } %>
-  <form class="form-horizotal d-flex justify-content-center align-items-items flex-column vh-100"
+  <form class="form-horizotal d-flex justify-content-center align-items-items flex-column"
       action="/user/upload" method="POST" enctype="multipart/form-data">
       <div class="form-group">
           <label>state the title</label>
@@ -13,16 +13,46 @@
           <input class="form-control" type="text" name="location" placeholder="location" />
       </div>
       <div class="form-group">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div><label>Map:</label></div>
+            <ul class="list-group list-group-horizontal">
+                <li class="pill pill-info list-group-item text-center">longitude:
+                    <div id="latclicked">0</div>
+                </li>
+                <li class="pill pill-info list-group-item text-center">latitude:
+                    <div id="longclicked">0</div>
+                </li>
+                <li class="pill pill-info list-group-item text-center">latmoved:
+                    <div id="latmoved">0</div>
+                </li>
+                <li class="pill pill-info list-group-item text-center">longmoved:
+                    <div id="longmoved">0</div>
+                </li>
+            <ul>
+          </div>
+          <%- include("../partials/googlemapapi.ejs") %>
+      </div>
+      <div class="form-group">
           <label>Please briefly describe the problem:</label>
           <textarea class="form-control" name="description" cols="" rows="10"></textarea>
       </div>
       <div class="form-group">
-          <input type="file" name="myImage">
+        <div class="file-field">
+    <div class="z-depth-1-half mb-4">
+      <img src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg" style="height:20vh;" alt="example placeholder">
+    </div>
+    <div class="d-flex justify-content-center">
+      <div class="btn btn-mdb-color btn-rounded float-left">
+        <span>Choose file</span>
+        <input type="file">
+      </div>
+    </div>
+  </div>
       </div>
       <input type="submit" value="submit" class="btn btn-success w-25 text-center" />
   </form>
+  </div>
   <% if(typeof file != 'undefined') { %>
-  <img src="<%= file %>" class="img-thumbnail" style="height:80px;width:100px">
   <% } %>
   <br>
 </div>

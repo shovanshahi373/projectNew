@@ -8,58 +8,55 @@ module.exports = {
   userAuth: function(passport) {
     passport.use(
       "user-local",
-      new localStrategy(
-        { usernameField: "email", passReqToCallback: true },
-        (req, email, password, done) => {
-          User.findOne({
-            where: {
-              email
+      new localStrategy({ usernameField: "email" }, (email, password, done) => {
+        User.findOne({
+          where: {
+            email
+          }
+        })
+          .then(user => {
+            if (!user) {
+              return done(null, false, {
+                message: "that email is not registerd"
+              });
             }
-          })
-            .then(user => {
-              if (!user) {
+
+            bcrypt.compare(password, user.password, (err, ismatched) => {
+              if (err) throw err;
+              if (ismatched) {
+                console.log("user password matches!!!!!");
+                return done(null, user);
+              } else {
                 return done(null, false, {
-                  message: "that email is not registerd"
+                  message: "username or password is incorrect"
                 });
               }
-
-              bcrypt.compare(password, user.password, (err, ismatched) => {
-                if (err) throw err;
-                if (ismatched) {
-                  console.log("password matches!!!!!");
-                  return done(null, user);
-                } else {
-                  return done(null, false, {
-                    message: "username or password is incorrect"
-                  });
-                }
-              });
-            })
-            .catch(err => {
-              console.log(err);
             });
-        }
-      )
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
     );
 
     passport.serializeUser((user, done) => {
-      done(null, user.email);
+      console.log(
+        "=====================setting user in cookie=========================="
+      );
+      done(null, user.id);
     });
 
-    passport.deserializeUser((email, done) => {
+    passport.deserializeUser((id, done) => {
+      console.log(
+        "=======================getting user from cookie========================"
+      );
       User.findOne({
         where: {
-          email
+          id
         }
       })
         .then(user => {
-          if (user) {
-            done(null, user); //true
-            // done(null, false); //1
-          } else {
-            done(null, false); //true
-            // done(null, user);  //2
-          }
+          done(null, user);
         })
         .catch(err => {
           console.log(err);
@@ -69,59 +66,55 @@ module.exports = {
   adminAuth: function(passport) {
     passport.use(
       "admin-local",
-      new localStrategy(
-        { usernameField: "email", passReqToCallback: true },
-        (req, email, password, done) => {
-          Admin.findOne({
-            where: {
-              email
+      new localStrategy({ usernameField: "email" }, (email, password, done) => {
+        Admin.findOne({
+          where: {
+            email
+          }
+        })
+          .then(admin => {
+            if (!admin) {
+              return done(null, false, {
+                message: "unauthorized email!"
+              });
             }
-          })
-            .then(admin => {
-              if (!admin) {
+
+            bcrypt.compare(password, admin.password, (err, ismatched) => {
+              if (err) throw err;
+              if (ismatched) {
+                console.log("admin password matches!!!!!");
+                return done(null, admin);
+              } else {
                 return done(null, false, {
-                  message: "unauthorized email!"
+                  message: "username or password is incorrect"
                 });
               }
-
-              bcrypt.compare(password, admin.password, (err, ismatched) => {
-                if (err) throw err;
-                if (ismatched) {
-                  console.log("password matches!!!!!");
-                  return done(null, admin);
-                } else {
-                  console.log("password not matched!!!");
-                  return done(null, false, {
-                    message: "username or password is incorrect"
-                  });
-                }
-              });
-
-              // return done(null, admin);
-            })
-            .catch(err => {
-              console.log(err);
             });
-        }
-      )
+          })
+          .catch(err => {
+            console.log(err);
+          });
+      })
     );
 
     passport.serializeUser((admin, done) => {
+      console.log(
+        "=================setting admin in cookie======================"
+      );
       done(null, admin.id);
     });
 
     passport.deserializeUser((id, done) => {
+      console.log(
+        "================= getting admin from cookie======================"
+      );
       Admin.findOne({
         where: {
           id
         }
       })
         .then(admin => {
-          if (admin) {
-            done(null, admin);
-          } else {
-            done(null, false);
-          }
+          done(null, admin);
         })
         .catch(err => {
           console.log(err);
