@@ -1,3 +1,5 @@
+<%- include("../partials/messages.ejs") %>
+
 <% if (typeof users !== 'undefined') { %>
   <%- include('../partials/getAllUsers',{users:users}); %>
 <% } %>

@@ -54,9 +54,11 @@ module.exports = {
       })
         .then(user => {
           if (user) {
-            done(null, user);
+            done(null, user); //true
+            // done(null, false); //1
           } else {
-            done(null, false);
+            done(null, false); //true
+            // done(null, user);  //2
           }
         })
         .catch(err => {

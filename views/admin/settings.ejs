@@ -1,0 +1,32 @@
+<div class="d-flex justify-content-center align-items-center mt-5">
+    <form action="/admin/dashboard/settings" method="POST" class="text-left" enctype="multipart/form-data">
+        <table>
+            <tr>
+                <td>Username</td>
+                <td><input type="text" placeholder="username" class="form-control" name="username" value="<%= admin.username %>"></td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td><input type="email" placeholder="email" class="form-control" name="email" value="<%= admin.email %>"></td>
+            </tr>
+            <tr>
+                <td>password</td>
+                <td><input type="password" class="form-control" name="password" placeholder="new password"></td>
+            </tr>
+            <tr>
+                <td>confirm password</td>
+                <td><input type="password" class="form-control" name="cpassword" placeholder="confirm new password"></td>
+            </tr>
+        </table>
+        <input type="hidden" name="image" value="<%= admin.image %>"/>
+
+        <div class="form-group">
+          <input type="file" name="pic">
+        </div>
+
+        <div class="btns mt-3">
+            <button type="submit" class="btn btn-info">change</button>
+            <button type="button" class="btn btn-info">reset</button>
+        </div>
+    </form>
+</div>

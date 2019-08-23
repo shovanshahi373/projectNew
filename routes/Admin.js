@@ -7,7 +7,7 @@ const Admin = require("../model/admin");
 const Users = require("../model/users");
 const Complains = require("../model/complain");
 const bcrypt = require("bcryptjs");
-const { ensureAuthenticatedAdmin } = require("../configs/auth");
+const adminAuth = require("../configs/auth").a;
 const passport = require("passport");
 const uuid4 = require("uuid/v4");
 
@@ -22,7 +22,10 @@ router.get("/create-admin", (req, res) => {
       password: result,
       image: "/uploads/admins/sovan.jpg"
     })
-      .then(admin => console.log("admin created"))
+      .then(admin => {
+        console.log("admin created");
+        res.status(200).redirect("/admin");
+      })
       .catch(err => console.log(err));
   });
 });
@@ -37,11 +40,9 @@ router.get("/logout", (req, res) => {
   req.logout();
   req.flash("success_msg", "you are logged out");
   res.redirect("/admin");
-  console.log(req.session);
 });
 
-router.get("/dashboard", ensureAuthenticatedAdmin, (req, res) => {
-  console.log(req.session);
+router.get("/dashboard", (req, res) => {
   res.render("admin/dashboard", {
     layout: "layouts/dashboard",
     admin: req.session.admin
@@ -77,7 +78,6 @@ router.post("/dashboard", (req, res, next) => {
 router.get("/dashboard/getAllUsers", (req, res) => {
   Users.findAll({ raw: true })
     .then(users => {
-      console.log(req.session);
       res.render("admin/dashboard", {
         admin: req.session.admin,
         layout: "layouts/dashboard",
@@ -220,6 +220,58 @@ router.get("/dashboard/complaints", (req, res) => {
       });
     })
     .catch(err => console.log(err));
+});
+
+router.get("/admin/dashboard/settings", (req, res) => {
+  res.render("admin/settings", {
+    admin: req.session.admin,
+    layout: "layouts/dashboard"
+  });
+});
+
+router.post("/admin/dashboard/settings", (req, res) => {
+  const { username, email, password, cpassword, image } = req.body;
+  const pic = req.file;
+  Admin.findOne({
+    where: {
+      id: req.session.admin.id
+    }
+  }).then(admin => {
+    if (pic) {
+      image = `../uploads/admins/${pic.filename}`;
+    }
+    if (admin) {
+      if (password) {
+        if (password === cpassword) {
+          hash = bcrypt.hashSync(password, 10);
+          admin.username = username;
+          admin.email = email;
+          admin.password = hash;
+          admin.image = image;
+          admin.save().then(result => {
+            if (result.email != email) {
+              req.logOut();
+              req.flash("success_msg", "successfully changed admin info");
+              res.redirect("/admin");
+            }
+          });
+        } else {
+          req.flash("error_msg", "please match both passwords");
+          res.redirect("/admin/dashboard");
+        }
+      }
+      admin.username = username;
+      admin.email = email;
+      admin.image = image;
+      admin
+        .save()
+        .then(result => {
+          req.flash("success_msg", "successfully changed");
+          res.redirect("/admin/dashboard");
+        })
+        .catch(err => console.log(err));
+    }
+  });
 });
 
 router.get("/dashboard/complaints/find/:id", (req, res) => {

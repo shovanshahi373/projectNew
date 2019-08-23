@@ -6,8 +6,7 @@ const Seq = require("sequelize");
 const Op = Seq.Op;
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
-const { ensureAuthenticated } = require("../configs/auth");
-// const ensureLoggedIn = require("connect-ensure-login").ensureLoggedIn;
+const userAuth = require("../configs/auth").a;
 const sendgrid = require("../configs/email");
 const crypto = require("crypto");
 const uuid4 = require("uuid/v4");
@@ -109,7 +108,7 @@ router.post("/home", async (req, res, next) => {
   })(req, res, next);
 });
 
-router.get("/home", ensureAuthenticated, (req, res) => {
+router.get("/home", (req, res) => {
   res.redirect("users/home", {
     layout: "layouts/users",
     user: req.session.user
@@ -120,6 +119,61 @@ router.get("/settings", (req, res) => {
   res.render("users/settings", {
     layout: "layouts/users",
     user: req.session.user
+  });
+});
+
+router.post("/settings", (req, res) => {
+  const { uname, email, mobile, password, image } = req.body;
+  const pic = req.file;
+  User.findOne({
+    where: {
+      id: req.session.user.id
+    }
+  }).then(user => {
+    if (pic) {
+      image = `../uploads/admins/${pic.filename}`;
+    }
+    if (user) {
+      if (password) {
+        if (password === cpassword) {
+          hash = bcrypt.hashSync(password, 10);
+          user.uname = uname;
+          user.email = email;
+          user.mobile = mobile;
+          user.password = hash;
+          user.image = image;
+          user.save().then(result => {
+            if (result.email != email) {
+              req.logOut();
+              req.flash("success_msg", "sucess. login to continue");
+              res.status(200).redirect("/user/login");
+            } else {
+              req.flash("success_msg", "successfully changed admin info");
+              res.status(200).redirect("/user/settings");
+            }
+          });
+        } else {
+          req.flash("error_msg", "please match both passwords");
+          res.redirect("/user/settings");
+        }
+      }
+      user.uname = uname;
+      user.email = email;
+      user.image = image;
+      user
+        .save()
+        .then(result => {
+          if (result.email != email) {
+            req.logOut();
+            req.flash("success_msg", "sucess. login to continue");
+            res.status(200).redirect("/user/login");
+          } else {
+            req.flash("success_msg", "successfully changed");
+            res.redirect("/user/settings");
+          }
+        })
+        .catch(err => console.log(err));
+    }
   });
 });
 
@@ -195,44 +249,6 @@ router.get("/create-new-password/:token", (req, res) => {
   });
 });
 
-router.post("/settings", (req, res) => {
-  const { uname, email: newemail, mobile, password, image } = req.body;
-  const pic = req.file;
-  if (pic) {
-    image = `../uploads/users/${pic.filename}`;
-  }
-  bcrypt.hash(password, 10).then(hash => {
-    User.findOne({ where: { email: req.session.user.email } })
-      .then(user => {
-        console.log("1111111111111111");
-        user.uname = uname;
-        user.email = newemail;
-        user.mobile = mobile;
-        user.password = hash;
-        user.image = image;
-        console.log(user);
-        user
-          .save()
-          .then(result => {
-            const checkHash = bcrypt.compare(password, result.password);
-            if (result.email != email || checkHash) {
-              console.log("111111111111111333");
-              req.logOut();
-              req.flash("success_msg", "user credentials successfully changed");
-              res.redirect("/user/login");
-            } else {
-              req.flash("success_msg", "user credentials successfully changed");
-              res.redirect("/user/settings");
-            }
-          })
-          .catch(err => console.log(err));
-      })
-      .catch(err => {
-        throw err;
-      });
-  });
-});
-
 router.get("/complain-form", (req, res) => {
   res.render("users/complain-form", {
     layout: "layouts/users.ejs",
@@ -295,22 +311,10 @@ router.get("/register", (req, res) => {
 });
 
 router.post("/register", (req, res) => {
-  let { uname, email, mobile, password, cpassword, gender } = req.body;
-  let males = ["/uploads/users/um1.png", "/uploads/users/um2.png"];
-  let females = ["/uploads/users/ufm1.png", "/uploads/users/ufm2.png"];
-  let img;
-  let gdr;
-
+  const { uname, email, mobile, password, cpassword, gender } = req.body;
+  const males = ["/uploads/users/um1.png", "/uploads/users/um2.png"];
+  const females = ["/uploads/users/ufm1.png", "/uploads/users/ufm2.png"];
   let errors = [];
-
-  if (gender[0].checked) {
-    img = males[Math.ceil(Math.random() * 2) - 1];
-  } else if (gender[1].checked) {
-    img = females[Math.ceil(Math.random() * 2) - 1];
-  } else {
-    errors.push({ msg: "please select your gender" });
-  }
-
   if (uname == "" || email == "") {
     errors.push({ msg: "please fill in all the fields" });
   }
@@ -347,21 +351,17 @@ router.post("/register", (req, res) => {
       .then(user => {
         if (!user) {
           const hash = bcrypt.hashSync(password, 10);
-          password = hash;
+          const getpicmale = males[Math.ceil(Math.random() * 2) - 1];
+          const getpicfemale = females[Math.ceil(Math.random() * 2) - 1];
           const id = uuid4();
-          if (gender[0].checked) {
-            gdr = 0;
-          } else {
-            gdr = 1;
-          }
           User.create({
             id,
             uname,
             email,
-            gender: gdr,
+            gender: gender == "male" ? 1 : 0,
             mobile,
-            password,
-            image: img
+            password: hash,
+            image: gender == "male" ? getpicmale : getpicfemale
           })
             .then(user => {
               req.flash(
