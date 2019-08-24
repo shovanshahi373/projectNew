@@ -1,28 +1,77 @@
 <header class="bg-light w-100">
   <nav class="navbar navbar-expand-lg navbar-light">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarTogglerDemo01"
+      aria-controls="navbarTogglerDemo01"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-      <a class="navbar-brand" href="/"><h1>Sar<span class="text-success">ok</span>aar</h1></a>
+      <a class="navbar-brand" href="/"
+        ><h1>Sar<span class="text-success">ok</span>aar</h1></a
+      >
       <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
         <li class="nav-item">
           <a class="nav-link" href="/user/home">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
+          <a class="nav-link" href="/user/history">history</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/user/complain-form">complain</a>
         </li>
       </ul>
 
-      
-      <ul class="navbar-nav my-2 my-lg-0"> 
+      <ul class="navbar-nav my-lg-0">
+        <li class="nav-item d-flex flex-column align-items-center">
+          <div class="dropdown">
+            <button onclick="myFunction()" class="dropbtn">
+              click
+            </button>
+            <div id="myDropdown" class="dropdown-content">
+              <a href="/user/profile">profile</a>
+              <a href="/user/settings">settings</a>
+              <a href="/user/logout">logout</a>
+            </div>
+          </div>
+        </li>
+
         <li class="nav-item d-flex align-items-center">
           <a class="nav-link" href="/user/profile"><%= user.uname %></a>
         </li>
+
         <li class="nav-item">
-          <img src="<%= user.image %>" class="ml-3" style="height:60px;width:60px;border-radius:50%;border:1px solid black"/>
+          <img
+            src="<%= user.image %>"
+            class="ml-3"
+            style="height:60px;width:60px;border-radius:50%;border:1px solid black"
+          />
         </li>
       </ul>
     </div>
   </nav>
 </header>
+
+<script defer>
+  function myFunction() {
+    document.getElementById("myDropdown").classList.toggle("show");
+  }
+
+  window.onclick = function(event) {
+    if (!event.target.matches(".dropbtn")) {
+      var dropdowns = document.getElementsByClassName("dropdown-content");
+      var i;
+      for (i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains("show")) {
+          openDropdown.classList.remove("show");
+        }
+      }
+    }
+  };
+</script>

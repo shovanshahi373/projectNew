@@ -121,7 +121,7 @@ router.post("/home", async (req, res, next) => {
 });
 
 router.get("/home", isUserAuthenticated, (req, res) => {
-  res.redirect("users/home", {
+  res.status(200).redirect("users/home", {
     layout: "layouts/users",
     // user
     user: req.user
@@ -137,7 +137,7 @@ router.get("/settings", isUserAuthenticated, (req, res) => {
 });
 
 router.post("/settings", (req, res) => {
-  const { uname, email, mobile, password, image } = req.body;
+  const { uname, email, mobile, password, cpassword, image } = req.body;
   const pic = req.file;
   User.findOne({
     where: {
@@ -157,18 +157,13 @@ router.post("/settings", (req, res) => {
           user.password = hash;
           user.image = image;
           user.save().then(result => {
-            if (result.email != email) {
-              req.logOut();
-              req.flash("success_msg", "sucess. login to continue");
-              res.status(200).redirect("/user/login");
-            } else {
-              req.flash("success_msg", "successfully changed admin info");
-              res.status(200).redirect("/user/settings");
-            }
+            req.logOut();
+            req.flash("success_msg", "sucess. login to continue");
+            res.status(200).redirect("/user/login");
           });
         } else {
           req.flash("error_msg", "please match both passwords");
-          res.redirect("/user/settings");
+          res.status(200).redirect("/user/settings");
         }
       }
       user.uname = uname;
@@ -183,7 +178,7 @@ router.post("/settings", (req, res) => {
             res.status(200).redirect("/user/login");
           } else {
             req.flash("success_msg", "successfully changed");
-            res.redirect("/user/settings");
+            res.status(200).redirect("/user/settings");
           }
         })
         .catch(err => console.log(err));
@@ -228,7 +223,7 @@ router.get("/handle-forgot-password", (req, res) => {
         });
       } else {
         req.flash("error_msg", "invalid email");
-        res.redirect("/user/forgot-password");
+        res.status(200).redirect("/user/forgot-password");
       }
     })
     .catch(err => console.log(err));
@@ -299,7 +294,13 @@ router.post("/upload", (req, res) => {
   })
     .then(result => {
       req.flash("success_msg", "complaint uploaded");
-      res.status(200).redirect("/user/complain-form");
+      res.render("users/complain-form", {
+        file: imageUrl,
+        layout: "layouts/users",
+        user: req.user,
+        googeMapAPI: mapKey
+      });
+      // res.status(200).redirect("/user/complain-form");
     })
     .catch(err => console.log(err));
 });
