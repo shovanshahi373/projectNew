@@ -13,8 +13,8 @@ const uuid4 = require("uuid/v4");
 const r = require("../configs/redditapi");
 const mapKey = process.env.GOOGLE_API_KEY;
 
-const { userAuth } = require("../configs/passport");
-userAuth(passport);
+// const userAuth = require("../configs/passport").userAuth;
+// userAuth(passport);
 
 // const auth = userAuth(passport);
 
@@ -87,24 +87,24 @@ router.post("/home", async (req, res, next) => {
 
   passport.authenticate("user-local", (err, user, info) => {
     if (err) {
-      return next(err);
-      // req.flash("error_msg", "authentication failed.");
-      // res.redirect("/user/login");
+      // return next(err);
+      req.flash("error_msg", "Something went off, Please Try Again");
+      res.redirect("/user/login");
     }
     if (user) {
       req.login(user, async err => {
         if (err) {
           return next(err);
         }
-        const sr1 = await r.getSubreddit("DeTrashed").getHot();
-        const sr2 = await r.getSubreddit("pics").getHot();
-        const sr3 = await r.getSubreddit("TrashTag").getHot();
+        const sr1 = await r.getSubreddit("DeTrashed").getHot({ limit: 50 });
+        const sr2 = await r.getSubreddit("pics").getHot({ limit: 50 });
+        const sr3 = await r.getSubreddit("TrashTag").getHot({ limit: 50 });
         const posts = [...sr1, ...sr2, ...sr3];
         console.log(posts.length);
         const filteredposts = posts.filter(post => {
-          const pat1 = new RegExp(/#TrashTag|garbage|sewage|trash|clean/gi);
+          const pat1 = new RegExp(/#TrashTag/gi);
           const pat2 = new RegExp(/.jpg$|.png$|.gif$/);
-          return post.title.match(pat1) && post.url.match(pat2);
+          return pat1.test(post.title) && post.url.match(pat2);
         });
         console.log(filteredposts.length);
         res.render("users/home", {
@@ -121,9 +121,8 @@ router.post("/home", async (req, res, next) => {
 });
 
 router.get("/home", isUserAuthenticated, (req, res) => {
-  res.status(200).redirect("users/home", {
+  res.status(200).redirect("/user/home", {
     layout: "layouts/users",
-    // user
     user: req.user
   });
 });
@@ -132,7 +131,6 @@ router.get("/settings", isUserAuthenticated, (req, res) => {
   res.render("users/settings", {
     layout: "layouts/users",
     user: req.user
-    // user
   });
 });
 
@@ -263,19 +261,17 @@ router.get("/complain-form", isUserAuthenticated, (req, res) => {
     layout: "layouts/users.ejs",
     user: req.user,
     googeMapAPI: mapKey
-    // user
   });
 });
 
 router.post("/upload", (req, res) => {
-  let { title, location, description } = req.body;
+  let { title, location, description, latclicked, longclicked } = req.body;
   const myImage = req.file;
   let errors = [];
   if (!myImage) {
     errors.push({ msg: "Error: No File Selected!" });
     res.status(422).render("users/complain-form", {
       layout: "layouts/users.ejs",
-      // user: req.session.user,
       user: req.user,
       errors
     });
@@ -293,12 +289,13 @@ router.post("/upload", (req, res) => {
     dateCreated: date
   })
     .then(result => {
-      req.flash("success_msg", "complaint uploaded");
+      // req.flash("success_msg", "complaint uploaded");
       res.render("users/complain-form", {
         file: imageUrl,
         layout: "layouts/users",
         user: req.user,
-        googeMapAPI: mapKey
+        googeMapAPI: mapKey,
+        success_msg: "complaint uploaded"
       });
       // res.status(200).redirect("/user/complain-form");
     })
@@ -311,7 +308,6 @@ router.get("/history", isUserAuthenticated, (req, res) => {
       complains.forEach(complain => {});
       res.render("users/history", {
         complains,
-        // user: req.session.user,
         user: req.user,
         layout: "layouts/users.ejs"
       });

@@ -8,7 +8,7 @@ const expressLayouts = require("express-ejs-layouts");
 const flash = require("connect-flash");
 const session = require("express-session");
 const passport = require("passport");
-// const { userAuth, adminAuth } = require("./configs/passport");
+const pass = require("./configs/passport");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const port = process.env.PORT || 3000;
@@ -29,6 +29,7 @@ Complain.belongsTo(User, { constraints: true, onDelete: "CASCADE" });
 const app = express();
 
 //configure passports for user and admin login
+pass(passport);
 // userAuth(passport);
 // adminAuth(passport);
 
@@ -104,7 +105,7 @@ app.use("/admin", require("./routes/Admin"));
 
 //error page
 app.use((req, res, next) => {
-  res.status(404).sendFile(__dirname + "/views/error.html");
+  res.status(404).sendFile(__dirname + "/resources/html/error.html");
 });
 
 app.listen(port, err => {

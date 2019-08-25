@@ -1,11 +1,15 @@
-<% if(typeof admin != '') { %>
-  <nav class="navbar navbar-dark bg-dark sticky-top">
-    <h3 class="navbar-brand">Dashboard</h3>
-    <div class="d-flex justify-content-center align-items-center">
-      <a class="nav-item mr-3 text-light" href="#"><%= admin.username %></a>
-      <a class="nav-item" href="#"><img src="<%= admin.image %>" style="height:50px;width:50px;border-radius:50%"></a>
-    </div>  
-  </nav>
+<% if(typeof admin != 'undefined') { %>
+<nav class="navbar navbar-dark bg-dark sticky-top">
+  <h3 class="navbar-brand">Dashboard</h3>
+  <div class="d-flex justify-content-center align-items-center">
+    <a class="nav-item mr-3 text-light" href="#"><%= admin.username %></a>
+    <a class="nav-item" href="#"
+      ><img
+        src="<%= admin.image %>"
+        style="height:50px;width:50px;border-radius:50%"
+    /></a>
+  </div>
+</nav>
 <% } else { %>
-  <section class="bg-dark">error loading the page...</section>
+<section class="bg-dark">error loading the page...</section>
 <% } %>

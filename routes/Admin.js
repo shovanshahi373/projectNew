@@ -10,9 +10,6 @@ const isAdminAuthenticated = require("../configs/auth").a;
 const passport = require("passport");
 const uuid4 = require("uuid/v4");
 
-const { adminAuth } = require("../configs/passport");
-adminAuth(passport);
-
 router.get("/create-admin", (req, res) => {
   const id = uuid4();
   bcrypt.hash("root", 10).then(result => {
@@ -65,7 +62,7 @@ router.post("/dashboard", (req, res, next) => {
       res.redirect("/admin");
     }
     if (admin) {
-      req.logIn(admin, err => {
+      req.login(admin, err => {
         if (err) {
           return next(err);
         }
@@ -84,8 +81,9 @@ router.post("/dashboard", (req, res, next) => {
 router.get("/dashboard/getAllUsers", isAdminAuthenticated, (req, res) => {
   Users.findAll({ raw: true })
     .then(users => {
+      const admin = req.admin;
       res.render("admin/dashboard", {
-        admin: req.admin,
+        admin,
         layout: "layouts/dashboard",
         users
       });
@@ -115,7 +113,7 @@ router.post("/dashboard/invite", (req, res) => {
         "sovanshahihero@gmail.com",
         "Sarokaar has invited you to join Admin Panel",
         `<h5>${description}</h5>
-        <div>click <a href="http://localhost:3000/admin/register/${id}/${token}">here</a> to accept the invitation.</div>`
+        <div>click <a href="http://localhost:3000/admin/register?id=${id}&token=${token}">here</a> to accept the invitation.</div>`
       );
 
       // req.flash("link", "email was successfully sent to " + email);
@@ -125,7 +123,7 @@ router.post("/dashboard/invite", (req, res) => {
 });
 
 router.get("/register/:id/:token", (req, res) => {
-  const { id, token } = req.params.token;
+  const { id, token } = req.query;
   res.render("admin/register", {
     layout: "layouts/admin-login",
     token,

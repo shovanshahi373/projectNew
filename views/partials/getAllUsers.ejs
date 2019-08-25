@@ -1,3 +1,17 @@
+<nav class="navbar navbar-light bg-light float-right">
+  <form class="form-inline">
+    <input
+      class="form-control mr-sm-2"
+      type="search"
+      placeholder="Search"
+      aria-label="Search"
+    />
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
+      <i class="fas fa-search"></i>
+    </button>
+  </form>
+</nav>
+
 <table class="table table-striped">
   <tr>
     <th>id</th>
@@ -8,13 +22,19 @@
     <th>last updated</th>
   </tr>
   <% users.forEach(user=> { %>
-    <tr>
-      <td><%= user.id %></td>
-      <td><%= user.uname %></td>
-      <td><img src="<%= user.image %>" style="heigh:50px;width:50px;border-radius:50%;"/></td>
-      <td><%= user.email %></td>
-      <td><%= user.createdAt %></td>
-      <td><%= user.updatedAt %></td>
-    </tr>
+  <tr>
+    <td><%= user.id %></td>
+    <td><%= user.uname %></td>
+    <td>
+      <img
+        src="<%= user.image %>"
+        style="height:50px;width:50px;border-radius:50%;"
+      />
+    </td>
+    <td><%= user.email %></td>
+    <td><%= user.createdAt %></td>
+    <td><%= user.updatedAt %></td>
+  </tr>
   <% }) %>
-<table>
+  <table></table>
+</table>
