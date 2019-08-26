@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../model/users");
 const Complain = require("../model/complain");
-const Location = require("../model/location");
+// const Location = require("../model/location");
 const Seq = require("sequelize");
 const Op = Seq.Op;
 const bcrypt = require("bcryptjs");
@@ -52,8 +52,8 @@ router.post("/password-verify", (req, res) => {
           .hash(password, 10)
           .then(hash => {
             resetUser.password = hash;
-            resetUser.resetTokenExpiry = undefined;
-            resetUser.resetToken = undefined;
+            resetUser.resetTokenExpiry = null;
+            resetUser.resetToken = null;
             resetUser
               .save()
               .then(user => {
@@ -89,26 +89,11 @@ router.post("/home", async (req, res, next) => {
     }
 
     if (user) {
-      req.login(user, async err => {
+      req.login(user, err => {
         if (err) {
           return next(err);
         }
-        const sr1 = await r.getSubreddit("DeTrashed").getHot({ limit: 50 });
-        const sr2 = await r.getSubreddit("pics").getHot({ limit: 50 });
-        const sr3 = await r.getSubreddit("TrashTag").getHot({ limit: 50 });
-        const posts = [...sr1, ...sr2, ...sr3];
-        console.log(posts.length);
-        const filteredposts = posts.filter(post => {
-          const pat1 = new RegExp(/#TrashTag/gi);
-          const pat2 = new RegExp(/.jpg$|.png$|.gif$/);
-          return pat1.test(post.title) && post.url.match(pat2);
-        });
-        console.log(filteredposts.length);
-        res.render("users/home", {
-          Zposts: filteredposts,
-          user,
-          layout: "layouts/users"
-        });
+        res.redirect("/user/home");
       });
     } else {
       req.flash("error_msg", info.message);
@@ -117,10 +102,22 @@ router.post("/home", async (req, res, next) => {
   })(req, res, next);
 });
 
-router.get("/home", isUserAuthenticated, (req, res) => {
-  res.status(200).redirect("/user/home", {
-    layout: "layouts/users",
-    user: req.user
+router.get("/home", isUserAuthenticated, async (req, res) => {
+  const sr1 = await r.getSubreddit("DeTrashed").getHot({ limit: 50 });
+  const sr2 = await r.getSubreddit("pics").getHot({ limit: 50 });
+  const sr3 = await r.getSubreddit("TrashTag").getHot({ limit: 50 });
+  const posts = [...sr1, ...sr2, ...sr3];
+  console.log(posts.length);
+  const filteredposts = posts.filter(post => {
+    const pat1 = new RegExp(/#TrashTag/gi);
+    const pat2 = new RegExp(/.jpg$|.png$|.gif$/);
+    return pat1.test(post.title) && post.url.match(pat2);
+  });
+  console.log(filteredposts.length);
+  res.render("users/home", {
+    Zposts: filteredposts,
+    user: req.user,
+    layout: "layouts/users"
   });
 });
 
@@ -206,7 +203,7 @@ router.get("/handle-forgot-password", (req, res) => {
               <title>Hi</title>
             </head>
             <body>
-              click <a href="http://localhost:3000/user/create-new-password/${token}" target="_blank">here</a>
+              click <a href="http://localhost:3000/user/create-new-password?token=${token}" target="_blank">here</a>
               to verify your account
             </body>
           </html>`
@@ -231,12 +228,12 @@ router.get("/forgot-password", (req, res) => {
   });
 });
 
-router.get("/create-new-password/:token", (req, res) => {
+router.get("/create-new-password", (req, res) => {
   User.findOne({
     where: {
       [Op.and]: [
         {
-          resetToken: req.params.token
+          resetToken: req.query.token
         },
         {
           resetTokenExpiry: { [Op.gte]: Date.now() }
@@ -257,7 +254,7 @@ router.get("/complain-form", isUserAuthenticated, (req, res) => {
   res.render("users/complain-form", {
     layout: "layouts/users.ejs",
     user: req.user,
-    mapKey
+    googeMapAPI: mapKey
   });
 });
 
@@ -268,9 +265,9 @@ router.post("/upload", (req, res) => {
   if (!myImage) {
     errors.push({ msg: "Error: No File Selected!" });
   }
-  if (!latclicked || !longclicked || latclicked == 0 || longclicked == 0) {
-    errors.push({ msg: "please pinpoint the location first!" });
-  }
+  // if (!latclicked || !longclicked || latclicked == 0 || longclicked == 0) {
+  //   errors.push({ msg: "please pinpoint the location first!" });
+  // }
 
   if (errors.length > 0) {
     res.status(422).render("users/complain-form", {
@@ -297,27 +294,9 @@ router.post("/upload", (req, res) => {
         file: imageUrl,
         layout: "layouts/users",
         user: req.user,
-        mapKey,
+        googeMapAPI: mapKey,
         success_msg: "complaint uploaded"
       });
-      // const id = uuid4();
-      // Location.create({
-      //   locationId: id,
-      //   locationName: location,
-      //   xCord: latclicked,
-      //   yCord: longclicked
-      // })
-      //   .then(location => {
-      //     res.render("users/complain-form", {
-      //       file: imageUrl,
-      //       layout: "layouts/users",
-      //       user: req.user,
-      //       googleMapAPI: mapKey,
-      //       success_msg: "complaint uploaded"
-      //     });
-      //   })
-      //   .catch(err => console.log(err));
-      // res.status(200).redirect("/user/complain-form");
     })
     .catch(err => console.log(err));
 });
@@ -325,7 +304,10 @@ router.post("/upload", (req, res) => {
 router.get("/history", isUserAuthenticated, (req, res) => {
   const { search } = req.query;
   const pat = new RegExp(search);
-  Complain.findAll({ where: { createdBy: req.user.email } })
+  Complain.findAll({
+    where: { createdBy: req.user.email },
+    order: [["dateCreated", "ASC"]]
+  })
     .then(complains => {
       const filteredusers = complains.filter(
         complain => pat.test(complain.title) || pat.test(complain.description)
