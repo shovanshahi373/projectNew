@@ -59,33 +59,69 @@ router.post("/dashboard", (req, res, next) => {
   passport.authenticate("admin-local", (err, admin, info) => {
     if (err) {
       req.flash("error_msg", "authentication failed.");
-      res.redirect("/admin");
-    }
-    if (admin) {
-      req.login(admin, err => {
-        if (err) {
-          return next(err);
-        }
-        res.render("admin/dashboard", {
-          admin,
-          layout: "layouts/dashboard"
-        });
-      });
-    } else {
-      req.flash("error_msg", info.message);
       return res.redirect("/admin");
     }
+    if (!admin) {
+      req.flash("error-msg", info.message);
+      return res.redirect("/admin");
+
+      // console.log(admin);
+      // req.logIn(admin, err => {
+      //   req.admin = admin;
+      //   console.log(req.admin);
+      //   if (err) {
+      //     return next(err);
+      //   }
+      //   res.render("admin/dashboard", {
+      //     admin,
+      //     layout: "layouts/dashboard"
+      //   });
+      // });
+    }
+    console.log("================= ");
+    req.logIn(admin, function(err) {
+      if (err) {
+        console.log("cannot log in admin ================ :", err);
+        return next(err);
+      }
+      console.log(admin);
+      // return res.redirect('/users/' + admin.username)
+      res.render("admin/dashboard", {
+        layout: "layouts/dashboard",
+        admin
+      });
+      // console.log(req.admin);
+    });
   })(req, res, next);
 });
 
 router.get("/dashboard/getAllUsers", isAdminAuthenticated, (req, res) => {
+  console.log("================================" + req.admin);
+  Users.findAll()
+    .then(users => {
+      // const admin = req.admin;
+      res.render("admin/dashboard", {
+        layout: "layouts/dashboard",
+        admin: req.admin,
+        users
+      });
+    })
+    .catch(err => console.log(err));
+});
+
+router.post("/dashboard/getAllUsers", isAdminAuthenticated, (req, res) => {
+  const { search } = req.body;
+  const pat = new RegExp(search);
   Users.findAll({ raw: true })
     .then(users => {
-      const admin = req.admin;
+      const filteredusers = users.filter(user => pat.test(user.uname));
+      const length = filteredusers.length;
       res.render("admin/dashboard", {
-        admin,
+        admin: req.admin,
         layout: "layouts/dashboard",
-        users
+        users: filteredusers,
+        search,
+        length
       });
     })
     .catch(err => console.log(err));
@@ -122,7 +158,7 @@ router.post("/dashboard/invite", (req, res) => {
   });
 });
 
-router.get("/register/:id/:token", (req, res) => {
+router.get("/register?id=id&token=token", (req, res) => {
   const { id, token } = req.query;
   res.render("admin/register", {
     layout: "layouts/admin-login",
@@ -168,10 +204,6 @@ router.post("/register", (req, res) => {
 
         if (!pic) {
           errors.push({ msg: "No File Selected!" });
-          res.status(422).render("admin/register", {
-            layout: "layouts/admin-login",
-            errors
-          });
         }
 
         if (errors.length > 0) {
@@ -188,7 +220,6 @@ router.post("/register", (req, res) => {
         const imageUrl = `../uploads/admins/${pic.filename}`;
         const id = uuid4();
         const hash = bcrypt.hashSync(password, 10);
-        password = hash;
         const ccno = citizenship.split("");
         ccno.splice(7, 0, "/");
         citizenship = ccno.join("");
@@ -197,7 +228,7 @@ router.post("/register", (req, res) => {
           username: uname,
           email,
           citizenship,
-          password,
+          password: hash,
           image: imageUrl
         })
           .then(admin => {
@@ -226,14 +257,36 @@ router.get("/dashboard/complaints", isAdminAuthenticated, (req, res) => {
     .catch(err => console.log(err));
 });
 
-router.get("/admin/dashboard/settings", isAdminAuthenticated, (req, res) => {
+router.post("/dashboard/complaints", isAdminAuthenticated, (req, res) => {
+  const { search } = req.body;
+  const pat = new RegExp(search);
+  Complains.findAll({
+    order: [["dateCreated", "ASC"]]
+  })
+    .then(complains => {
+      const filteredcomplains = complains.filter(complain =>
+        pat.test(complain.title)
+      );
+      const length = filteredcomplains.length;
+      res.render("admin/dashboard", {
+        layout: "layouts/dashboard",
+        complains: filteredcomplains,
+        admin: req.admin,
+        search,
+        length
+      });
+    })
+    .catch(err => console.log(err));
+});
+
+router.get("/dashboard/settings", isAdminAuthenticated, (req, res) => {
   res.render("admin/settings", {
     admin: req.admin,
     layout: "layouts/dashboard"
   });
 });
 
-router.post("/admin/dashboard/settings", (req, res) => {
+router.post("/dashboard/settings", (req, res) => {
   const { username, email, password, cpassword, image } = req.body;
   const pic = req.file;
   Admin.findOne({
@@ -294,7 +347,8 @@ router.get(
           post,
           url,
           layout: "layouts/dashboard",
-          admin: req.admin
+          admin: req.admin,
+          googleMap: process.env.GOOGLE_API_KEY
         });
       })
       .catch(err => console.log(err));

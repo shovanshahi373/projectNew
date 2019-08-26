@@ -15,9 +15,11 @@
           <ul class="list-group list-group-horizontal">
               <li class="pill pill-info list-group-item text-center">latitude:
                   <div id="latclicked" name="latclicked">0</div>
+                  <!-- <input type="text" name="latclicked"> -->
               </li>
               <li class="pill pill-info list-group-item text-center">longitude:
                   <div id="longclicked" name="longclicked">0</div>
+                  <!-- <input type="text" name="longclicked"> -->
               </li>
               <li class="pill pill-info list-group-item text-center">latmoved:
                   <div id="latmoved">0</div>
@@ -28,7 +30,7 @@
           <ul>
         </div>
         
-        <%- include("../partials/googlemapapi.ejs",{key: googeMapAPI}) %>
+    <%- include("../partials/googlemapapi.ejs",{key: mapKey}) %>
     </div>
     <div class="form-group">
         <label>Please briefly describe the problem:</label>

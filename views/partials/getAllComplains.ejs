@@ -1,16 +1,22 @@
 <nav class="navbar navbar-light bg-light float-right">
-  <form class="form-inline">
+  <form class="form-inline" action="/admin/dashboard/complaints" method="POST">
     <input
       class="form-control mr-sm-2"
       type="search"
       placeholder="Search"
       aria-label="Search"
+      name="search"
+      value="<% typeof search != 'undefined' ? search : '' %>"
     />
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">
       <i class="fas fa-search"></i>
     </button>
   </form>
 </nav>
+
+<% if(typeof length != 'undefined') { %>
+<div class="text-muted lead"><%= length %> results found.</div>
+<% } %>
 
 <table class="table table-striped">
   <tr>

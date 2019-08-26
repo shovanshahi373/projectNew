@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../model/users");
 const Complain = require("../model/complain");
+const Location = require("../model/location");
 const Seq = require("sequelize");
 const Op = Seq.Op;
 const bcrypt = require("bcryptjs");
@@ -12,11 +13,6 @@ const crypto = require("crypto");
 const uuid4 = require("uuid/v4");
 const r = require("../configs/redditapi");
 const mapKey = process.env.GOOGLE_API_KEY;
-
-// const userAuth = require("../configs/passport").userAuth;
-// userAuth(passport);
-
-// const auth = userAuth(passport);
 
 router.get("/login", (req, res) => {
   res.render("users/login", {
@@ -91,6 +87,7 @@ router.post("/home", async (req, res, next) => {
       req.flash("error_msg", "Something went off, Please Try Again");
       res.redirect("/user/login");
     }
+
     if (user) {
       req.login(user, async err => {
         if (err) {
@@ -260,7 +257,7 @@ router.get("/complain-form", isUserAuthenticated, (req, res) => {
   res.render("users/complain-form", {
     layout: "layouts/users.ejs",
     user: req.user,
-    googeMapAPI: mapKey
+    mapKey
   });
 });
 
@@ -270,12 +267,19 @@ router.post("/upload", (req, res) => {
   let errors = [];
   if (!myImage) {
     errors.push({ msg: "Error: No File Selected!" });
+  }
+  if (!latclicked || !longclicked || latclicked == 0 || longclicked == 0) {
+    errors.push({ msg: "please pinpoint the location first!" });
+  }
+
+  if (errors.length > 0) {
     res.status(422).render("users/complain-form", {
       layout: "layouts/users.ejs",
       user: req.user,
       errors
     });
   }
+
   const imageUrl = `../uploads/${myImage.filename}`;
   let d = new Date();
   const date = d.toDateString();
@@ -289,33 +293,71 @@ router.post("/upload", (req, res) => {
     dateCreated: date
   })
     .then(result => {
-      // req.flash("success_msg", "complaint uploaded");
       res.render("users/complain-form", {
         file: imageUrl,
         layout: "layouts/users",
         user: req.user,
-        googeMapAPI: mapKey,
+        mapKey,
         success_msg: "complaint uploaded"
       });
+      // const id = uuid4();
+      // Location.create({
+      //   locationId: id,
+      //   locationName: location,
+      //   xCord: latclicked,
+      //   yCord: longclicked
+      // })
+      //   .then(location => {
+      //     res.render("users/complain-form", {
+      //       file: imageUrl,
+      //       layout: "layouts/users",
+      //       user: req.user,
+      //       googleMapAPI: mapKey,
+      //       success_msg: "complaint uploaded"
+      //     });
+      //   })
+      //   .catch(err => console.log(err));
       // res.status(200).redirect("/user/complain-form");
     })
     .catch(err => console.log(err));
 });
 
 router.get("/history", isUserAuthenticated, (req, res) => {
+  const { search } = req.query;
+  const pat = new RegExp(search);
   Complain.findAll({ where: { createdBy: req.user.email } })
     .then(complains => {
-      complains.forEach(complain => {});
+      const filteredusers = complains.filter(
+        complain => pat.test(complain.title) || pat.test(complain.description)
+      );
+      const length = filteredusers.length;
       res.render("users/history", {
-        complains,
+        complains: filteredusers,
         user: req.user,
-        layout: "layouts/users.ejs"
+        layout: "layouts/users.ejs",
+        search,
+        length
       });
     })
     .catch(err => {
       console.log(err);
     });
 });
+
+router.get(
+  "/login/google",
+  passport.authenticate("google", {
+    scope: ["profile", "email"]
+  })
+);
+
+router.get(
+  "/login/google/redirect",
+  passport.authenticate("google"),
+  (req, res) => {
+    res.send("hello");
+  }
+);
 
 router.get("/register", (req, res) => {
   res.render("users/register", {

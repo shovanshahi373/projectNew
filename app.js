@@ -30,8 +30,6 @@ const app = express();
 
 //configure passports for user and admin login
 pass(passport);
-// userAuth(passport);
-// adminAuth(passport);
 
 //set up assets directory
 app.use(express.static(path.join(__dirname, "resources")));
@@ -95,6 +93,7 @@ app.use((req, res, next) => {
   res.locals.error = req.flash("error");
   res.locals.link = req.flash("link");
   // res.locals.user = req.user || null;
+  // res.locals.admin = req.admin || null;
   next();
 });
 

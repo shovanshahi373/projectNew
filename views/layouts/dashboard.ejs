@@ -1,37 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Sarokaar | Dashboard</title>
     <link rel="stylesheet" href="/fonts/css/all.min.css" />
     <link rel="stylesheet" href="/css/bootstrap.min.css" />
-    <link rel="shortcut icon" href="/images/slogo-2.png" type="image/x-icon">
-    <link rel="stylesheet" href="/css/dashboard.css">
-    <%# <link rel="stylesheet" href="css/index.css" /> %>
-</head>
-<body>
+    <link rel="shortcut icon" href="/images/slogo-2.png" type="image/x-icon" />
+    <link rel="stylesheet" href="/css/dashboard.css" />
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.js"></script>
+    <link
+      href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.0.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <%#
+    <link rel="stylesheet" href="css/index.css" />
+    %>
+  </head>
+  <body>
     <div class="container-fluid">
-        <div class="row" style="height:100vh;">
-            <div class="col-md-2 bg-light h-100">
-                <%- include('../partials/d-sidebar.ejs') %>
-            </div>
-            <div class="col-md-10 h-100">
-                <%# navbar %>
-                <div class="row">
-                    <div class="col-12 bg-dark">
-                        <%- include('../partials/d-navbar.ejs') %>                        
-                    </div>
-                </div>
-                <%# header %>
-                <div class="row h-25">
-                    <%- include('../partials/d-header.ejs') %>
-                </div>
-                <%# main %>
-                <div class="row" style="margin-top:-30px"><div class="container"><%- body %></div></div>
-            </div>
+      <div class="row" style="height:100vh;">
+        <div class="col-md-2 bg-light h-100">
+          <%- include('../partials/d-sidebar.ejs') %>
         </div>
+        <div class="col-md-10 h-100">
+          <%# navbar %>
+          <div class="row">
+            <div class="col-12 bg-dark">
+              <%- include('../partials/d-navbar.ejs') %>
+            </div>
+          </div>
+          <%# header %>
+          <div class="row h-25">
+            <%- include('../partials/d-header.ejs') %> <%-
+            include('../partials/messages.ejs') %>
+          </div>
+          <%# main %>
+          <div class="container" style="margin-top:-100px">
+            <div class="card card-body"><%- body %></div>
+          </div>
+        </div>
+      </div>
     </div>
-</body>
+  </body>
 </html>

@@ -13,7 +13,8 @@ module.exports = db.define("admins", {
   },
   email: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: false,
+    unique: true
   },
   citizenship: {
     type: Sequelize.STRING,
