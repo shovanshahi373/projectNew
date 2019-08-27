@@ -1,68 +1,93 @@
-<div class="d-flex justify-content-center align-items-center mt-5">
-  <form
-    action="/admin/dashboard/settings"
-    method="POST"
-    class="text-left"
-    enctype="multipart/form-data"
+<div class="d-flex justify-content-center flex-column align-items-center py-5">
+  <h3>Update Admin Info:</h3>
+  <div
+    class="d-flex justify-content-center align-items-center p-3"
+    style="border:1px solid #efe4e4;box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);border-radius: 3px"
   >
-    <table>
-      <tr>
-        <td>Username</td>
-        <td>
-          <input
-            type="text"
-            placeholder="username"
-            class="form-control"
-            name="username"
-            value="<%= admin.username %>"
-          />
-        </td>
-      </tr>
-      <tr>
-        <td>Email</td>
-        <td>
-          <input
-            type="email"
-            placeholder="email"
-            class="form-control"
-            name="email"
-            value="<%= admin.email %>"
-          />
-        </td>
-      </tr>
-      <tr>
-        <td>password</td>
-        <td>
-          <input
-            type="password"
-            class="form-control"
-            name="password"
-            placeholder="new password"
-          />
-        </td>
-      </tr>
-      <tr>
-        <td>confirm password</td>
-        <td>
-          <input
-            type="password"
-            class="form-control"
-            name="cpassword"
-            placeholder="confirm new password"
-          />
-        </td>
-      </tr>
-    </table>
-
-    <input type="hidden" name="image" value="<%= admin.image %>" />
-
-    <div class="form-group">
-      <input type="file" name="myImage" />
+    <div class="z-depth-1-half mb-4">
+      <img src="<%= admin.image %>" style="height:20vh;" />
     </div>
+    <form
+      action="/admin/dashboard/settings"
+      method="POST"
+      class="text-left"
+      enctype="multipart/form-data"
+    >
+      <table>
+        <tr>
+          <td>Username</td>
+          <td>
+            <input
+              type="text"
+              placeholder="username"
+              class="form-control"
+              name="username"
+              value="<%= admin.username %>"
+              required
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>Email</td>
+          <td>
+            <input
+              type="email"
+              placeholder="email"
+              class="form-control"
+              name="email"
+              value="<%= admin.email %>"
+              required
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>password</td>
+          <td>
+            <input
+              type="password"
+              class="form-control"
+              name="password"
+              placeholder="new password"
+            />
+          </td>
+        </tr>
+        <tr>
+          <td>confirm password</td>
+          <td>
+            <input
+              type="password"
+              class="form-control"
+              name="cpassword"
+              placeholder="confirm new password"
+            />
+          </td>
+        </tr>
+      </table>
 
-    <div class="btns mt-3">
-      <button type="submit" class="btn btn-info">change</button>
-      <button type="button" class="btn btn-info">reset</button>
-    </div>
-  </form>
+      <div class="d-flex justify-content-center align-items-center mt-3">
+        <div class="file-field mr-3">
+          <div class="d-flex justify-content-start">
+            <div class="btn btn-info" id="trigger">
+              Set Profile Picture
+            </div>
+            <input type="file" name="myImage" id="real-file" hidden />
+          </div>
+        </div>
+
+        <div class="btns">
+          <button type="submit" class="btn btn-info">update</button>
+        </div>
+      </div>
+
+      <input type="hidden" name="image" value="<%= admin.image %>" />
+    </form>
+  </div>
 </div>
+
+<script defer>
+  var trigger = document.getElementById("trigger");
+  var myImage = document.getElementById("real-file");
+  trigger.addEventListener("click", () => {
+    myImage.click();
+  });
+</script>

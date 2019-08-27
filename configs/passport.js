@@ -1,6 +1,5 @@
 const localStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require("passport-google-oauth20");
-// const Sequelize = require("sequelize");
 const bcrypt = require("bcryptjs");
 const User = require("../model/users");
 const Admin = require("../model/admin");

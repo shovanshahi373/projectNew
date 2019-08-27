@@ -8,3 +8,18 @@
   justify-content: center;
   align-items: center;
 }
+
+.sarokaar-bg {
+  opacity: 0.2;
+  z-index: -999;
+  background-image: url("/images/slogo-2.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  /* background-size: cover; */
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* transform: translate(50%, 50%); */
+}

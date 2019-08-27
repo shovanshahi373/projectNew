@@ -43,12 +43,6 @@ router.get("/logout", (req, res) => {
 });
 
 router.get("/dashboard", isAdminAuthenticated, (req, res) => {
-  console.log(
-    "============================================================\n" + req
-  );
-  console.log(
-    "============================================================\n" + req.user
-  );
   res.render("admin/dashboard", {
     layout: "layouts/dashboard",
     admin: req.user
@@ -71,20 +65,12 @@ router.post("/dashboard", (req, res, next) => {
       req.flash("error-msg", info.message);
       return res.redirect("/admin");
     }
-    console.log("================= ");
     req.login(admin, function(err) {
       if (err) {
         console.log("cannot log in admin ================ :", err);
         return next(err);
       }
-      // console.log(admin);
-      // return res.redirect('/users/' + admin.username)
-      // res.render("admin/dashboard", {
-      //   layout: "layouts/dashboard",
-      //   admin
-      // });
       res.redirect("/admin/dashboard");
-      // console.log(req.admin);
     });
   })(req, res, next);
 });
@@ -266,7 +252,7 @@ router.post("/dashboard/settings", (req, res) => {
     }
     if (admin) {
       if (password) {
-        if (password === cpassword) {
+        if (password.length > 6 && password === cpassword) {
           hash = bcrypt.hashSync(password, 10);
           admin.username = username;
           admin.email = email;
@@ -290,7 +276,11 @@ router.post("/dashboard/settings", (req, res) => {
       admin
         .save()
         .then(result => {
-          req.flash("success_msg", "successfully changed");
+          if (result.username != username || result.email != email) {
+            req.flash("success_msg", "successfully changed admin info");
+            res.redirect("/admin");
+          }
+          req.flash("success_msg", "success :)");
           res.redirect("/admin/dashboard");
         })
         .catch(err => console.log(err));
