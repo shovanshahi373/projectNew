@@ -2,6 +2,7 @@ require("dotenv").config();
 require("./configs/database");
 const Sequelize = require("sequelize");
 const express = require("express");
+const favicon = require("serve-favicon");
 const path = require("path");
 const multer = require("multer");
 const expressLayouts = require("express-ejs-layouts");
@@ -27,6 +28,9 @@ require("./configs/database").sync({ force: true });
 
 //init app
 const app = express();
+
+// app.use(favicon(__dirname + "/resources/images/assets/icon.ico"));
+app.use(favicon(path.join(__dirname, "resources/images/assets/favicon.ico")));
 
 //configure passports for user and admin login
 pass(passport);

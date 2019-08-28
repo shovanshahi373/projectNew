@@ -16,6 +16,18 @@
       <i class="fas fa-search"></i>
     </button>
   </form>
+  <ul class="list-group list-group-horizontal ml-5">
+    <li class="list-group-item restrict">
+      <form href="/admin/dashboard/complaints?restrict=completed" method="GET">
+        <input type="submit" readonly name="restrict" value="completed" />
+      </form>
+    </li>
+    <li class="list-group-item restrict">
+      <form href="/admin/dashboard/complaints?restrict=pending" method="GET">
+        <input type="submit" readonly name="restrict" value="pending" />
+      </form>
+    </li>
+  </ul>
 </nav>
 
 <% if(typeof length != 'undefined') { %>

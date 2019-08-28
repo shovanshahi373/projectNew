@@ -15,12 +15,16 @@ module.exports = db.define("complains", {
     type: Sequelize.STRING,
     allowNull: false
   },
+  expDate: {
+    type: Sequelize.INTEGER,
+    allowNull: false
+  },
   image: {
     type: Sequelize.STRING,
     allowNull: false
   },
   category: {
-    type : Sequelize.STRING,
+    type: Sequelize.STRING,
     allowNull: true
   },
   createdBy: {
@@ -29,7 +33,7 @@ module.exports = db.define("complains", {
   },
   isCompleted: {
     type: Sequelize.BOOLEAN,
-    defaultValue: false,
+    defaultValue: false
   },
   markedBy: {
     type: Sequelize.STRING,

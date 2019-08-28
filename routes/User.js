@@ -9,10 +9,12 @@ const bcrypt = require("bcryptjs");
 const passport = require("passport");
 const isUserAuthenticated = require("../configs/auth").u;
 const sendgrid = require("../configs/email");
+const writeReadComplain = require("../configs/tfidf");
 const crypto = require("crypto");
 const uuid4 = require("uuid/v4");
 const r = require("../configs/redditapi");
 const mapKey = process.env.GOOGLE_API_KEY;
+const fs = require("fs");
 
 router.get("/login", (req, res) => {
   res.render("users/login", {
@@ -203,7 +205,7 @@ router.get("/handle-forgot-password", (req, res) => {
               <title>Hi</title>
             </head>
             <body>
-              click <a href="http://localhost:3000/user/create-new-password?token=${token}" target="_blank">here</a>
+              click <a href="https://sarokaar.herokuapp.com/user/create-new-password?token=${token}" target="_blank">here</a>
               to verify your account
             </body>
           </html>`
@@ -280,11 +282,22 @@ router.post("/upload", (req, res) => {
   const imageUrl = `../uploads/${myImage.filename}`;
   let d = new Date();
   const date = d.toDateString();
+
+  // const datecreated = Date.now();
+  // const expDate = d.setDate(d.getDate() + 2);
+  const dateExpires = d.setTime(Date.now() + 2 * 24 * 60 * 60 * 1000);
+
   const pid = uuid4();
+  //tfidf code
+  d.setDate();
+  const fArr = writeReadComplain(pid, title + " " + description);
+
+  console.log(fArr);
   Complain.create({
     cid: pid,
     title,
     description,
+    expDate: dateExpires,
     image: imageUrl,
     createdBy: req.user.email,
     dateCreated: date
@@ -297,24 +310,41 @@ router.post("/upload", (req, res) => {
         googeMapAPI: mapKey,
         success_msg: "complaint uploaded"
       });
+      // res.render("users/complain-form", {
+      //   file: imageUrl,
+      //   layout: "layouts/users",
+      //   user: req.user,
+      //   googeMapAPI: mapKey,
+      //   success_msg: "complaint uploaded"
+      // });
     })
     .catch(err => console.log(err));
 });
 
 router.get("/history", isUserAuthenticated, (req, res) => {
-  const { search } = req.query;
+  const { search, restrict } = req.query;
   const pat = new RegExp(search);
   Complain.findAll({
     where: { createdBy: req.user.email },
     order: [["dateCreated", "ASC"]]
   })
     .then(complains => {
-      const filteredusers = complains.filter(
+      let filteredcomplaints = complains.filter(
         complain => pat.test(complain.title) || pat.test(complain.description)
       );
-      const length = filteredusers.length;
+      const length = filteredcomplaints.length;
+      if (restrict == "pending") {
+        filteredcomplaints = filteredcomplaints.filter(
+          complain => complain.isCompleted == 0
+        );
+      }
+      if (restrict == "completed") {
+        filteredcomplaints = filteredcomplaints.filter(
+          complain => complain.isCompleted == 1
+        );
+      }
       res.render("users/history", {
-        complains: filteredusers,
+        complains: filteredcomplaints,
         user: req.user,
         layout: "layouts/users.ejs",
         search,

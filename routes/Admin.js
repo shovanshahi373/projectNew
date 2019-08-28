@@ -212,15 +212,26 @@ router.post("/register", (req, res) => {
 
 router.get("/dashboard/complaints", isAdminAuthenticated, (req, res) => {
   const search = req.query.search;
+  const status = req.query.restrict;
   const pat = new RegExp(search);
   Complains.findAll({
     order: [["dateCreated", "ASC"]]
   })
     .then(complains => {
-      const filteredcomplains = complains.filter(complain =>
+      let filteredcomplains = complains.filter(complain =>
         pat.test(complain.title)
       );
       const length = filteredcomplains.length;
+      if (status == "pending") {
+        filteredcomplains = filteredcomplains.filter(
+          complain => complain.isCompleted == 0
+        );
+      }
+      if (status == "completed") {
+        filteredcomplains = filteredcomplains.filter(
+          complain => complain.isCompleted == 1
+        );
+      }
       res.render("admin/dashboard", {
         layout: "layouts/dashboard",
         complains: filteredcomplains,
