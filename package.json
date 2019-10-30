@@ -32,7 +32,7 @@
     "passport": "^0.4.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-local": "^1.0.0",
-    "sequelize": "^5.11.0",
+    "sequelize": "^5.15.1",
     "serve-favicon": "^2.5.0",
     "snoostorm": "^1.1.2",
     "snoowrap": "^1.19.0",
